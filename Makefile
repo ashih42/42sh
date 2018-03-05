@@ -6,12 +6,13 @@
 #    By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/03/05 12:32:33 by nmei              #+#    #+#              #
-#    Updated: 2018/03/05 12:42:06 by nmei             ###   ########.fr        #
+#    Updated: 2018/03/05 14:34:01 by nmei             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = 42sh
 RM = /bin/rm -f
+MKDIR = /bin/mkdir
 CFLAGS = -Wall -Wextra -Werror
 
 SRCS_DIR = ./srcs/
@@ -25,14 +26,17 @@ OFILES = $(patsubst %, $(OBJS_DIR)%.o, $(FILES))
 #libft
 LFT = ./libft/
 LFT_LIB = $(addprefix $(LFT), ft.a)
-LFT_INC = -I $(LFT)includes/
+LFT_INC = -I $(LFT)
 LFT_LINK = -L $(LFT) -l ft
 
 .PHONY: all clean fclean re
 
 all: $(LFT_LIB) $(NAME)
 
-$(OFILES): $(CFILES)
+$(OBJS_DIR):
+	$(MKDIR) $@
+
+$(OFILES): $(CFILES) $(OBJS_DIR)
 	gcc $(CFLAGS) -c -I$(INCLUDES) $(LFT_INC) $< -o $@
 
 $(LFT_LIB):
