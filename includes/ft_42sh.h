@@ -6,12 +6,13 @@
 /*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 14:08:33 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/06 14:21:15 by nmei             ###   ########.fr       */
+/*   Updated: 2018/03/06 14:53:24 by nmei             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_42SH_H
 # define FT_42SH_H
+# define HASHMAP_SIZE	512
 
 /*
 **	This will be the data structure that stores our environment variables
@@ -27,7 +28,7 @@ typedef struct			s_hash_node
 
 typedef struct			s_env
 {
-	t_hash_node			env_hashmap[256];
+	t_hash_node			env_hashmap[HASHMAP_SIZE];
 }						t_env;	
 
 /*
