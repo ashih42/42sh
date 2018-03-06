@@ -6,7 +6,7 @@
 /*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 13:41:33 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/05 16:40:16 by nmei             ###   ########.fr       */
+/*   Updated: 2018/03/05 20:41:53 by nmei             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,7 +38,7 @@ int		main(int argc, char **argv, char **envp)
 	(void)argc;
 	(void)argv;
 
-	init_sh(envp, &env);
+	init_sh(envp);
 	sh_loop();
 	return (0);
 }

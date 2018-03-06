@@ -6,7 +6,7 @@
 #    By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/03/05 12:32:33 by nmei              #+#    #+#              #
-#    Updated: 2018/03/05 14:34:01 by nmei             ###   ########.fr        #
+#    Updated: 2018/03/06 13:50:38 by nmei             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,9 +19,9 @@ SRCS_DIR = ./srcs/
 INCLUDES = ./includes/
 OBJS_DIR = ./objects/
 
-FILES = main
-CFILES = $(patsubst %, $(SRCS_DIR)%.c, $(FILES))
-OFILES = $(patsubst %, $(OBJS_DIR)%.o, $(FILES))
+FILES = main.c env.c listen.c parse.c dispatcher.c
+CFILES = $(patsubst %, $(SRCS_DIR)%, $(FILES))
+OFILES = $(patsubst %.c, $(OBJS_DIR)%.o, $(FILES))
 
 #libft
 LFT = ./libft/
@@ -36,7 +36,7 @@ all: $(LFT_LIB) $(NAME)
 $(OBJS_DIR):
 	$(MKDIR) $@
 
-$(OFILES): $(CFILES) $(OBJS_DIR)
+$(OBJS_DIR)%.o: $(SRCS_DIR)%.c
 	gcc $(CFLAGS) -c -I$(INCLUDES) $(LFT_INC) $< -o $@
 
 $(LFT_LIB):

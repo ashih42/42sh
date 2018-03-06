@@ -6,7 +6,7 @@
 /*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 14:08:33 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/05 16:46:06 by nmei             ###   ########.fr       */
+/*   Updated: 2018/03/05 20:41:40 by nmei             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,16 +18,16 @@
 **	Maybe other stuff too?
 */
 
-typedef struct	s_env
-{
+// typedef struct	s_env
+// {
 
-}				t_env;	
+// }				t_env;	
 
 /*
 **	main.c
 */
 
-void			sh_loop()
+void			sh_loop();
 
 /*
 **	env.c
