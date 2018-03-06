@@ -1,23 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   listen.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/03/05 16:10:47 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/05 16:40:14 by nmei             ###   ########.fr       */
+/*   Created: 2018/03/05 16:11:41 by nmei              #+#    #+#             */
+/*   Updated: 2018/03/05 16:30:33 by nmei             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /*
-**	init_sh()
+**	sh_listen()
 **
-**	This function should read in the default shell environment variables
-**	(**envp) and load them into our 42sh environment variable data structure...
+**	This function should implement listening on stdin. Will need to read
+**	one char at a time so that backspaces and tabs will be supported!!!
+**
+**	Because the input is of an unspecified length, we will either need to
+**	realloc when we are about to go over our allocation limit or use some
+**	sort of linked list implementation...
 */
 
-void	init_sh(char **envp)
+void	sh_listen()
 {
 
 }

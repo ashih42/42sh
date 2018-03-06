@@ -1,23 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   env.c                                              :+:      :+:    :+:   */
+/*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/03/05 16:10:47 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/05 16:40:14 by nmei             ###   ########.fr       */
+/*   Created: 2018/03/05 16:26:40 by nmei              #+#    #+#             */
+/*   Updated: 2018/03/05 16:39:29 by nmei             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 /*
-**	init_sh()
+**	sh_parse()
 **
-**	This function should read in the default shell environment variables
-**	(**envp) and load them into our 42sh environment variable data structure...
+**	This function will take the input read in via sh_listen() and parse it for
+**	redirections, escaped characters, etc.
 */
 
-void	init_sh(char **envp)
+void	sh_parse()
 {
 
 }
