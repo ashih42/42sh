@@ -6,7 +6,7 @@
 /*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 14:08:33 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/05 20:41:40 by nmei             ###   ########.fr       */
+/*   Updated: 2018/03/06 14:17:08 by nmei             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,10 +18,17 @@
 **	Maybe other stuff too?
 */
 
-// typedef struct	s_env
-// {
+typedef struct			s_hash_node
+{
+	char				*key;
+	char				*val;
+	struct s_hash_node	*next;
+}						t_hash_node;
 
-// }				t_env;	
+typedef struct			s_env
+{
+	t_hash_node			env_hashmap[256];
+}						t_env;	
 
 /*
 **	main.c
