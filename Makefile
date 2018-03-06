@@ -6,7 +6,7 @@
 #    By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/03/05 12:32:33 by nmei              #+#    #+#              #
-#    Updated: 2018/03/06 13:50:38 by nmei             ###   ########.fr        #
+#    Updated: 2018/03/06 13:52:27 by nmei             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,7 +31,7 @@ LFT_LINK = -L $(LFT) -l ft
 
 .PHONY: all clean fclean re
 
-all: $(LFT_LIB) $(NAME)
+all: $(LFT_LIB) $(NAME) $(OBJS_DIR)
 
 $(OBJS_DIR):
 	$(MKDIR) $@
