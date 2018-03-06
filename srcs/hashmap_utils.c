@@ -6,7 +6,7 @@
 /*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/06 13:55:36 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/06 14:53:31 by nmei             ###   ########.fr       */
+/*   Updated: 2018/03/06 15:42:19 by hiroshius        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,4 +67,37 @@ unsigned long	djb2_hash(char *str)
 t_hash_node 	*get_hash_node(t_hash_node hashmap[HASHMAP_SIZE])
 {
 
+}
+
+/*
+** add_hash_node()
+** Checks to see if a t_hash_node with a given key already exists, adds it if
+** it's not in the linked list.
+*/
+
+int				*add_hash_node(t_hash_node *hashmap, char *key,
+				char *value)
+{
+	t_hash_node	*new;
+
+	if (!get_hash_node(hashmap, key))
+	{
+		new = new_hash_node(key, value);
+		if (hashmap)
+		{
+			while (hashmap->next)
+				hashmap = hashmap->next;
+			hashmap->next = new;
+			return (1);
+		}
+		else
+
+	}
+	else
+		return (0);
+}
+
+char			*get_hash_value(t_hash_node *node)
+{
+	return (node->val);
 }
