@@ -6,7 +6,7 @@
 #    By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/03/05 12:32:33 by nmei              #+#    #+#              #
-#    Updated: 2018/03/06 13:52:27 by nmei             ###   ########.fr        #
+#    Updated: 2018/03/06 14:37:24 by nmei             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,12 +31,12 @@ LFT_LINK = -L $(LFT) -l ft
 
 .PHONY: all clean fclean re
 
-all: $(LFT_LIB) $(NAME) $(OBJS_DIR)
+all: $(LFT_LIB) $(NAME)
 
 $(OBJS_DIR):
 	$(MKDIR) $@
 
-$(OBJS_DIR)%.o: $(SRCS_DIR)%.c
+$(OBJS_DIR)%.o: $(SRCS_DIR)%.c $(OBJS_DIR)
 	gcc $(CFLAGS) -c -I$(INCLUDES) $(LFT_INC) $< -o $@
 
 $(LFT_LIB):
