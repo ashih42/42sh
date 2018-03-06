@@ -1,24 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main.c                                             :+:      :+:    :+:   */
+/*   env.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/03/05 13:41:33 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/05 16:18:13 by nmei             ###   ########.fr       */
+/*   Created: 2018/03/05 16:10:47 by nmei              #+#    #+#             */
+/*   Updated: 2018/03/05 16:11:33 by nmei             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <libft.h>
-#include "ft_42sh.h"
+/*
+**	init_sh()
+**
+**	This function should read in the zsh shell environment variables (**envp)
+**	and load them into our 42sh environment variable data structure...
+*/
 
-int		main(int argc, char **argv, char **envp)
+void	init_sh(char **envp)
 {
-	(void)argc;
-	(void)argv;
 
-	init_sh(envp, &env);
-	sh_loop();
-	return (0);
 }
