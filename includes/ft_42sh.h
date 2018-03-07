@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_42sh.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apuel <apuel@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 14:08:33 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/07 02:48:23 by apuel            ###   ########.fr       */
+/*   Updated: 2018/03/07 04:01:28 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,6 +65,12 @@ void					sh_dispatcher(t_env *e, int argc, char **argv);
 */
 
 void					ft_cd(t_env *e, int argc, char **argv);
+
+/*
+**	ft_echo.c
+*/
+
+void					ft_echo(t_env *e, int argc, char **argv);
 
 /*
 **	split_argv.c
