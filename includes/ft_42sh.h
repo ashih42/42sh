@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_42sh.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 14:08:33 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/06 17:40:44 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/06 17:51:43 by nmei             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@
 # define BUFFER_SIZE 4096
 # define WHITESPACE " \t\n\v\r\f"
 
-# define SWAP(a, b, T) {T temp = a; a = b; b = temp;}
+# define SWAP(a, b, T) {T temp = (a); (a) = (b); (b) = temp;}
 
 
 /*
@@ -46,9 +46,9 @@ typedef struct			s_hashmap
 typedef struct			s_env
 {
 	t_hashmap			map;
-	char buffer[BUFFER_SIZE + 1];
-	int pos;
-	char **args;
+	char				buffer[BUFFER_SIZE + 1];
+	int					pos;
+	char				**args;
 	char				*pwd;
 	char				*oldpwd;
 }						t_env;	
@@ -95,6 +95,6 @@ int						remove_hash_node(t_hashmap hmap, char *key);
 /*
 **	split_ws.c
 */
-char		**split_ws(char const *s, char *ws);
+char					**split_ws(char const *s, char *ws);
 
 #endif
