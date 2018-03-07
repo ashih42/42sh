@@ -6,7 +6,7 @@
 /*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 14:08:33 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/06 19:28:29 by nmei             ###   ########.fr       */
+/*   Updated: 2018/03/06 23:31:19 by nmei             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@ typedef struct			s_hashmap
 
 typedef struct			s_env
 {
-	t_hashmap			map;
+	t_hashmap			hmap;
 	char				buffer[BUFFER_SIZE + 1];
 	int					pos;
 	char				**args;
@@ -89,6 +89,7 @@ void					sh_dispatcher(t_env *e);
 unsigned long			djb2_hash(char *str);
 t_hash_node				*new_hash_node(char *key, char *val);
 t_hash_node 			*get_hash_node(t_hashmap *hmap, char *key);
+char					*get_hash_val(t_hashmap *hmap, char *key);
 int						add_hash_node(t_hashmap *hmap, char *key, char *value);
 int						remove_hash_node(t_hashmap *hmap, char *key);
 

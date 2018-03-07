@@ -79,6 +79,21 @@ t_hash_node		*get_hash_node(t_hashmap *hmap, char *key)
 }
 
 /*
+**	get_hash_val()
+**
+*/
+
+char			*get_hash_val(t_hashmap *hmap, char *key)
+{
+	t_hash_node	*key_node;
+
+	if ((key_node = get_hash_node(hmap, key)))
+		return (key_node->val);
+	else
+		return (NULL);
+}
+
+/*
 **	add_hash_node()
 **
 **	Checks to see if a t_hash_node with a given key already exists

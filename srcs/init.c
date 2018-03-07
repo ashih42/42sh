@@ -6,7 +6,7 @@
 /*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 16:10:47 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/06 19:38:37 by nmei             ###   ########.fr       */
+/*   Updated: 2018/03/06 23:37:47 by nmei             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ void	init_sh(t_env *e, char **envp)
 		tmp_val = ft_strdup(eq_ptr + 1);
 		//printf("val: |%s|\n", tmp_val);
 		envp++;
-		add_hash_node(&e->map, tmp_key, tmp_val);
+		add_hash_node(&e->hmap, tmp_key, tmp_val);
 		free(tmp_key);
 		free(tmp_val);
 	}
@@ -43,5 +43,5 @@ void	init_sh(t_env *e, char **envp)
 	//printf("test val: |%s|\n", get_hash_node(&e->map, "OLDPWD")->val);
 	//printf("test key: |%s|\n", get_hash_node(&e->map, "HOME")->key);
 	//printf("test val: |%s|\n", get_hash_node(&e->map, "HOME")->val);
-	e->pwd = getcwd(0, 0);
+	add_hash_node(&e->hmap, "PWD", getcwd(NULL, 0));
 }

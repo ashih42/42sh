@@ -6,7 +6,7 @@
 /*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 16:26:59 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/06 19:01:17 by nmei             ###   ########.fr       */
+/*   Updated: 2018/03/06 23:58:40 by nmei             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,25 +25,33 @@
 
 void	ft_cd(t_env *e)
 {
-	// TODO: how to do case: cd (no arg[1] -> cd $HOME)
-	// how to check argc??
+	char		*homedir;
+	char		*pwd;
+	char		*oldpwd;
 
+	// TODO: how to do case: cd (no arg[1] -> cd $HOME)
+	// Need to be able to handle 'cd .' and 'cd ..'
+	// how to check argc??
+	pwd = get_hash_val(&e->hmap, "PWD");
+	homedir = get_hash_val(&e->hmap, "HOME");
+	oldpwd = get_hash_val(&e->hmap, "OLDPWD");
 	if (ft_strequ(e->args[1], "-"))
 	{
-		chdir(e->oldpwd);
-		SWAP(e->oldpwd, e->pwd, char *);
+		if (!chdir(oldpwd))
+			add_hash_node(&e->hmap, "OLDPWD", pwd);
 	}
 	else if (ft_strequ(e->args[1], "~/"))
 	{
-		chdir(get_hash_node(&e->map, "HOME")->val);
+		if (!chdir(homedir))
+			add_hash_node(&e->hmap, "OLDPWD", pwd);
 	}
 	else
 	{
-		e->oldpwd = e->pwd;
-		chdir(e->args[1]);
-		e->pwd = getcwd(0, 0);
+		if (!chdir(e->args[1]))
+			add_hash_node(&e->hmap, "OLDPWD", pwd);
 	}
-
+	pwd = getcwd(NULL, 0);
+	add_hash_node(&e->hmap, "PWD", pwd);
 }
 
 
@@ -51,7 +59,9 @@ void	ft_cd(t_env *e)
 void	run(t_env *e)
 {
 	if (ft_strequ(e->args[0], "cd"))
+	{
 		ft_cd(e);
+	}
 	else
 		execvp(e->args[0], e->args);
 	exit(0);
