@@ -84,25 +84,26 @@ t_hash_node 	*get_hash_node(t_hashmap hmap, char *key)
 ** it's not in the linked list.
 */
 
-int				*add_hash_node(t_hashmap hmap, char *key, char *value)
+int				add_hash_node(t_hashmap hmap, char *key, char *value)
 {
-	t_hash_node	*new;
+	t_hash_node *curr;
 
-	if (!get_hash_node(hashmap, key))
+	curr = hmap->nodes[djb2_hash(key)];
+	if (curr)
 	{
-		new = new_hash_node(key, value);
-		if (hashmap)
+		if (!ft_strcmp(curr->key, key))
+			return (0);
+		while (curr->next)
 		{
-			while (hashmap->next)
-				hashmap = hashmap->next;
-			hashmap->next = new;
-			return (1);
+			curr = curr->next;
+			if (!ft_strcmp(curr->key, key))
+				return (0);
 		}
-		else
-
+		curr = new_hash_node(key, value);
 	}
 	else
-		return (0);
+		curr = new_hash_node(key, value);
+	return (1);
 }
 
 /*
