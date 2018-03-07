@@ -82,34 +82,36 @@ t_hash_node		*get_hash_node(t_hashmap *hmap, char *key)
 **	add_hash_node()
 **
 **	Checks to see if a t_hash_node with a given key already exists
-**	If the node exists, then overwrite the value with our new value
-**	it's not in the linked list.
+**	1) If the key node exists, then overwrite the value with our new value
+**	2) If the key node does not exist, then create a new node
 **
 **	If a hash node was successfully added, function returns 0.
-**	If a hash node wasn't able to be added, function returns 1.
+**	If a hash node's 'val' was updated, function returns 1.
 */
 
 int				add_hash_node(t_hashmap *hmap, char *key, char *value)
 {
 	t_hash_node		*prev;
 	t_hash_node		*curr;
-	unsigned long	hash;
 
-	hash = djb2_hash(key);
-	curr = (hmap->nodes)[hash];
+	curr = (hmap->nodes)[djb2_hash(key)];
 	if (curr)
 	{
 		while (curr)
 		{
 			if (!ft_strcmp(curr->key, key))
+			{
+				(curr->val) ? free(curr->val) : 0;
+				curr->val = strdup(value);
 				return (1);
+			}
 			prev = curr;
 			curr = curr->next;
 		}
 		prev->next = new_hash_node(key, value);
 	}
 	else
-		(hmap->nodes)[hash] = new_hash_node(key, value);
+		(hmap->nodes)[djb2_hash(key)] = new_hash_node(key, value);
 	return (0);
 }
 
