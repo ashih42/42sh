@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/01 18:48:47 by ashih             #+#    #+#             */
-/*   Updated: 2018/03/06 16:17:23 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/06 16:47:45 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,7 +39,7 @@ static int	count_substrings(char const *s, char *ws)
 			i++;
 		if (s[i] == '\0')
 			return (count);
-		while (!(s[i] == c || s[i] == '\0'))
+		while (!(is_ws(s[i], ws) || s[i] == '\0'))
 			i++;
 		count++;
 	}
