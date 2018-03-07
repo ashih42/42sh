@@ -6,7 +6,7 @@
 /*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 14:08:33 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/06 16:10:09 by nmei             ###   ########.fr       */
+/*   Updated: 2018/03/06 16:19:24 by nmei             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,31 +40,31 @@ typedef struct			s_env
 **	main.c
 */
 
-void			sh_loop();
+void					sh_loop();
 
 /*
 **	env.c
 */
 
-void			init_sh(char **envp);
+void					init_sh(char **envp);
 
 /*
 **	listen.c
 */
 
-void			sh_listen();
+void					sh_listen();
 
 /*
 **	parse.c
 */
 
-void			sh_parse();
+void					sh_parse();
 
 /*
 **	dispatcher.c
 */
 
-void			sh_dispatcher();
+void					sh_dispatcher();
 
 /*
 **	hashmap_utils.c
