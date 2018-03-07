@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   signal.c                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/03/07 08:43:50 by ashih             #+#    #+#             */
-/*   Updated: 2018/03/07 09:08:27 by ashih            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "ft_42sh.h"
 
 // There appears to be no way to pass arguments into this signal-handling function,
@@ -24,6 +12,14 @@ void	ft_ctrl_c(int signo)
 	ft_printf("\n");
 	
 	// DELIVER DEMOCRACY?
+
+	sh_listen(g_e);
+}
+
+void	ft_ctrl_d(int signo)
+{
+	void(signn);
+	ft_printf("\n");
 
 	sh_listen(g_e);
 }

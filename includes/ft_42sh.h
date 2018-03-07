@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 14:08:33 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/07 08:54:40 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/07 09:47:29 by hiroshius        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ typedef struct			s_env
 	char				*buffer;
 }						t_env;
 
-extern t_env			*g_e;
+t_env					*g_e;
 
 /*
 **	envp.c
