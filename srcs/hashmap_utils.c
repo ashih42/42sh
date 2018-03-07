@@ -93,8 +93,10 @@ int				add_hash_node(t_hashmap *hmap, char *key, char *value)
 {
 	t_hash_node		*prev;
 	t_hash_node		*curr;
+	unsigned long	hash;
 
-	curr = (hmap->nodes)[djb2_hash(key)];
+	hash = djb2_hash(key);
+	curr = (hmap->nodes)[hash];
 	if (curr)
 	{
 		while (curr)
@@ -111,7 +113,7 @@ int				add_hash_node(t_hashmap *hmap, char *key, char *value)
 		prev->next = new_hash_node(key, value);
 	}
 	else
-		(hmap->nodes)[djb2_hash(key)] = new_hash_node(key, value);
+		(hmap->nodes)[hash] = new_hash_node(key, value);
 	return (0);
 }
 

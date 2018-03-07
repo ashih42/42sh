@@ -6,7 +6,7 @@
 /*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 16:10:47 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/06 19:34:30 by nmei             ###   ########.fr       */
+/*   Updated: 2018/03/06 19:38:37 by nmei             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@ void	init_sh(t_env *e, char **envp)
 	char	*eq_ptr;
 
 	//printf("%lu %lu\n", djb2_hash("playwright"), djb2_hash("snush"));
+
 	while (*envp)
 	{
 		eq_ptr = ft_strchr(*envp, '=');
