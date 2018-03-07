@@ -3,51 +3,63 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apuel <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/15 17:32:57 by apuel             #+#    #+#             */
-/*   Updated: 2017/12/02 12:39:04 by apuel            ###   ########.fr       */
+/*   Created: 2017/11/12 06:38:22 by ashih             #+#    #+#             */
+/*   Updated: 2017/11/28 22:50:36 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static long long	itoa_pow(int n, int exp)
+static char	*make_zero_str(void)
 {
-	long long result;
+	char	*result;
 
-	result = 1;
-	if (exp < 0)
-		return (0);
-	while (exp--)
-		result *= n;
+	result = malloc(sizeof(char) * 2);
+	if (result == NULL)
+		return (NULL);
+	result[0] = '0';
+	result[1] = '\0';
 	return (result);
 }
 
-char				*ft_itoa(int n)
+static int	count_places(int n)
 {
-	long long	nb;
-	long long	ctr;
-	size_t		pos;
-	char		*result;
+	int		places;
+	int		sign;
 
-	nb = n;
-	pos = 0;
-	if (nb < 0)
+	places = 0;
+	sign = (n < 0) ? -1 : 1;
+	while (n != 0)
 	{
-		pos++;
-		nb = -nb;
+		places++;
+		n = n / 10;
 	}
-	ctr = 1;
-	while (nb / itoa_pow(10, ctr) != 0)
-		ctr++;
-	result = ft_strnew(ctr + pos);
-	if (result)
+	places += (sign == -1) ? 1 : 0;
+	return (places);
+}
+
+char		*ft_itoa(int n)
+{
+	char	*result;
+	int		places;
+	int		sign;
+
+	if (n == 0)
+		return (make_zero_str());
+	places = count_places(n);
+	sign = (n < 0) ? -1 : 1;
+	result = malloc(sizeof(char) * (places + 1));
+	if (result == NULL)
+		return (NULL);
+	result[places--] = '\0';
+	while (n != 0)
 	{
-		if (pos)
-			result[0] = '-';
-		while (ctr > 0)
-			result[pos++] = ((nb / itoa_pow(10, --ctr)) % 10) + '0';
+		result[places--] = n % 10 * sign + '0';
+		n = n / 10;
 	}
+	if (sign == -1)
+		result[places] = '-';
 	return (result);
 }

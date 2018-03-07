@@ -3,27 +3,36 @@
 /*                                                        :::      ::::::::   */
 /*   ft_atoi.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apuel <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/15 13:46:42 by apuel             #+#    #+#             */
-/*   Updated: 2017/11/15 22:29:01 by apuel            ###   ########.fr       */
+/*   Created: 2017/11/27 22:47:53 by ashih             #+#    #+#             */
+/*   Updated: 2017/11/28 21:59:24 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-int	ft_atoi(const char *str)
-{
-	long long	result;
-	long long	n;
+#include "libft.h"
 
-	result = 0;
-	n = 1;
-	while (*str == ' ' || (*str >= 9 && *str <= 13))
+int		ft_atoi(const char *str)
+{
+	int	total;
+	int	sign;
+
+	total = 0;
+	sign = 1;
+	while (*str == ' ' || *str == '\t' || *str == '\n' ||
+			*str == '\v' || *str == '\f' || *str == '\r')
 		str++;
 	if (*str == '-')
-		n = -n;
-	if (*str == '-' || *str == '+')
+		sign = -1;
+	else if (*str == '+')
+		sign = 1;
+	else
+		str--;
+	str++;
+	while ('0' <= *str && *str <= '9')
+	{
+		total = total * 10 + (*str - '0');
 		str++;
-	while (*str >= '0' && *str <= '9')
-		result = (result * 10) + (*str++ - '0');
-	return ((int)(result * n));
+	}
+	return (total * sign);
 }

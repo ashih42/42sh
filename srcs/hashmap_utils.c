@@ -1,4 +1,5 @@
-#include <stdlib.h>
+#include "ft_42sh.h"
+
 
 t_hash_node		*new_hash_node(char *key, char *val)
 {

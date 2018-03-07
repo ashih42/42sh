@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   dispatcher.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 16:26:59 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/05 16:34:56 by nmei             ###   ########.fr       */
+/*   Updated: 2018/03/06 16:37:31 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "ft_42sh.h"
 
 /*
 **	sh_dispatcher()
@@ -21,7 +23,8 @@
 **	   provided as a literal path.
 */
 
-void	sh_dispatcher()
+void	sh_dispatcher(t_env *e)
 {
-
+	ft_printf("{robot}dispatching...\n");
+	(void)e;
 }

@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+         #
+#    By: ashih <ashih@student.42.fr>                +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2018/03/05 12:32:33 by nmei              #+#    #+#              #
-#    Updated: 2018/03/06 16:02:47 by nmei             ###   ########.fr        #
+#    Updated: 2018/03/06 16:38:35 by ashih            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -19,7 +19,7 @@ SRCS_DIR = ./srcs/
 INCLUDES = ./includes/
 OBJS_DIR = ./objects/
 
-FILES = main.c env.c listen.c parse.c dispatcher.c hashmap_utils.c
+FILES = main.c env.c listen.c parse.c dispatcher.c hashmap_utils.c split_ws.c
 CFILES = $(patsubst %, $(SRCS_DIR)%, $(FILES))
 OFILES = $(patsubst %.c, $(OBJS_DIR)%.o, $(FILES))
 

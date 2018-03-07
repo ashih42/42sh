@@ -3,39 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstnew.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apuel <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/15 18:38:27 by apuel             #+#    #+#             */
-/*   Updated: 2017/11/27 15:28:19 by apuel            ###   ########.fr       */
+/*   Created: 2017/11/28 23:19:40 by ashih             #+#    #+#             */
+/*   Updated: 2017/12/01 17:00:59 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include "libft.h"
 
-t_list	*ft_lstnew(void const *content, size_t content_size)
+t_list		*ft_lstnew(void const *content, size_t content_size)
 {
-	t_list	*element;
-	void	*copy;
+	t_list	*new;
 
-	element = malloc(sizeof(t_list));
-	if (element)
+	if ((new = malloc(sizeof(t_list))) == NULL)
+		return (NULL);
+	if (content_size != 0 && (new->content = malloc(content_size)) == NULL)
 	{
-		copy = (void *)0;
-		if (content)
-			copy = malloc(content_size);
-		else
-			content_size = 0;
-		if (copy)
-			ft_memcpy(copy, content, content_size);
-		if (!content || copy)
-		{
-			element->next = (t_list *)0;
-			element->content = copy;
-			element->content_size = content_size;
-		}
-		else
-			ft_memdel((void **)&element);
+		free(new);
+		return (NULL);
 	}
-	return (element);
+	if (content_size == 0)
+		new->content = NULL;
+	if (content == NULL)
+	{
+		if (new->content != NULL)
+			free(new->content);
+		new->content = NULL;
+		new->content_size = 0;
+	}
+	else
+	{
+		ft_memcpy(new->content, content, content_size);
+		new->content_size = content_size;
+	}
+	new->next = NULL;
+	return (new);
 }

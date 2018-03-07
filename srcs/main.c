@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 13:41:33 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/06 16:09:22 by nmei             ###   ########.fr       */
+/*   Updated: 2018/03/06 16:39:15 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,25 +24,26 @@
 **	3) Calling the relevant commands specified in the parsed input
 */
 
-void	sh_loop()
+void	sh_loop(t_env *e)
 {
 	while (1)
 	{
-		sh_listen();
-		sh_parse();
-		sh_dispatcher();
+		sh_listen(e);
+		sh_parse(e);
+		sh_dispatcher(e);
 	}
 }
 
 int		main(int argc, char **argv, char **envp)
 {
-	t_env	env;
+	t_env	e;
 
-	ft_memset(env, 0, sizeof(env));
+	ft_bzero(&e, sizeof(t_env));
+	
 	(void)argc;
 	(void)argv;
 
-	init_sh(&env, envp);
-	sh_loop();
+	init_sh(&e, envp);
+	sh_loop(&e);
 	return (0);
 }

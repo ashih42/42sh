@@ -3,29 +3,44 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strstr.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apuel <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/15 14:10:58 by apuel             #+#    #+#             */
-/*   Updated: 2017/11/15 21:16:38 by apuel            ###   ########.fr       */
+/*   Created: 2017/11/27 22:07:28 by ashih             #+#    #+#             */
+/*   Updated: 2017/11/27 23:09:59 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char	*ft_strstr(const char *str, const char *to_find)
+static int	find_match(const char *big, const char *little)
 {
-	size_t i;
-	size_t len;
+	int		i;
 
 	i = 0;
-	len = ft_strlen(to_find);
-	if (ft_strlen(str) == 0 && len == 0)
-		return ((char *)str);
-	while (str[i])
+	while (little[i])
 	{
-		if (ft_strncmp(&str[i], to_find, len) == 0)
-			return ((char *)&str[i]);
+		if (big[i] != little[i])
+			return (0);
 		i++;
 	}
-	return ((char *)0);
+	return (1);
+}
+
+char		*ft_strstr(const char *big, const char *little)
+{
+	int		i;
+
+	if (!little[0])
+		return ((char *)big);
+	i = 0;
+	while (big[i])
+	{
+		if (big[i] == little[0])
+		{
+			if (find_match(big + i, little))
+				return ((char *)big + i);
+		}
+		i++;
+	}
+	return (NULL);
 }

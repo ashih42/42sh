@@ -3,26 +3,40 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memmove.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apuel <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/15 11:46:14 by apuel             #+#    #+#             */
-/*   Updated: 2017/11/15 16:39:34 by apuel            ###   ########.fr       */
+/*   Created: 2017/11/27 13:38:24 by ashih             #+#    #+#             */
+/*   Updated: 2017/11/27 17:06:03 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void	*ft_memmove(void *dst, const void *src, size_t size)
+void		*ft_memmove(void *dst, const void *src, size_t len)
 {
-	size_t i;
+	char	*dst_ptr;
+	char	*src_ptr;
+	int		i;
 
-	if (dst < src)
-		ft_memcpy(dst, src, size);
-	else if (dst > src)
+	dst_ptr = (char *)dst;
+	src_ptr = (char *)src;
+	if (dst_ptr > src_ptr)
 	{
-		i = size;
-		while (i--)
-			((unsigned char *)dst)[i] = ((unsigned char *)src)[i];
+		i = len - 1;
+		while (i >= 0)
+		{
+			dst_ptr[i] = src_ptr[i];
+			i--;
+		}
+	}
+	else
+	{
+		i = 0;
+		while (i < (int)len)
+		{
+			dst_ptr[i] = src_ptr[i];
+			i++;
+		}
 	}
 	return (dst);
 }

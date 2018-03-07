@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 16:26:40 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/05 16:39:29 by nmei             ###   ########.fr       */
+/*   Updated: 2018/03/06 16:37:34 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "ft_42sh.h"
 
 /*
 **	sh_parse()
@@ -17,7 +19,8 @@
 **	redirections, escaped characters, etc.
 */
 
-void	sh_parse()
+void	sh_parse(t_env *e)
 {
-
+	ft_printf("{robot}parsing...\n");
+	(void)e;
 }

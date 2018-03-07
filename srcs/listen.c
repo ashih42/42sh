@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   listen.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 16:11:41 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/05 16:30:33 by nmei             ###   ########.fr       */
+/*   Updated: 2018/03/06 16:37:03 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#include "ft_42sh.h"
 
 /*
 **	sh_listen()
@@ -21,7 +23,27 @@
 **	sort of linked list implementation...
 */
 
-void	sh_listen()
+
+void	sh_listen(t_env *e)
 {
+	ft_bzero(e->buffer, BUFFER_SIZE + 1);
+	e->pos = 0;
+
+	ft_printf("{robot}> ");
+
+	char c;
+	while (1)
+	{
+		read(STDIN_FILENO, &c, 1);
+		e->buffer[e->pos++] = c;
+		ft_putchar(c);
+		if (c == '\n')
+		{
+			ft_printf("{robot}beep boop beep boop{robot}\n");
+			return ;
+		}
+		
+	}
+	
 
 }

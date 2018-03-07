@@ -3,41 +3,41 @@
 /*                                                        :::      ::::::::   */
 /*   ft_lstmap.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apuel <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/15 19:25:30 by apuel             #+#    #+#             */
-/*   Updated: 2017/11/15 19:48:10 by apuel            ###   ########.fr       */
+/*   Created: 2017/11/28 23:49:43 by ashih             #+#    #+#             */
+/*   Updated: 2017/11/28 23:58:17 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
 #include "libft.h"
 
-t_list	*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem))
+static void	add_last(t_list **head, t_list *node)
 {
-	t_list	*new;
-	t_list	*element;
-	t_list	*prev;
+	t_list	*temp;
 
-	new = (t_list *)0;
-	prev = (t_list *)0;
-	while (lst)
+	if (*head == NULL)
 	{
-		element = f(lst);
-		if (element)
-		{
-			if (prev)
-				prev->next = element;
-			else
-				new = element;
-			prev = element;
-			lst = lst->next;
-		}
-		else
-		{
-			ft_lstdel(&new, (void (*)(void *, size_t))free);
-			break ;
-		}
+		*head = node;
+		return ;
 	}
-	return (new);
+	temp = *head;
+	while (temp->next != NULL)
+		temp = temp->next;
+	temp->next = node;
+}
+
+t_list		*ft_lstmap(t_list *lst, t_list *(*f)(t_list *elem))
+{
+	t_list	*new_lst;
+
+	if (f == NULL)
+		return (NULL);
+	new_lst = NULL;
+	while (lst != NULL)
+	{
+		add_last(&new_lst, f(lst));
+		lst = lst->next;
+	}
+	return (new_lst);
 }

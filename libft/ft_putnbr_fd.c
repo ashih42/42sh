@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_putnbr.c                                        :+:      :+:    :+:   */
+/*   ft_putnbr_fd.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apuel <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/15 18:02:52 by apuel             #+#    #+#             */
-/*   Updated: 2017/11/15 18:11:47 by apuel            ###   ########.fr       */
+/*   Created: 2017/11/28 22:25:15 by ashih             #+#    #+#             */
+/*   Updated: 2017/11/28 22:49:23 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,15 +14,25 @@
 
 void	ft_putnbr_fd(int n, int fd)
 {
-	long long nb;
+	char	buffer[15];
+	int		sign;
+	int		i;
 
-	nb = n;
-	if (nb < 0)
+	if (n == 0)
 	{
-		ft_putchar_fd('-', fd);
-		nb = -nb;
+		ft_putchar_fd('0', fd);
+		return ;
 	}
-	if (nb / 10 != 0)
-		ft_putnbr_fd(nb / 10, fd);
-	ft_putchar_fd(nb % 10 + '0', fd);
+	sign = (n < 0) ? -1 : 1;
+	i = 0;
+	while (n != 0)
+	{
+		buffer[i++] = n % 10 * sign + '0';
+		n = n / 10;
+	}
+	i--;
+	if (sign == -1)
+		ft_putchar_fd('-', fd);
+	while (i >= 0)
+		ft_putchar_fd(buffer[i--], fd);
 }

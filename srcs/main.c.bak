@@ -1,0 +1,45 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   main.c                                             :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/03/05 13:41:33 by nmei              #+#    #+#             */
+/*   Updated: 2018/03/06 16:29:55 by ashih            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "ft_42sh.h"
+
+/*
+**	sh_loop()
+**
+**	Our shell loop which consists of:
+**
+**	1) Listening for user input on stdin
+**	2) Parsing the input
+**	3) Calling the relevant commands specified in the parsed input
+*/
+
+void	sh_loop(t_env *env)
+{
+	while (1)
+	{
+		sh_listen(env);
+		sh_parse(env);
+		sh_dispatcher(env);
+	}
+}
+
+int		main(int argc, char **argv, char **envp)
+{
+	(void)argc;
+	(void)argv;
+
+	t_env env;
+
+	init_sh(envp);
+	sh_loop(&env);
+	return (0);
+}

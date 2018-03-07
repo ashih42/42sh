@@ -3,69 +3,105 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strsplit.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apuel <marvin@42.fr>                       +#+  +:+       +#+        */
+/*   By: ashih <marvin@42.fr>                       +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/15 16:58:05 by apuel             #+#    #+#             */
-/*   Updated: 2017/11/27 16:17:24 by apuel            ###   ########.fr       */
+/*   Created: 2017/11/01 18:48:47 by ashih             #+#    #+#             */
+/*   Updated: 2017/11/28 19:59:25 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-static size_t	word_len(const char *s, char c)
+static int	count_substrings(char const *s, char c)
 {
-	size_t i;
+	int		count;
+	int		i;
 
+	count = 0;
 	i = 0;
-	while (s[i] && s[i] != c)
-		i++;
-	return (i);
-}
-
-static void		split_input(char **result, const char *s, char c)
-{
-	size_t i;
-	size_t j;
-
-	i = 0;
-	while (*s)
+	while (1)
 	{
-		if (*s != c)
-		{
-			j = 0;
-			result[i] = ft_strnew(word_len(s, c));
-			if (result[i])
-				while (*s && *s != c)
-					result[i][j++] = *s++;
+		while (s[i] == c)
 			i++;
-		}
-		else
-			s++;
+		if (s[i] == '\0')
+			return (count);
+		while (!(s[i] == c || s[i] == '\0'))
+			i++;
+		count++;
 	}
 }
 
-char			**ft_strsplit(char const *s, char c)
+static void	initialize_strings(char **array, char const *s, char c)
 {
-	char	**result;
-	size_t	i;
-	size_t	num_str;
+	int		i;
+	int		j;
+	int		head;
 
-	if (!s)
-		return ((char **)0);
 	i = 0;
-	num_str = 1;
-	while (s[i])
+	j = 0;
+	head = 0;
+	while (1)
 	{
-		if (s[i] != c)
-		{
-			i += word_len(&s[i], c);
-			num_str++;
-		}
-		else
+		while (s[i] == c)
 			i++;
+		if (s[i] == '\0')
+		{
+			array[j] = 0;
+			return ;
+		}
+		head = i;
+		while (!(s[i] == c || s[i] == '\0'))
+			i++;
+		array[j] = malloc(sizeof(char) * (i - head + 1));
+		j++;
 	}
-	result = ft_memalloc(num_str * sizeof(char *));
-	if (result)
-		split_input(result, s, c);
-	return (result);
+}
+
+static void	fill_array(char **array, char const *s, char c)
+{
+	int		i;
+	int		j;
+	int		k;
+
+	i = 0;
+	j = 0;
+	k = 0;
+	while (1)
+	{
+		while (s[i] == c)
+			i++;
+		if (s[i] == '\0')
+			return ;
+		k = 0;
+		while (!(s[i] == c || s[i] == '\0'))
+		{
+			array[j][k] = s[i];
+			k++;
+			i++;
+		}
+		array[j][k] = '\0';
+		j++;
+	}
+}
+
+char		**ft_strsplit(char const *s, char c)
+{
+	char	**total_array;
+	int		t;
+
+	if (s == NULL)
+		return (NULL);
+	if (ft_strlen(s) == 0)
+	{
+		total_array = malloc(sizeof(char*) * 1);
+		total_array[0] = 0;
+		return (total_array);
+	}
+	t = count_substrings(s, c);
+	total_array = malloc(sizeof(char*) * (t + 1));
+	if (total_array == NULL)
+		return (NULL);
+	initialize_strings(total_array, s, c);
+	fill_array(total_array, s, c);
+	return (total_array);
 }
