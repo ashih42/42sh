@@ -6,7 +6,7 @@
 /*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 14:08:33 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/06 16:00:47 by nmei             ###   ########.fr       */
+/*   Updated: 2018/03/06 16:10:09 by nmei             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,5 +65,14 @@ void			sh_parse();
 */
 
 void			sh_dispatcher();
+
+/*
+**	hashmap_utils.c
+*/
+unsigned long			djb2_hash(char *str);
+t_hash_node				*new_hash_node(char *key, char *val);
+t_hash_node 			*get_hash_node(t_hashmap hmap, char *key);
+int						add_hash_node(t_hashmap hmap, char *key, char *value);
+int						remove_hash_node(t_hashmap hmap, char *key);
 
 #endif

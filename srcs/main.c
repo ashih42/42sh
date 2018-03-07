@@ -6,10 +6,11 @@
 /*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 13:41:33 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/05 20:41:53 by nmei             ###   ########.fr       */
+/*   Updated: 2018/03/06 16:09:22 by nmei             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <stdlib.h>
 #include <libft.h>
 #include "ft_42sh.h"
 
@@ -35,10 +36,13 @@ void	sh_loop()
 
 int		main(int argc, char **argv, char **envp)
 {
+	t_env	env;
+
+	ft_memset(env, 0, sizeof(env));
 	(void)argc;
 	(void)argv;
 
-	init_sh(envp);
+	init_sh(&env, envp);
 	sh_loop();
 	return (0);
 }

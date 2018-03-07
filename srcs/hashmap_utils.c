@@ -84,26 +84,26 @@ t_hash_node 	*get_hash_node(t_hashmap hmap, char *key)
 ** it's not in the linked list.
 */
 
-int				*add_hash_node(t_hashmap hmap, char *key, char *value)
-{
-	t_hash_node	*new;
+// int				add_hash_node(t_hashmap hmap, char *key, char *value)
+// {
+// 	t_hash_node	*new;
 
-	if (!get_hash_node(hashmap, key))
-	{
-		new = new_hash_node(key, value);
-		if (hashmap)
-		{
-			while (hashmap->next)
-				hashmap = hashmap->next;
-			hashmap->next = new;
-			return (1);
-		}
-		else
+// 	if (!get_hash_node(hashmap, key))
+// 	{
+// 		new = new_hash_node(key, value);
+// 		if (hashmap)
+// 		{
+// 			while (hashmap->next)
+// 				hashmap = hashmap->next;
+// 			hashmap->next = new;
+// 			return (1);
+// 		}
+// 		else
 
-	}
-	else
-		return (0);
-}
+// 	}
+// 	else
+// 		return (0);
+// }
 
 /*
 **	remove_hash_node()
