@@ -14,13 +14,14 @@ void	ft_ctrl_c(int signo)
 	{
 		signal(SIGCHLD,SIG_IGN);
 		kill(g_e->child_pid, SIGINT);
-
+		g_e->child_pid = 0;
 	}
-	// DELIVER DEMOCRACY?
-//	ft_printf("\n");
-	ft_printf("\n");
-	ft_strdel(&(g_e->buffer));
-//	sh_listen(g_e);
+	else
+	{
+		// ANDRES HOW TO ERASE ^C ??????????
+		ft_printf("\n{robot} %s > ", get_variable(g_e, "PWD"));
+	}
+
 }
 
 void	ft_ctrl_z(int signo)
