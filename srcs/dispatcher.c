@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 16:26:59 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/06 17:45:42 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/06 18:03:23 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,19 +23,31 @@
 **	   provided as a literal path.
 */
 
-
-void	run(t_env *e)
+void	ft_cd(t_env *e)
 {
-	if (ft_strequ(e->args[0], "cd"))
-	{
-		if (ft_strequ(e->args[1], "-"))
-		{
+	// TODO: how to do case: cd (no arg[1] -> cd $HOME)
+	// how to check argc??
 
-		}	
+	if (ft_strequ(e->args[1], "-"))
+	{
+		chdir(e->oldpwd);
+		SWAP(e->oldpwd, e->pwd, char *);
+	}
+	else
+	{
 		e->oldpwd = e->pwd;
 		chdir(e->args[1]);
 		e->pwd = getcwd(0, 0);
 	}
+
+}
+
+
+
+void	run(t_env *e)
+{
+	if (ft_strequ(e->args[0], "cd"))
+		ft_cd(e);
 	else
 		execvp(e->args[0], e->args);
 }

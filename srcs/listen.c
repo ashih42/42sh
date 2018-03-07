@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 16:11:41 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/06 17:43:43 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/06 17:58:37 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,7 +36,7 @@ void	sh_listen(t_env *e)
 	{
 		read(STDIN_FILENO, &c, 1);
 		e->buffer[e->pos++] = c;
-		ft_putchar(c);
+//		ft_putchar(c);
 		if (c == '\n')
 		{
 //			ft_printf("{robot}beep boop beep boop{robot}\n");
