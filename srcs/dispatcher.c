@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 16:26:59 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/07 06:05:27 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/07 08:13:13 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,19 +55,33 @@ static char	*build_filepath(char *path, char *file)
 	return (filepath);
 }
 
-void		fork_execve(char *path, char **argv, char **envp)
+int		fork_execve(char *path, char **argv, char **envp)
 {
 	int	pid;
 	int	status;
 
+	status = 0;
 	pid = fork();
 	if (pid == 0)
 		exit(execve(path, argv, envp));
 	else if (pid != -1)
 		waitpid(pid, &status, 0);
+	return ((status == 0) ? 0 : -1);
 }
 
-void		execute(t_env *e, char **argv, char **envp)
+// TO-DO NOTES:
+// should separately check:
+// 1. does the command/file exist?
+// 2. does it have permissions?
+// and print corresponding error message
+
+// Also, how does, e.g.
+// > ./foo
+// the dot expands to current directory? 
+// it seems the OS just knows what . and .. mean,
+// so the shell doesn't have to do anything special about them
+
+int		execute(t_env *e, char **argv, char **envp)
 {
 	char	*temp_path;
 	char	**path;
@@ -75,6 +89,7 @@ void		execute(t_env *e, char **argv, char **envp)
 
 	temp_path = get_variable(e, "PATH");
 	if (!ft_strchr(argv[0], '/'))
+	{
 		if ((path = ft_strsplit(temp_path, ':')))
 		{
 			i = -1;
@@ -86,14 +101,16 @@ void		execute(t_env *e, char **argv, char **envp)
 					fork_execve(temp_path, argv, envp);
 					free(temp_path);
 					ft_char_array_del(path);
-					return ;
+					return (0);
 				}
 				free(temp_path);
 			}
 			ft_char_array_del(path);
 		}
-	if (ft_strchr(argv[0], '/'))
-		fork_execve(argv[0], argv, envp);
+		return (-1);
+	}
+	else
+		return (fork_execve(argv[0], argv, envp));
 }
 
 void		sh_dispatcher(t_env *e, int argc, char **argv)
@@ -104,7 +121,8 @@ void		sh_dispatcher(t_env *e, int argc, char **argv)
 	{
 		if ((envp = serialize_envp(e)))
 		{
-			execute(e, argv, envp);
+			if (execute(e, argv, envp) < 0)
+				ft_printf("42sh: command not found: %s\n", argv[0]);
 			ft_char_array_del(envp);
 		}
 		else
