@@ -16,9 +16,9 @@ void	ft_ctrl_c(int signo)
 	sh_listen(g_e);
 }
 
-void	ft_ctrl_d(int signo)
+void	ft_ctrl_z(int signo)
 {
-	void(signn);
+	void(signo);
 	ft_printf("\n");
 
 	sh_listen(g_e);
