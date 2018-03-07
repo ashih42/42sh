@@ -1,6 +1,5 @@
 #include "ft_42sh.h"
 
-
 t_hash_node		*new_hash_node(char *key, char *val)
 {
 	t_hash_node *new;
@@ -10,7 +9,7 @@ t_hash_node		*new_hash_node(char *key, char *val)
 	if ((new = (t_hash_node *)malloc(sizeof(t_hash_node))))
 	{
 		key_copy = ft_strdup(key);
-		val_copy = ft_strdup(value);
+		val_copy = ft_strdup(val);
 		if (key_copy && val_copy)
 		{
 			new->key = key_copy;
@@ -48,9 +47,9 @@ unsigned long	djb2_hash(char *str)
 	int				c;
 
 	hash = 5381;
-	while (c = *str++)
+	while ((c = *str++))
 		hash = ((hash << 5) + hash) ^ c;
-	return (hash % HASHMAP_SIZE)
+	return (hash % HASHMAP_SIZE);
 }
 
 /*
@@ -59,16 +58,16 @@ unsigned long	djb2_hash(char *str)
 **	Given a hashmap and a key, return the hashnode that contains the exact same
 **	key.
 **
-**	If get_hash_node() can't find a matching node, it returns NULL
+**	If get_hash_node() can't find a matching node or key is invalid returns NULL
 */
 
 t_hash_node 	*get_hash_node(t_hashmap hmap, char *key)
 {
 	t_hash_node	*curr;
 
-	if (hmap)
+	if (key)
 	{
-		curr = hmap->nodes[djb2_hash(key)];
+		curr = hmap.nodes[djb2_hash(key)];
 		while (curr)
 		{
 			if (ft_strcmp(curr->key, key) == 0)
@@ -94,7 +93,7 @@ int				add_hash_node(t_hashmap hmap, char *key, char *value)
 	t_hash_node *prev;
 	t_hash_node *curr;
 
-	curr = hmap->nodes[djb2_hash(key)];
+	curr = hmap.nodes[djb2_hash(key)];
 	if (curr)
 	{
 		while (curr)
@@ -122,7 +121,7 @@ int				add_hash_node(t_hashmap hmap, char *key, char *value)
 **	pointer swapping so that the 'prev' of curr will point to curr's 'next'.
 **
 **	If a hash node is sucessfully removed then the function returns 0.
-**	If a hash node wasn't found or the hashmap is invalid returns 1.
+**	If a hash node wasn't found or the key is invalid returns 1.
 */
 
 int				remove_hash_node(t_hashmap hmap, char *key)
@@ -130,10 +129,10 @@ int				remove_hash_node(t_hashmap hmap, char *key)
 	t_hash_node *prev;
 	t_hash_node *curr;
 
-	if (hmap)
+	if (key)
 	{
 		prev = NULL;
-		curr = hmap->nodes[djb2_hash(key)];
+		curr = hmap.nodes[djb2_hash(key)];
 		while (curr)
 		{
 			if (ft_strcmp(curr->key, key) == 0)
