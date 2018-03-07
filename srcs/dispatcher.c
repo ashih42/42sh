@@ -6,7 +6,7 @@
 /*   By: apuel <apuel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 16:26:59 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/07 02:47:31 by apuel            ###   ########.fr       */
+/*   Updated: 2018/03/07 03:15:26 by apuel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,15 +23,22 @@
 **	   provided as a literal path.
 */
 
-void	sh_dispatcher(t_env *e, int argc, char **argv)
+static int	built_ins(t_env *e, int argc, char **argv)
+{
+	if (ft_strequ(argv[0], "cd"))
+		ft_cd(e, argc, argv);
+	else
+		return (0);
+	return (1);
+}
+
+void		sh_dispatcher(t_env *e, int argc, char **argv)
 {
 	char	**envp;
 
 	if (argc)
 	{
-		if (ft_strequ(argv[0], "cd"))
-			ft_cd(e, argc, argv);
-		else
+		if (!built_ins(e, argc, argv))
 		{
 			if ((envp = serialize_envp(e)))
 			{
