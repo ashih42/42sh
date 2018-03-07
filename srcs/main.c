@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 13:41:33 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/07 11:32:27 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/07 13:47:58 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,10 @@ int		main(int argc, char **argv, char **envp)
 		argv = sh_parse(&e, &argc);
 		if (argv)
 			sh_dispatcher(&e, argc, argv);
+		// NOTE: reusing the argv from main()... what if sh_parse() returns a much longer char **,
+		// longer than the amount of memory allocated for the original main()'s argv?
+
+		// To be safe, we should add argc and argv as elements inside t_env e;
 	}
 	return (0);
 }
