@@ -6,7 +6,7 @@
 /*   By: apuel <apuel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 16:26:59 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/07 02:17:25 by apuel            ###   ########.fr       */
+/*   Updated: 2018/03/07 02:47:31 by apuel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,33 +22,6 @@
 **	3) If the cmd is not located in the specified PATHS check if the the cmd was
 **	   provided as a literal path.
 */
-
-void	ft_cd(t_env *e, int argc, char **argv)
-{
-	char		*homedir;
-	char		*pwd;
-	char		*oldpwd;
-
-	if (argc > 1)
-	{
-		pwd = get_variable(e, "PWD");
-		homedir = get_variable(e, "HOME");
-		oldpwd = get_variable(e, "OLDPWD");
-		if (ft_strequ(argv[1], "-"))
-		{
-			if (!chdir(oldpwd))
-				set_variable(e, "OLDPWD", pwd);
-		}
-		else if (ft_strequ(argv[1], "~/"))
-		{
-			if (!chdir(homedir))
-				set_variable(e, "OLDPWD", pwd);
-		}
-		else if (!chdir(argv[1]))
-			set_variable(e, "OLDPWD", pwd);
-		set_variable(e, "PWD", getcwd(NULL, 0));
-	}
-}
 
 void	sh_dispatcher(t_env *e, int argc, char **argv)
 {

@@ -6,7 +6,7 @@
 /*   By: apuel <apuel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 14:08:33 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/07 02:29:54 by apuel            ###   ########.fr       */
+/*   Updated: 2018/03/07 02:48:23 by apuel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,6 +59,12 @@ char					**sh_parse(t_env *e, int *argc);
 */
 
 void					sh_dispatcher(t_env *e, int argc, char **argv);
+
+/*
+**	ft_cd.c
+*/
+
+void					ft_cd(t_env *e, int argc, char **argv);
 
 /*
 **	split_argv.c
