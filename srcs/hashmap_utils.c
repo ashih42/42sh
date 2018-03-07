@@ -79,31 +79,35 @@ t_hash_node 	*get_hash_node(t_hashmap hmap, char *key)
 }
 
 /*
-** add_hash_node()
-** Checks to see if a t_hash_node with a given key already exists, adds it if
-** it's not in the linked list.
+**	add_hash_node()
+**
+**	Checks to see if a t_hash_node with a given key already exists, adds it if
+**	it's not in the linked list.
+**
+**	If a hash node was successfully added, function returns 0.
+**	If a hash node wasn't able to be added, function returns 1.
 */
 
 int				add_hash_node(t_hashmap hmap, char *key, char *value)
 {
+	t_hash_node *prev;
 	t_hash_node *curr;
 
 	curr = hmap->nodes[djb2_hash(key)];
 	if (curr)
 	{
-		if (!ft_strcmp(curr->key, key))
-			return (0);
-		while (curr->next)
+		while (curr)
 		{
-			curr = curr->next;
 			if (!ft_strcmp(curr->key, key))
-				return (0);
+				return (1);
+			prev = curr;
+			curr = curr->next;
 		}
-		curr = new_hash_node(key, value);
+		prev->next = new_hash_node(key, value);
 	}
 	else
 		curr = new_hash_node(key, value);
-	return (1);
+	return (0);
 }
 
 /*
