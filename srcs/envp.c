@@ -6,7 +6,7 @@
 /*   By: apuel <apuel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 00:46:15 by apuel             #+#    #+#             */
-/*   Updated: 2018/03/07 02:18:16 by apuel            ###   ########.fr       */
+/*   Updated: 2018/03/07 04:49:43 by apuel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,16 +66,6 @@ int				set_variable(t_env *e, char *key, char *value)
 	return (0);
 }
 
-void			free_serialized_envp(char **envp)
-{
-	size_t	i;
-
-	i = 0;
-	while (envp[i])
-		free(envp[i++]);
-	free(envp);
-}
-
 char			**serialize_envp(t_env *e)
 {
 	t_list	*node;
@@ -92,7 +82,7 @@ char			**serialize_envp(t_env *e)
 			entry = node->content;
 			if (!(map = ft_strnew(ft_strlen(entry[0]) + 1 + ft_strlen(entry[1]))))
 			{
-				free_serialized_envp(table);
+				ft_char_array_del(table);
 				return (NULL);
 			}
 			ft_strcpy(map, entry[0]);

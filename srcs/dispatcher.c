@@ -6,7 +6,7 @@
 /*   By: apuel <apuel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 16:26:59 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/07 04:43:03 by apuel            ###   ########.fr       */
+/*   Updated: 2018/03/07 04:49:53 by apuel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -77,12 +77,12 @@ void		execute(t_env *e, char **argv, char **envp)
 				{
 					fork_execve(temp_path, argv, envp);
 					free(temp_path);
-					free_serialized_envp(path);
+					ft_char_array_del(path);
 					return ;
 				}
 				free(temp_path);
 			}
-			free_serialized_envp(path);
+			ft_char_array_del(path);
 		}
 	if (ft_strchr(argv[0], '/'))
 		fork_execve(argv[0], argv, envp);
@@ -97,9 +97,10 @@ void		sh_dispatcher(t_env *e, int argc, char **argv)
 		if ((envp = serialize_envp(e)))
 		{
 			execute(e, argv, envp);
-			free_serialized_envp(envp);
+			ft_char_array_del(envp);
 		}
 		else
 			ft_printf("{robot} [!] Failed to allocate envp!\n");
+		ft_char_array_del(argv);
 	}
 }
