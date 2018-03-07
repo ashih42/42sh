@@ -6,26 +6,30 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 14:08:33 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/07 06:19:14 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/07 08:54:40 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_42SH_H
 # define FT_42SH_H
 
-# include <unistd.h>
-# include <stdlib.h>
-# include <libft.h>
+# include <signal.h>
+# include "libft.h"
+
 
 # define HASHMAP_SIZE	256
 # define BUFFER_SIZE	4096
 # define WHITESPACE		" \t\n\v\r\f"
 
+
+
 typedef struct			s_env
 {
 	t_list				*envp;
 	char				*buffer;
-}						t_env;	
+}						t_env;
+
+extern t_env			*g_e;
 
 /*
 **	envp.c
@@ -84,6 +88,11 @@ void					ft_unsetenv(t_env *e, int argc, char **argv);
 **	ft_exit.c
 */
 void					ft_exit(t_env *e, int argc, char **argv);
+
+/*
+**	signal.c
+*/
+void					ft_ctrl_c(int signo);
 
 /*
 **	split_argv.c

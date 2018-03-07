@@ -1,0 +1,29 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   signal.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/03/07 08:43:50 by ashih             #+#    #+#             */
+/*   Updated: 2018/03/07 09:08:27 by ashih            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "ft_42sh.h"
+
+// There appears to be no way to pass arguments into this signal-handling function,
+// already defined to only take 1 int parameter.
+
+// So, I made a global pointer to t_env e.  Perhaps we could just use this global for everything?
+// Or keep pasing e in arguments, and only use g_e for signals when absolutely necessary?
+
+void	ft_ctrl_c(int signo)
+{
+	(void)signo;
+	ft_printf("\n");
+	
+	// DELIVER DEMOCRACY?
+
+	sh_listen(g_e);
+}

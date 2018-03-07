@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apuel <apuel@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 13:41:33 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/07 02:30:51 by apuel            ###   ########.fr       */
+/*   Updated: 2018/03/07 09:02:07 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,10 +22,14 @@
 **	3) Calling the relevant commands specified in the parsed input
 */
 
+t_env *g_e = 0;
+
 int		main(int argc, char **argv, char **envp)
 {
 	t_env	e;
 
+	g_e = &e;
+	signal(SIGINT, ft_ctrl_c);
 	ft_bzero(&e, sizeof(t_env));
 	sh_init(&e, envp);
 	while (1)
