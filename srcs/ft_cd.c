@@ -6,7 +6,7 @@
 /*   By: apuel <apuel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 02:47:21 by apuel             #+#    #+#             */
-/*   Updated: 2018/03/07 03:20:24 by apuel            ###   ########.fr       */
+/*   Updated: 2018/03/07 03:36:04 by apuel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,10 +14,14 @@
 
 static void	change_directory(t_env *e, char *directory)
 {
+	char	*pwd;
+
 	if (!chdir(directory))
 	{
 		set_variable(e, "OLDPWD", get_variable(e, "PWD"));
-		set_variable(e, "PWD", getcwd(NULL, 0));
+		pwd = getcwd(NULL, 0);
+		set_variable(e, "PWD", pwd);
+		free(pwd);
 	}
 }
 
