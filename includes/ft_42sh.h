@@ -6,12 +6,15 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 14:08:33 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/06 16:39:41 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/06 17:40:44 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_42SH_H
 # define FT_42SH_H
+
+
+# include <stdio.h>		// REMOVE THIS LATER 
 
 # include "libft.h"
 
@@ -19,6 +22,8 @@
 # define HASHMAP_SIZE	256
 # define BUFFER_SIZE 4096
 # define WHITESPACE " \t\n\v\r\f"
+
+# define SWAP(a, b, T) {T temp = a; a = b; b = temp;}
 
 
 /*
@@ -43,6 +48,9 @@ typedef struct			s_env
 	t_hashmap			map;
 	char buffer[BUFFER_SIZE + 1];
 	int pos;
+	char **args;
+	char				*pwd;
+	char				*oldpwd;
 }						t_env;	
 
 /*

@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 16:26:40 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/06 16:37:34 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/06 16:58:29 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@
 
 void	sh_parse(t_env *e)
 {
-	ft_printf("{robot}parsing...\n");
-	(void)e;
+//	ft_printf("{robot}parsing...\n");
+	e->args = split_ws(e->buffer, WHITESPACE);
+	
 }

@@ -10,7 +10,7 @@ SRCS_DIR = ./srcs/
 INCLUDES = ./includes/
 OBJS_DIR = ./objects/
 
-FILES = env.c listen.c parse.c dispatcher.c hashmap_utils.c split_ws.c
+FILES = init.c listen.c parse.c dispatcher.c hashmap_utils.c split_ws.c
 ifeq ($(TESTING_ENV),)
     FILES += main.c
 else

@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 16:11:41 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/06 16:37:03 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/06 17:43:43 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ void	sh_listen(t_env *e)
 	ft_bzero(e->buffer, BUFFER_SIZE + 1);
 	e->pos = 0;
 
-	ft_printf("{robot}> ");
+	ft_printf("{robot} %s > ", e->pwd);
 
 	char c;
 	while (1)
@@ -39,7 +39,7 @@ void	sh_listen(t_env *e)
 		ft_putchar(c);
 		if (c == '\n')
 		{
-			ft_printf("{robot}beep boop beep boop{robot}\n");
+//			ft_printf("{robot}beep boop beep boop{robot}\n");
 			return ;
 		}
 		
