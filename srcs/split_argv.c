@@ -6,7 +6,7 @@
 /*   By: apuel <apuel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/01 18:48:47 by ashih             #+#    #+#             */
-/*   Updated: 2018/03/07 02:12:19 by apuel            ###   ########.fr       */
+/*   Updated: 2018/03/07 04:44:18 by apuel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -59,7 +59,10 @@ static void	initialize_strings(char **array, char const *s, char *ws)
 		while (is_ws(s[i], ws))
 			i++;
 		if (s[i] == '\0')
+		{
+			array[j] = 0;
 			return ;
+		}
 		head = i;
 		while (!(is_ws(s[i], ws) || s[i] == '\0'))
 			i++;
@@ -104,7 +107,7 @@ char		**split_argv(char const *s, char *ws, int *argc)
 	if (ft_strlen(s) == 0)
 		return (NULL);
 	*argc = count_substrings(s, ws);
-	if ((total_array = malloc(sizeof(char *) * (*argc))))
+	if ((total_array = malloc(sizeof(char *) * (*argc + 1))))
 	{
 		initialize_strings(total_array, s, ws);
 		fill_array(total_array, s, ws);

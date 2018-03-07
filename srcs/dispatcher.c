@@ -6,7 +6,7 @@
 /*   By: apuel <apuel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 16:26:59 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/07 04:31:52 by apuel            ###   ########.fr       */
+/*   Updated: 2018/03/07 04:43:03 by apuel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,6 @@ void		fork_execve(char *path, char **argv, char **envp)
 	int	pid;
 	int	status;
 
-	ft_printf("Attempting to run %s...\n", path);
 	pid = fork();
 	if (pid == 0)
 		exit(execve(path, argv, envp));
