@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dispatcher.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
+/*   By: apuel <apuel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 16:26:59 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/07 04:00:42 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/07 04:31:52 by apuel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,21 +34,73 @@ static int	built_ins(t_env *e, int argc, char **argv)
 	return (1);
 }
 
+static char	*build_filepath(char *path, char *file)
+{
+	char	*filepath;
+
+	if ((filepath = ft_strnew(ft_strlen(path) + 1 + ft_strlen(file))))
+	{
+		ft_strcpy(filepath, path);
+		ft_strcat(filepath, "/");
+		ft_strcat(filepath, file);
+	}
+	return (filepath);
+}
+
+void		fork_execve(char *path, char **argv, char **envp)
+{
+	int	pid;
+	int	status;
+
+	ft_printf("Attempting to run %s...\n", path);
+	pid = fork();
+	if (pid == 0)
+		exit(execve(path, argv, envp));
+	else if (pid != -1)
+		waitpid(pid, &status, 0);
+}
+
+void		execute(t_env *e, char **argv, char **envp)
+{
+	char	*temp_path;
+	char	**path;
+	size_t	i;
+
+	temp_path = get_variable(e, "PATH");
+	if (!ft_strchr(argv[0], '/'))
+		if ((path = ft_strsplit(temp_path, ':')))
+		{
+			i = -1;
+			while (path[++i])
+			{
+				temp_path = build_filepath(path[i], argv[0]);
+				if (temp_path && access(temp_path, X_OK) == 0)
+				{
+					fork_execve(temp_path, argv, envp);
+					free(temp_path);
+					free_serialized_envp(path);
+					return ;
+				}
+				free(temp_path);
+			}
+			free_serialized_envp(path);
+		}
+	if (ft_strchr(argv[0], '/'))
+		fork_execve(argv[0], argv, envp);
+}
+
 void		sh_dispatcher(t_env *e, int argc, char **argv)
 {
 	char	**envp;
 
-	if (argc)
+	if (argc && !built_ins(e, argc, argv))
 	{
-		if (!built_ins(e, argc, argv))
+		if ((envp = serialize_envp(e)))
 		{
-			if ((envp = serialize_envp(e)))
-			{
-				execve(argv[0], argv, envp);
-				free_serialized_envp(envp);
-			}
-			else
-				ft_printf("{robot} [!] Failed to allocate envp!\n");
+			execute(e, argv, envp);
+			free_serialized_envp(envp);
 		}
+		else
+			ft_printf("{robot} [!] Failed to allocate envp!\n");
 	}
 }
