@@ -61,7 +61,7 @@ unsigned long	djb2_hash(char *str)
 **	If get_hash_node() can't find a matching node or key is invalid returns NULL
 */
 
-t_hash_node 	*get_hash_node(t_hashmap *hmap, char *key)
+t_hash_node		*get_hash_node(t_hashmap *hmap, char *key)
 {
 	t_hash_node	*curr;
 
@@ -70,7 +70,7 @@ t_hash_node 	*get_hash_node(t_hashmap *hmap, char *key)
 		curr = (hmap->nodes)[djb2_hash(key)];
 		while (curr)
 		{
-			if (ft_strcmp(curr->key, key) == 0)
+			if (!ft_strcmp(curr->key, key))
 				return (curr);
 			curr = curr->next;
 		}
@@ -81,7 +81,8 @@ t_hash_node 	*get_hash_node(t_hashmap *hmap, char *key)
 /*
 **	add_hash_node()
 **
-**	Checks to see if a t_hash_node with a given key already exists, adds it if
+**	Checks to see if a t_hash_node with a given key already exists
+**	If the node exists, then overwrite the value with our new value
 **	it's not in the linked list.
 **
 **	If a hash node was successfully added, function returns 0.
@@ -108,9 +109,7 @@ int				add_hash_node(t_hashmap *hmap, char *key, char *value)
 		prev->next = new_hash_node(key, value);
 	}
 	else
-	{
 		(hmap->nodes)[hash] = new_hash_node(key, value);
-	}
 	return (0);
 }
 
@@ -139,16 +138,14 @@ int				remove_hash_node(t_hashmap *hmap, char *key)
 		curr = (hmap->nodes)[djb2_hash(key)];
 		while (curr)
 		{
-			if (ft_strcmp(curr->key, key) == 0)
+			if (!ft_strcmp(curr->key, key))
 			{
 				if (prev)
 					prev->next = curr->next;
-				if (curr->key)
-					free(curr->key);
-				if (curr->val)
-					free(curr->val);
+				(curr->key) ? free(curr->key) : 0;
+				(curr->val) ? free(curr->val) : 0;
 				free(curr);
-				curr = NULL;
+				(hmap->nodes)[djb2_hash(key)] = NULL;
 				return (0);
 			}
 			prev = curr;

@@ -6,7 +6,7 @@
 /*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 14:08:33 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/06 18:23:32 by nmei             ###   ########.fr       */
+/*   Updated: 2018/03/06 19:02:36 by nmei             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,8 +20,8 @@
 
 
 # define HASHMAP_SIZE	256
-# define BUFFER_SIZE 4096
-# define WHITESPACE " \t\n\v\r\f"
+# define BUFFER_SIZE	4096
+# define WHITESPACE		" \t\n\v\r\f"
 
 # define SWAP(a, b, T) {T temp = (a); (a) = (b); (b) = temp;}
 

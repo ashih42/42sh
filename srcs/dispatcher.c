@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dispatcher.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 16:26:59 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/06 18:08:31 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/06 19:01:17 by nmei             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,10 @@ void	ft_cd(t_env *e)
 	{
 		chdir(e->oldpwd);
 		SWAP(e->oldpwd, e->pwd, char *);
+	}
+	else if (ft_strequ(e->args[1], "~/"))
+	{
+		chdir(get_hash_node(&e->map, "HOME")->val);
 	}
 	else
 	{
