@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 13:41:33 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/07 09:02:07 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/07 11:32:27 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,6 @@
 **	2) Parsing the input
 **	3) Calling the relevant commands specified in the parsed input
 */
-
-t_env *g_e = 0;
 
 int		main(int argc, char **argv, char **envp)
 {

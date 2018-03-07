@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 14:08:33 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/07 09:47:29 by hiroshius        ###   ########.fr       */
+/*   Updated: 2018/03/07 11:02:18 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ typedef struct			s_env
 {
 	t_list				*envp;
 	char				*buffer;
+	int 				child_pid;
 }						t_env;
 
 t_env					*g_e;

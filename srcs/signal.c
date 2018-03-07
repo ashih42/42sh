@@ -11,8 +11,16 @@ void	ft_ctrl_c(int signo)
 	(void)signo;
 	ft_printf("\n");
 	
-	// DELIVER DEMOCRACY?
+	if (g_e->child_pid != 0)
+	{
+		signal(SIGCHLD,SIG_IGN);
+		kill(g_e->child_pid, SIGINT);
 
+	}
+	// DELIVER DEMOCRACY?
+	ft_printf("\n");
+//	ft_printf("\n");
+//	ft_strdel(&(g_e->buffer));
 	sh_listen(g_e);
 }
 

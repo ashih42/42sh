@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   listen.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apuel <apuel@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 16:11:41 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/07 02:52:53 by apuel            ###   ########.fr       */
+/*   Updated: 2018/03/07 11:19:48 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,5 +26,5 @@
 void	sh_listen(t_env *e)
 {
 	ft_printf("{robot} %s > ", get_variable(e, "PWD"));
-	del_and_gnl(0, &(e->buffer)); //TODO: read one character at a time to detect tabs :sob:
+	del_and_gnl(STDIN_FILENO, &(e->buffer)); //TODO: read one character at a time to detect tabs :sob:
 }

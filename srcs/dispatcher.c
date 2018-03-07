@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 16:26:59 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/07 08:13:13 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/07 11:07:28 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,13 +55,14 @@ static char	*build_filepath(char *path, char *file)
 	return (filepath);
 }
 
-int		fork_execve(char *path, char **argv, char **envp)
+int		fork_execve(t_env *e, char *path, char **argv, char **envp)
 {
 	int	pid;
 	int	status;
 
 	status = 0;
 	pid = fork();
+	e->child_pid = pid;
 	if (pid == 0)
 		exit(execve(path, argv, envp));
 	else if (pid != -1)
@@ -98,7 +99,7 @@ int		execute(t_env *e, char **argv, char **envp)
 				temp_path = build_filepath(path[i], argv[0]);
 				if (temp_path && access(temp_path, X_OK) == 0)
 				{
-					fork_execve(temp_path, argv, envp);
+					fork_execve(e, temp_path, argv, envp);
 					free(temp_path);
 					ft_char_array_del(path);
 					return (0);
@@ -110,7 +111,7 @@ int		execute(t_env *e, char **argv, char **envp)
 		return (-1);
 	}
 	else
-		return (fork_execve(argv[0], argv, envp));
+		return (fork_execve(e, argv[0], argv, envp));
 }
 
 void		sh_dispatcher(t_env *e, int argc, char **argv)
