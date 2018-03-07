@@ -9,7 +9,6 @@
 void	ft_ctrl_c(int signo)
 {
 	(void)signo;
-	ft_printf("\n");
 	
 	if (g_e->child_pid != 0)
 	{
@@ -18,10 +17,10 @@ void	ft_ctrl_c(int signo)
 
 	}
 	// DELIVER DEMOCRACY?
-	ft_printf("\n");
 //	ft_printf("\n");
-//	ft_strdel(&(g_e->buffer));
-	sh_listen(g_e);
+	ft_printf("\n");
+	ft_strdel(&(g_e->buffer));
+//	sh_listen(g_e);
 }
 
 void	ft_ctrl_z(int signo)
