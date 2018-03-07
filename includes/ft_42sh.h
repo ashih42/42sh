@@ -3,67 +3,44 @@
 /*                                                        :::      ::::::::   */
 /*   ft_42sh.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: apuel <apuel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 14:08:33 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/06 23:31:19 by nmei             ###   ########.fr       */
+/*   Updated: 2018/03/07 02:29:54 by apuel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef FT_42SH_H
 # define FT_42SH_H
 
-
-# include <stdio.h>		// REMOVE THIS LATER 
-
+# include <unistd.h>
+# include <stdlib.h>
 # include <libft.h>
-
 
 # define HASHMAP_SIZE	256
 # define BUFFER_SIZE	4096
 # define WHITESPACE		" \t\n\v\r\f"
 
-# define SWAP(a, b, T) {T temp = (a); (a) = (b); (b) = temp;}
-
-
-/*
-**	This will be the data structure that stores our environment variables
-**	Maybe other stuff too?
-*/
-
-typedef struct			s_hash_node
-{
-	char				*key;
-	char				*val;
-	struct s_hash_node	*next;
-}						t_hash_node;
-
-typedef struct			s_hashmap
-{
-	t_hash_node			*nodes[HASHMAP_SIZE];
-}						t_hashmap;
-
 typedef struct			s_env
 {
-	t_hashmap			hmap;
-	char				buffer[BUFFER_SIZE + 1];
-	int					pos;
-	char				**args;
-	char				*pwd;
-	char				*oldpwd;
+	t_list				*envp;
+	char				*buffer;
 }						t_env;	
 
 /*
-**	main.c
+**	envp.c
 */
 
-void					sh_loop(t_env *e);
+char					*get_variable(t_env *e, char *key);
+int						set_variable(t_env *e, char *key, char *value);
+void					free_serialized_envp(char **envp);
+char					**serialize_envp(t_env *e);
 
 /*
-**	env.c
+**	init.c
 */
 
-void					init_sh(t_env *e, char **envp);
+void					sh_init(t_env *e, char **envp);
 
 /*
 **	listen.c
@@ -75,27 +52,18 @@ void					sh_listen(t_env *e);
 **	parse.c
 */
 
-void					sh_parse(t_env *e);
+char					**sh_parse(t_env *e, int *argc);
 
 /*
 **	dispatcher.c
 */
 
-void					sh_dispatcher(t_env *e);
+void					sh_dispatcher(t_env *e, int argc, char **argv);
 
 /*
-**	hashmap_utils.c
+**	split_argv.c
 */
-unsigned long			djb2_hash(char *str);
-t_hash_node				*new_hash_node(char *key, char *val);
-t_hash_node 			*get_hash_node(t_hashmap *hmap, char *key);
-char					*get_hash_val(t_hashmap *hmap, char *key);
-int						add_hash_node(t_hashmap *hmap, char *key, char *value);
-int						remove_hash_node(t_hashmap *hmap, char *key);
 
-/*
-**	split_ws.c
-*/
-char					**split_ws(char const *s, char *ws);
+char					**split_argv(char const *s, char *ws, int *argc);
 
 #endif

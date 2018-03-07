@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   split_ws.c                                         :+:      :+:    :+:   */
+/*   split_argv.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
+/*   By: apuel <apuel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/01 18:48:47 by ashih             #+#    #+#             */
-/*   Updated: 2018/03/06 16:47:45 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/07 02:12:19 by apuel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "libft.h"
+#include "ft_42sh.h"
 
 static int is_ws(char c, char *ws)
 {
@@ -59,10 +59,7 @@ static void	initialize_strings(char **array, char const *s, char *ws)
 		while (is_ws(s[i], ws))
 			i++;
 		if (s[i] == '\0')
-		{
-			array[j] = 0;
 			return ;
-		}
 		head = i;
 		while (!(is_ws(s[i], ws) || s[i] == '\0'))
 			i++;
@@ -98,24 +95,21 @@ static void	fill_array(char **array, char const *s, char *ws)
 	}
 }
 
-char		**split_ws(char const *s, char *ws)
+char		**split_argv(char const *s, char *ws, int *argc)
 {
 	char	**total_array;
-	int		t;
 
 	if (s == NULL)
 		return (NULL);
 	if (ft_strlen(s) == 0)
-	{
-		total_array = malloc(sizeof(char*) * 1);
-		total_array[0] = 0;
-		return (total_array);
-	}
-	t = count_substrings(s, ws);
-	total_array = malloc(sizeof(char*) * (t + 1));
-	if (total_array == NULL)
 		return (NULL);
-	initialize_strings(total_array, s, ws);
-	fill_array(total_array, s, ws);
+	*argc = count_substrings(s, ws);
+	if ((total_array = malloc(sizeof(char *) * (*argc))))
+	{
+		initialize_strings(total_array, s, ws);
+		fill_array(total_array, s, ws);
+	}
+	else
+		*argc = 0;
 	return (total_array);
 }

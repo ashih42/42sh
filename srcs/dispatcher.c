@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dispatcher.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: apuel <apuel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 16:26:59 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/06 23:58:40 by nmei             ###   ########.fr       */
+/*   Updated: 2018/03/07 02:17:25 by apuel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,67 +23,50 @@
 **	   provided as a literal path.
 */
 
-void	ft_cd(t_env *e)
+void	ft_cd(t_env *e, int argc, char **argv)
 {
 	char		*homedir;
 	char		*pwd;
 	char		*oldpwd;
 
-	// TODO: how to do case: cd (no arg[1] -> cd $HOME)
-	// Need to be able to handle 'cd .' and 'cd ..'
-	// how to check argc??
-	pwd = get_hash_val(&e->hmap, "PWD");
-	homedir = get_hash_val(&e->hmap, "HOME");
-	oldpwd = get_hash_val(&e->hmap, "OLDPWD");
-	if (ft_strequ(e->args[1], "-"))
+	if (argc > 1)
 	{
-		if (!chdir(oldpwd))
-			add_hash_node(&e->hmap, "OLDPWD", pwd);
+		pwd = get_variable(e, "PWD");
+		homedir = get_variable(e, "HOME");
+		oldpwd = get_variable(e, "OLDPWD");
+		if (ft_strequ(argv[1], "-"))
+		{
+			if (!chdir(oldpwd))
+				set_variable(e, "OLDPWD", pwd);
+		}
+		else if (ft_strequ(argv[1], "~/"))
+		{
+			if (!chdir(homedir))
+				set_variable(e, "OLDPWD", pwd);
+		}
+		else if (!chdir(argv[1]))
+			set_variable(e, "OLDPWD", pwd);
+		set_variable(e, "PWD", getcwd(NULL, 0));
 	}
-	else if (ft_strequ(e->args[1], "~/"))
-	{
-		if (!chdir(homedir))
-			add_hash_node(&e->hmap, "OLDPWD", pwd);
-	}
-	else
-	{
-		if (!chdir(e->args[1]))
-			add_hash_node(&e->hmap, "OLDPWD", pwd);
-	}
-	pwd = getcwd(NULL, 0);
-	add_hash_node(&e->hmap, "PWD", pwd);
 }
 
-
-
-void	run(t_env *e)
+void	sh_dispatcher(t_env *e, int argc, char **argv)
 {
-	if (ft_strequ(e->args[0], "cd"))
+	char	**envp;
+
+	if (argc)
 	{
-		ft_cd(e);
+		if (ft_strequ(argv[0], "cd"))
+			ft_cd(e, argc, argv);
+		else
+		{
+			if ((envp = serialize_envp(e)))
+			{
+				execve(argv[0], argv, envp);
+				free_serialized_envp(envp);
+			}
+			else
+				ft_printf("{robot} [!] Failed to allocate envp!\n");
+		}
 	}
-	else
-		execvp(e->args[0], e->args);
-	exit(0);
-}
-
-
-
-
-
-void	sh_dispatcher(t_env *e)
-{
-//	ft_printf("{robot}dispatching...\n");
-	int pid;
-	int child_status;
-	pid = fork();
-	if (pid < 0)
-	{
-		ft_puterror("fork() failed", 0, 0);
-		exit(0);
-	}
-	if (pid == 0)
-		run(e);
-	else
-		wait(&child_status);
 }

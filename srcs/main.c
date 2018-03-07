@@ -3,19 +3,17 @@
 /*                                                        :::      ::::::::   */
 /*   main.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
+/*   By: apuel <apuel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 13:41:33 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/06 17:15:02 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/07 02:30:51 by apuel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include <stdlib.h>
-#include <libft.h>
 #include "ft_42sh.h"
 
 /*
-**	sh_loop()
+**	main()
 **
 **	Our shell loop which consists of:
 **
@@ -24,30 +22,20 @@
 **	3) Calling the relevant commands specified in the parsed input
 */
 
-void	sh_loop(t_env *e)
-{
-	while (1)
-	{
-		sh_listen(e);
-		sh_parse(e);
-		sh_dispatcher(e);
-	}
-}
-
 int		main(int argc, char **argv, char **envp)
 {
 	t_env	e;
 
 	ft_bzero(&e, sizeof(t_env));
-	
-	(void)argc;
-	(void)argv;
-
-	init_sh(&e, envp);
-	sh_loop(&e);
-
-//	char temp[BUFFER_SIZE];
-	printf("getcwd = %s\n", getcwd(0, 0));
-//	printf("temp = %s\n", temp);
+	sh_init(&e, envp);
+	while (1)
+	{
+		sh_listen(&e);
+		if (!e.buffer)
+			break ;
+		argv = sh_parse(&e, &argc);
+		if (argv)
+			sh_dispatcher(&e, argc, argv);
+	}
 	return (0);
 }

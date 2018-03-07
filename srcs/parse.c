@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
+/*   By: apuel <apuel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 16:26:40 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/06 16:58:29 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/07 01:51:11 by apuel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,9 +19,7 @@
 **	redirections, escaped characters, etc.
 */
 
-void	sh_parse(t_env *e)
+char	**sh_parse(t_env *e, int *argc)
 {
-//	ft_printf("{robot}parsing...\n");
-	e->args = split_ws(e->buffer, WHITESPACE);
-	
+	return (split_argv(e->buffer, WHITESPACE, argc));
 }

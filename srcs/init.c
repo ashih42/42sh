@@ -3,45 +3,45 @@
 /*                                                        :::      ::::::::   */
 /*   init.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: apuel <apuel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 16:10:47 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/06 23:37:47 by nmei             ###   ########.fr       */
+/*   Updated: 2018/03/07 02:29:31 by apuel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_42sh.h"
 
 /*
-**	init_sh()
+**	sh_init()
 **
 **	This function should read in the default shell environment variables
 **	(**envp) and load them into our 42sh environment variable data structure...
+**
+**	Essentially deserialize envp.
 */
 
-void	init_sh(t_env *e, char **envp)
+void	sh_init(t_env *e, char **envp)
 {
 	char	*tmp_key;
 	char	*tmp_val;
 	char	*eq_ptr;
 
-	//printf("%lu %lu\n", djb2_hash("playwright"), djb2_hash("snush"));
-
 	while (*envp)
-	{
-		eq_ptr = ft_strchr(*envp, '=');
-		tmp_key = ft_strsub(*envp, 0, eq_ptr - (*envp));
-		//printf("key: |%s|\n", tmp_key);
-		tmp_val = ft_strdup(eq_ptr + 1);
-		//printf("val: |%s|\n", tmp_val);
-		envp++;
-		add_hash_node(&e->hmap, tmp_key, tmp_val);
-		free(tmp_key);
-		free(tmp_val);
-	}
-	//printf("test key: |%s|\n", get_hash_node(&e->map, "OLDPWD")->key);
-	//printf("test val: |%s|\n", get_hash_node(&e->map, "OLDPWD")->val);
-	//printf("test key: |%s|\n", get_hash_node(&e->map, "HOME")->key);
-	//printf("test val: |%s|\n", get_hash_node(&e->map, "HOME")->val);
-	add_hash_node(&e->hmap, "PWD", getcwd(NULL, 0));
+		if ((eq_ptr = ft_strchr(*envp, '=')))
+		{
+			if ((tmp_key = ft_strsub(*envp, 0, eq_ptr - (*envp))))
+			{
+				if ((tmp_val = ft_strdup(eq_ptr + 1)))
+				{
+					set_variable(e, tmp_key, tmp_val);
+					free(tmp_val);
+					free(tmp_key);
+				}
+			}
+			envp++;
+		}
+	set_variable(e, "PWD", getcwd(NULL, 0));
+	if (!get_variable(e, "OLDPWD"))
+		set_variable(e, "OLDPWD", getcwd(NULL, 0));
 }
