@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 02:47:21 by apuel             #+#    #+#             */
-/*   Updated: 2018/03/07 04:11:19 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/07 14:08:01 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,9 @@ static void	change_directory(t_env *e, char *directory)
 {
 	char	*pwd;
 
-	if (!chdir(directory))
+	if (chdir(directory))
+		ft_printf("cd: no such file or directory: %s\n", directory);
+	else
 	{
 		set_variable(e, "OLDPWD", get_variable(e, "PWD"));
 		pwd = getcwd(NULL, 0);
