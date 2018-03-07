@@ -10,8 +10,7 @@ SRCS_DIR = ./srcs/
 INCLUDES = ./includes/
 OBJS_DIR = ./objects/
 
-#FILES = main.c env.c listen.c parse.c dispatcher.c hashmap_utils.c
-FILES = $(filter-out main.c, $(filter-out test_main.c, $(wildcard *.c)))
+FILES = env.c listen.c parse.c dispatcher.c hashmap_utils.c split_ws.c
 ifeq ($(TESTING_ENV),)
     FILES += main.c
 else
