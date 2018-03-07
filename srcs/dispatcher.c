@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dispatcher.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apuel <apuel@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 16:26:59 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/07 04:49:53 by apuel            ###   ########.fr       */
+/*   Updated: 2018/03/07 04:55:35 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,6 +29,8 @@ static int	built_ins(t_env *e, int argc, char **argv)
 		ft_cd(e, argc, argv);
 	else if (ft_strequ(argv[0], "echo"))
 		ft_echo(e, argc, argv);
+	else if (ft_strequ(argv[0], "exit"))
+		ft_exit(e, argc, argv);
 	else
 		return (0);
 	return (1);

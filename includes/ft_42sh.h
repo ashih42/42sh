@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 14:08:33 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/07 04:01:28 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/07 04:58:21 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,18 @@ void					ft_cd(t_env *e, int argc, char **argv);
 */
 
 void					ft_echo(t_env *e, int argc, char **argv);
+
+/*
+**	ft_exit.c
+*/
+
+void					ft_exit(t_env *e, int argc, char **argv);
+
+/*
+**	ft_setenv.c
+*/
+
+void					ft_setenv(t_env *e, int argc, char **argv);
 
 /*
 **	split_argv.c
