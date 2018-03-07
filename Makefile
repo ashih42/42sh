@@ -10,7 +10,7 @@ SRCS_DIR = ./srcs/
 INCLUDES = ./includes/
 OBJS_DIR = ./objects/
 
-FILES = init.c listen.c parse.c dispatcher.c envp.c split_argv.c ft_cd.c ft_echo.c ft_exit.c ft_setenv.c
+FILES = init.c listen.c parse.c dispatcher.c envp.c split_argv.c ft_cd.c ft_echo.c ft_exit.c ft_setenv.c ft_unsetenv.c ft_env.c
 ifeq ($(TESTING_ENV),)
     FILES += main.c
 else

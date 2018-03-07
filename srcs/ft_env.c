@@ -1,22 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_setenv.c                                        :+:      :+:    :+:   */
+/*   ft_env.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/03/07 04:57:34 by ashih             #+#    #+#             */
-/*   Updated: 2018/03/07 06:03:51 by ashih            ###   ########.fr       */
+/*   Created: 2018/03/07 05:08:47 by ashih             #+#    #+#             */
+/*   Updated: 2018/03/07 05:56:58 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_42sh.h"
 
-void		ft_setenv(t_env *e, int argc, char **argv)
-{
-	if (argc >= 3)
-	{
-		set_variable(e, argv[1], argv[2]);
-	}
+// Don't forget to deliver democracy
 
+void		ft_env(t_env *e, int argc, char **argv)
+{
+	(void)argc;
+	(void)argv;
+
+	t_list	*node;
+	char	**content;
+
+	node = e->envp;
+	while (node)
+	{
+		content = node->content;
+		ft_printf("%s=%s\n", content[0], content[1]);
+		node = node->next;
+	}
 }

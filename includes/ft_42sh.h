@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 14:08:33 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/07 04:58:21 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/07 06:19:14 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,59 +30,60 @@ typedef struct			s_env
 /*
 **	envp.c
 */
-
+void					del_variable(t_env *e, char *key);
 char					*get_variable(t_env *e, char *key);
 int						set_variable(t_env *e, char *key, char *value);
-void					free_serialized_envp(char **envp);
 char					**serialize_envp(t_env *e);
 
 /*
 **	init.c
 */
-
 void					sh_init(t_env *e, char **envp);
 
 /*
 **	listen.c
 */
-
 void					sh_listen(t_env *e);
 
 /*
 **	parse.c
 */
-
 char					**sh_parse(t_env *e, int *argc);
 
 /*
 **	dispatcher.c
 */
-
 void					sh_dispatcher(t_env *e, int argc, char **argv);
 
 /*
 **	ft_cd.c
 */
-
 void					ft_cd(t_env *e, int argc, char **argv);
 
 /*
 **	ft_echo.c
 */
-
 void					ft_echo(t_env *e, int argc, char **argv);
 
 /*
-**	ft_exit.c
+**	ft_env.c
 */
-
-void					ft_exit(t_env *e, int argc, char **argv);
+void					ft_env(t_env *e, int argc, char **argv);
 
 /*
 **	ft_setenv.c
 */
-
 void					ft_setenv(t_env *e, int argc, char **argv);
+
+/*
+**	ft_unsetenv.c
+*/
+void					ft_unsetenv(t_env *e, int argc, char **argv);
+
+/*
+**	ft_exit.c
+*/
+void					ft_exit(t_env *e, int argc, char **argv);
 
 /*
 **	split_argv.c

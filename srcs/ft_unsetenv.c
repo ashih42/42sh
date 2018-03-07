@@ -1,22 +1,28 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_setenv.c                                        :+:      :+:    :+:   */
+/*   ft_unsetenv.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/03/07 04:57:34 by ashih             #+#    #+#             */
-/*   Updated: 2018/03/07 06:03:51 by ashih            ###   ########.fr       */
+/*   Created: 2018/03/07 06:00:46 by ashih             #+#    #+#             */
+/*   Updated: 2018/03/07 06:21:41 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_42sh.h"
 
-void		ft_setenv(t_env *e, int argc, char **argv)
+// should this REMOVE or SET TO EMPTY STRING ??
+
+void		ft_unsetenv(t_env *e, int argc, char **argv)
 {
-	if (argc >= 3)
+	if (argc >= 2)
 	{
-		set_variable(e, argv[1], argv[2]);
+		del_variable(e, argv[1]);
+//		if (get_variable(e, argv[1]))
+//			set_variable(e, argv[1], "");
 	}
 
 }
+
+
