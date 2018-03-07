@@ -18,7 +18,7 @@ void	ft_ctrl_c(int signo)
 
 void	ft_ctrl_z(int signo)
 {
-	void(signo);
+	(void)signo;
 	ft_printf("\n");
 
 	sh_listen(g_e);
