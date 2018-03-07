@@ -61,13 +61,13 @@ unsigned long	djb2_hash(char *str)
 **	If get_hash_node() can't find a matching node, it returns NULL
 */
 
-t_hash_node 	*get_hash_node(t_hash_node *hashmap, char *key)
+t_hash_node 	*get_hash_node(t_hashmap hmap, char *key)
 {
 	t_hash_node	*curr;
 
-	if (hashmap)
+	if (hmap)
 	{
-		curr = hashmap[djb2_hash(key)];
+		curr = hmap->nodes[djb2_hash(key)];
 		while (curr)
 		{
 			if (ft_strcmp(curr->key, key) == 0)
@@ -84,8 +84,7 @@ t_hash_node 	*get_hash_node(t_hash_node *hashmap, char *key)
 ** it's not in the linked list.
 */
 
-int				*add_hash_node(t_hash_node *hashmap, char *key,
-				char *value)
+int				*add_hash_node(t_hashmap hmap, char *key, char *value)
 {
 	t_hash_node	*new;
 
@@ -106,11 +105,6 @@ int				*add_hash_node(t_hash_node *hashmap, char *key,
 		return (0);
 }
 
-char			*get_hash_value(t_hash_node *node)
-{
-	return (node->val);
-}
-
 /*
 **	remove_hash_node()
 **
@@ -125,15 +119,15 @@ char			*get_hash_value(t_hash_node *node)
 **	If a hash node wasn't found or the hashmap is invalid returns 1.
 */
 
-int				remove_hash_node(t_hash_node *hashmap, char *key)
+int				remove_hash_node(t_hashmap hmap, char *key)
 {
 	t_hash_node *prev;
 	t_hash_node *curr;
 
-	if (hashmap)
+	if (hmap)
 	{
 		prev = NULL;
-		curr = hashmap[djb2_hash(key)];
+		curr = hmap->nodes[djb2_hash(key)];
 		while (curr)
 		{
 			if (ft_strcmp(curr->key, key) == 0)
@@ -145,6 +139,7 @@ int				remove_hash_node(t_hash_node *hashmap, char *key)
 				if (curr->val)
 					free(curr->val);
 				free(curr);
+				curr = NULL;
 				return (0);
 			}
 			prev = curr;
