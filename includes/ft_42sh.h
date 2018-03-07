@@ -6,7 +6,7 @@
 /*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 14:08:33 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/06 17:51:43 by nmei             ###   ########.fr       */
+/*   Updated: 2018/03/06 18:23:32 by nmei             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,7 +16,7 @@
 
 # include <stdio.h>		// REMOVE THIS LATER 
 
-# include "libft.h"
+# include <libft.h>
 
 
 # define HASHMAP_SIZE	256
@@ -88,9 +88,9 @@ void					sh_dispatcher(t_env *e);
 */
 unsigned long			djb2_hash(char *str);
 t_hash_node				*new_hash_node(char *key, char *val);
-t_hash_node 			*get_hash_node(t_hashmap hmap, char *key);
-int						add_hash_node(t_hashmap hmap, char *key, char *value);
-int						remove_hash_node(t_hashmap hmap, char *key);
+t_hash_node 			*get_hash_node(t_hashmap *hmap, char *key);
+int						add_hash_node(t_hashmap *hmap, char *key, char *value);
+int						remove_hash_node(t_hashmap *hmap, char *key);
 
 /*
 **	split_ws.c
