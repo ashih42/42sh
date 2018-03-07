@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 03:50:36 by ashih             #+#    #+#             */
-/*   Updated: 2018/03/07 04:09:40 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/07 10:36:38 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,14 +18,31 @@
 // have any quotes,
 // have an opening quote only -> need shell to ask for more args
 
+
+void		print_term(t_env *e, char *str)
+{
+	char	*value;
+
+	if (str[0] == '$')
+	{
+		value = get_variable(e, str + 1);
+		if (value)
+			ft_printf(value);
+	}
+	else
+		ft_printf(str);
+}
+
 void		ft_echo(t_env *e, int argc, char **argv)
 {
-	(void)e;
-	
-	int i = 0;
-	int need_space = 0;
-	int newline = 1;
+	int i;
+	int newline;
+	int need_space;
 
+	i = (argc >= 1 && ft_strequ(argv[1], "-n")) ? 1 : 0;
+	newline = (argc >= 1 && ft_strequ(argv[1], "-n")) ? 0 : 1;
+	need_space = 0;
+	
 	if (argc >= 1 && ft_strequ(argv[1], "-n"))
 	{
 		newline = 0;
@@ -35,7 +52,7 @@ void		ft_echo(t_env *e, int argc, char **argv)
 	{
 		if (need_space)
 			ft_printf(" ");
-		ft_printf(argv[i]);
+		print_term(e, argv[i]);
 		need_space = 1;
 	}
 	ft_printf((newline) ? "\n" : "");
