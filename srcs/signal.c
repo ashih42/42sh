@@ -21,6 +21,7 @@ void	ft_ctrl_c(int signo)
 		// ANDRES HOW TO ERASE ^C ??????????
 		ft_printf("\n{robot} %s > ", get_variable(g_e, "PWD"));
 	}
+	
 
 }
 

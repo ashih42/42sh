@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 16:26:59 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/07 13:55:22 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/07 15:10:06 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,7 +71,10 @@ int		fork_execve(t_env *e, char *path, char **argv, char **envp)
 	if (pid == 0)
 		exit(execve(path, argv, envp));
 	else
+	{
 		waitpid(pid, &status, 0);
+		e->child_pid = 0;
+	}
 	return ((status == 0) ? 0 : -1);
 }
 
