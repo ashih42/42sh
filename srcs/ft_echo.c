@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 03:50:36 by ashih             #+#    #+#             */
-/*   Updated: 2018/03/07 10:36:38 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/07 14:13:28 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@
 // have an opening quote only -> need shell to ask for more args
 
 
-void		print_term(t_env *e, char *str)
+int		print_term(t_env *e, char *str)
 {
 	char	*value;
 
@@ -27,10 +27,14 @@ void		print_term(t_env *e, char *str)
 	{
 		value = get_variable(e, str + 1);
 		if (value)
+		
 			ft_printf(value);
+		else
+			return (0);
 	}
 	else
 		ft_printf(str);
+	return (1);
 }
 
 void		ft_echo(t_env *e, int argc, char **argv)
@@ -52,8 +56,8 @@ void		ft_echo(t_env *e, int argc, char **argv)
 	{
 		if (need_space)
 			ft_printf(" ");
-		print_term(e, argv[i]);
-		need_space = 1;
+		if (print_term(e, argv[i]))
+			need_space = 1;
 	}
 	ft_printf((newline) ? "\n" : "");
 }
