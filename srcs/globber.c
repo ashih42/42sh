@@ -1,18 +1,46 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   globber.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: msharpe <marvin@42.fr>                     +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/03/07 21:56:53 by msharpe           #+#    #+#             */
+/*   Updated: 2018/03/07 23:31:17 by msharpe          ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 /*
 ** All functions are to go through match parse once they have a conclusion
 ** this allows multiple wild cards to be used in a single search.
 */
-void matchparse (char *s1, char *s2)
+int matchparse (char *s1, char *s2)
 {
-	if (s2[j] == '*')
-		matchstar(s1, s2);
-	if (s2[j] == '?')
-		matchq(s1, s2);
-	if (s2[j] == '[')
+	int persist;
+	size_t i;
+	size_t j;
+
+	i = 0;
+	j = 0;
+	while(1)
 	{
-		matchbrackparse(s1, s2);
-		matchbrack(s1, s2); //another parser is needed for this specfic wildcard.
+		if (s1[i] == '\0' && s2[i] == '\0')
+			return (1);
+		if 
+
+
+	if (s2[j] == '*' || s2[j] == '?' || s2[j] == '[')
+	{
+		s2[j] == '*' ? matchstar(s1, s2) : 0;
+		s2[j] == '?' ? matchq(s1, s2): 0;
+		if (s2[j] == '[') 
+		{
+			matchbrackparse(s1, s2): 0;
+			matchbrack(s1, s2); //another parser is needed for this specfic wildcard.
+		}
 	}
+	if (persist = 1)
+		matchparse(&s1[i++], &s2[j + 1]);
 }
 /*
 ** if a bracket is used, the range of the search needs to be parsed out.
