@@ -4,6 +4,7 @@
 # define FT_42SH_H
 
 # include <signal.h>
+# include <termios.h>
 # include "libft.h"
 
 # define HASHMAP_SIZE	256
