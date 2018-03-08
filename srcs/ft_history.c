@@ -6,11 +6,20 @@
 /*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 15:40:20 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/07 16:38:46 by nmei             ###   ########.fr       */
+/*   Updated: 2018/03/07 16:49:34 by nmei             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_42sh.h"
+
+/*
+**	add_cmd_history()
+**
+**	This function is called after a builtin or 'execute' call.
+**
+**	It will initialize [cmd_count, e->buffer] as the contents of lst node.
+**	The node then gets added to the end of the e->cmd_history linked list.
+*/
 
 int		add_cmd_history(t_env *e)
 {
@@ -29,8 +38,15 @@ int		add_cmd_history(t_env *e)
 	return (0);
 }
 
+/*
+**	ft_history()
+**
+**	Display the command history of our shell.
+*/
+
 // TODO:
-// `history 5` should display commands from 5 onwards...
+// `history 5` should display commands from ind 5 onwards...
+
 
 void	ft_history(t_env *e, int argc, char **argv)
 {
