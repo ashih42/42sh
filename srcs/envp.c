@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   envp.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 00:46:15 by apuel             #+#    #+#             */
-/*   Updated: 2018/03/07 06:26:59 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/07 16:14:15 by nmei             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_42sh.h"
 
-static t_list	*new_entry(char *key, char *value)
+t_list			*new_entry(char *key, char *value)
 {
 	char	**entry;
 

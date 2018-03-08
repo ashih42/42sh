@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   dispatcher.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 16:26:59 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/07 15:10:06 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/07 16:24:34 by nmei             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,8 +37,11 @@ static int	built_ins(t_env *e, int argc, char **argv)
 		ft_unsetenv(e, argc, argv);
 	else if (ft_strequ(argv[0], "exit"))
 		ft_exit(e, argc, argv);
+	else if (ft_strequ(argv[0], "history"))
+		ft_history(e, argc, argv);
 	else
 		return (0);
+	add_cmd_history(e);
 	return (1);
 }
 
@@ -132,6 +135,7 @@ void		sh_dispatcher(t_env *e, int argc, char **argv)
 		{
 			if (execute(e, argv, envp) < 0)
 				ft_printf("42sh: command not found: %s\n", argv[0]);
+			add_cmd_history(e);
 			ft_char_array_del(envp);
 		}
 		else

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_42sh.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 14:08:33 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/07 11:02:18 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/07 16:24:28 by nmei             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,6 +26,7 @@
 typedef struct			s_env
 {
 	t_list				*envp;
+	t_list				*cmd_history;
 	char				*buffer;
 	int 				child_pid;
 }						t_env;
@@ -35,6 +36,7 @@ t_env					*g_e;
 /*
 **	envp.c
 */
+t_list					*new_entry(char *key, char *value);
 void					del_variable(t_env *e, char *key);
 char					*get_variable(t_env *e, char *key);
 int						set_variable(t_env *e, char *key, char *value);
@@ -89,6 +91,12 @@ void					ft_unsetenv(t_env *e, int argc, char **argv);
 **	ft_exit.c
 */
 void					ft_exit(t_env *e, int argc, char **argv);
+
+/*
+**	ft_history.c
+*/
+int						add_cmd_history(t_env *e);
+void					ft_history(t_env *e, int argc, char **argv);
 
 /*
 **	signal.c
