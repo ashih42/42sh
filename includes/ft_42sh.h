@@ -23,11 +23,31 @@ typedef struct			s_env
 	int 				child_pid;
 }						t_env;
 
+typedef struct			s_process
+{
+	struct s_process	*next;/* next process in pipeline */
+	char				**argv;/* for exec */
+	pid_t				pid;/* process ID */
+	bool				completed;/* true if process has completed */
+	bool				stopped;/* true if process has stopped */
+	int					status;/* reported status value */
+}						t_process;
+
+typedef struct			s_job
+{
+	struct s_job		*next;/* next active job */
+	char				*command;/* command line, used for messages */
+	t_process			*first_process;/* list of processes in this job */
+	pid_t				pgid;/* process group ID */
+	bool				notified;/* true if user told about stopped job */
+	struct termios		tmodes;/* saved terminal modes */
+}						t_job;
+
 t_env					*g_e;
 
 /*
-**	envp.c
-*/
+ **	envp.c
+ */
 void					del_variable(t_env *e, char *key);
 char					*get_variable(t_env *e, char *key);
 t_list					*new_entry(char *key, char *value);
@@ -35,70 +55,70 @@ int						set_variable(t_env *e, char *key, char *value);
 char					**serialize_envp(t_env *e);
 
 /*
-**	init.c
-*/
+ **	init.c
+ */
 void					sh_init(t_env *e, char **envp);
 
 /*
-**	listen.c
-*/
+ **	listen.c
+ */
 void					sh_listen(t_env *e);
 
 /*
-**	parse.c
-*/
+ **	parse.c
+ */
 char					**sh_parse(t_env *e);
 
 /*
-**	dispatcher.c
-*/
+ **	dispatcher.c
+ */
 void					sh_dispatcher(t_env *e, int argc, char **argv);
 
 /*
-**	ft_cd.c
-*/
+ **	ft_cd.c
+ */
 void					ft_cd(t_env *e, int argc, char **argv);
 
 /*
-**	ft_echo.c
-*/
+ **	ft_echo.c
+ */
 void					ft_echo(t_env *e, int argc, char **argv);
 
 /*
-**	ft_env.c
-*/
+ **	ft_env.c
+ */
 void					ft_env(t_env *e, int argc, char **argv);
 
 /*
-**	ft_setenv.c
-*/
+ **	ft_setenv.c
+ */
 void					ft_setenv(t_env *e, int argc, char **argv);
 
 /*
-**	ft_unsetenv.c
-*/
+ **	ft_unsetenv.c
+ */
 void					ft_unsetenv(t_env *e, int argc, char **argv);
 
 /*
-**	ft_exit.c
-*/
+ **	ft_exit.c
+ */
 void					ft_exit(t_env *e, int argc, char **argv);
 
 /*
-**	signal.c
-*/
+ **	signal.c
+ */
 void					ft_ctrl_c(int signo);
 void					ft_ctrl_z(int signo);
 
 /*
-**	ft_history.c
-*/
+ **	ft_history.c
+ */
 int						add_cmd_history(t_env *e);
 void					ft_history(t_env *e, int argc, char **argv);
 
 /*
-**	split_argv.c
-*/
+ **	split_argv.c
+ */
 char					**split_argv(char const *s, char *ws);
 
 char		**str_explode(char const *s, char *delim);

@@ -25,6 +25,11 @@ void	ft_ctrl_c(int signo)
 
 }
 
+/* 
+** Job control
+** https://www.gnu.org/software/libc/manual/html_node/Implementing-a-Shell.html
+*/
+
 void	ft_ctrl_z(int signo)
 {
 	(void)signo;
