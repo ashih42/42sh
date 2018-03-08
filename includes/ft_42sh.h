@@ -3,6 +3,8 @@
 
 # include <signal.h>
 # include <termios.h>
+# include <sys/types.h>
+# include <stdbool.h>
 # include "libft.h"
 
 # define HASHMAP_SIZE	256
