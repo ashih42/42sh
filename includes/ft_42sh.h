@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   ft_42sh.h                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/03/05 14:08:33 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/07 17:24:14 by ashih            ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 // IMPORTANT: renamed Makefile variable to CFLAGZ so it does nothing while I test things for now
 
 #ifndef FT_42SH_H
@@ -95,6 +83,7 @@ void					ft_exit(t_env *e, int argc, char **argv);
 **	signal.c
 */
 void					ft_ctrl_c(int signo);
+void					ft_ctrl_z(int signo);
 
 /*
 **	ft_history.c

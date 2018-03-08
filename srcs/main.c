@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 13:41:33 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/07 17:51:42 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/07 18:03:41 by hiroshius        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -88,6 +88,7 @@ int		main(int argc, char **argv, char **envp)
 
 	g_e = &e;
 	signal(SIGINT, ft_ctrl_c);
+	signal(SIGSTOP, ft_ctrl_z);
 	ft_bzero(&e, sizeof(t_env));
 	sh_init(&e, envp);
 	while (1)
