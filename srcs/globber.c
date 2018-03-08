@@ -1,14 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   globber.c                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: msharpe <marvin@42.fr>                     +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/03/07 01:14:17 by msharpe           #+#    #+#             */
-/*   Updated: 2018/03/07 02:00:46 by msharpe          ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
 /*
 ** All functions are to go through match parse once they have a conclusion
 ** this allows multiple wild cards to be used in a single search.
