@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_42sh.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 14:08:33 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/07 17:24:14 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/07 18:00:23 by nmei             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ t_env					*g_e;
 /*
 **	envp.c
 */
+t_list					*new_entry(char *key, char *value);
 void					del_variable(t_env *e, char *key);
 char					*get_variable(t_env *e, char *key);
 int						set_variable(t_env *e, char *key, char *value);
