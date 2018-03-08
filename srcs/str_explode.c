@@ -1,32 +1,32 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   split_argv.c                                       :+:      :+:    :+:   */
+/*   str_explode.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2017/11/01 18:48:47 by ashih             #+#    #+#             */
-/*   Updated: 2018/03/07 17:43:57 by ashih            ###   ########.fr       */
+/*   Created: 2018/03/07 15:50:13 by ashih             #+#    #+#             */
+/*   Updated: 2018/03/07 17:46:28 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_42sh.h"
 
-static int is_ws(char c, char *ws)
+static int is_delim(char c, char *delim)
 {
 	int i;
 
 	i = 0;
-	while (ws[i])
+	while (delim[i])
 	{
-		if (ws[i] == c)
+		if (delim[i] == c)
 			return (1);
 		i++;
 	}
 	return (0);
 }
 
-static int	count_substrings(char const *s, char *ws)
+static int	count_substrings(char const *s, char *delim)
 {
 	int		count;
 	int		i;
@@ -35,17 +35,17 @@ static int	count_substrings(char const *s, char *ws)
 	i = 0;
 	while (1)
 	{
-		while (is_ws(s[i], ws))
+		while (is_delim(s[i], delim))
 			i++;
 		if (s[i] == '\0')
-			return (count);
-		while (!(is_ws(s[i], ws) || s[i] == '\0'))
+			return (count * 2 - 1);
+		while (!(is_delim(s[i], delim) || s[i] == '\0'))
 			i++;
 		count++;
 	}
 }
 
-static void	initialize_strings(char **array, char const *s, char *ws)
+static void	initialize_strings(char **array, char const *s, char *delim)
 {
 	int		i;
 	int		j;
@@ -56,7 +56,7 @@ static void	initialize_strings(char **array, char const *s, char *ws)
 	head = 0;
 	while (1)
 	{
-		while (is_ws(s[i], ws))
+		while (is_delim(s[i], delim))
 			i++;
 		if (s[i] == '\0')
 		{
@@ -64,14 +64,14 @@ static void	initialize_strings(char **array, char const *s, char *ws)
 			return ;
 		}
 		head = i;
-		while (!(is_ws(s[i], ws) || s[i] == '\0'))
+		while (!(is_delim(s[i], delim) || s[i] == '\0'))
 			i++;
-		array[j] = malloc(sizeof(char) * (i - head + 1));
-		j++;
+		array[j++] = malloc(sizeof(char) * (i - head + 1));
+		array[j++] = malloc(sizeof(char) * 2);
 	}
 }
 
-static void	fill_array(char **array, char const *s, char *ws)
+static void	fill_array(char **array, char const *s, char *delim)
 {
 	int		i;
 	int		j;
@@ -82,45 +82,52 @@ static void	fill_array(char **array, char const *s, char *ws)
 	k = 0;
 	while (1)
 	{
-		while (is_ws(s[i], ws))
+		while (is_delim(s[i], delim))
 			i++;
 		if (s[i] == '\0')
 			return ;
 		k = 0;
-		while (!(is_ws(s[i], ws) || s[i] == '\0'))
+		while (!(is_delim(s[i], delim) || s[i] == '\0'))
 		{
 			array[j][k] = s[i];
 			k++;
 			i++;
 		}
-		array[j][k] = '\0';
-		j++;
+		array[j++][k] = '\0';
+		array[j][0] = s[i++];
+		array[j++][1] = '\0';
 	}
 }
 
-char		**split_argv(char const *s, char *ws)
+char		**str_explode(char const *s, char *delim)
 {
 	char	**total_array;
 	int		len;
 
 	if (s == NULL)
 		return (NULL);
-	if (ft_strlen(s) == 0)
+	
+	len = count_substrings(s, delim);
+	if (len <= 1)
 	{
 		total_array = ft_memalloc(sizeof(char *) * 2);
 		if (total_array == NULL)
 			return (NULL);
 		else
 		{
-			total_array[0] = ft_strnew(0);
+			total_array[0] = ft_strdup(s);
 			return (total_array);
 		}
 	}
-	len = count_substrings(s, ws);
+
+//	ft_printf("len = %d\n", len);
 	if ((total_array = malloc(sizeof(char *) * (len + 1))))
 	{
-		initialize_strings(total_array, s, ws);
-		fill_array(total_array, s, ws);
+//		ft_printf("GOT HERE 1\n");
+		initialize_strings(total_array, s, delim);
+//		ft_printf("GOT HERE 2\n");
+		fill_array(total_array, s, delim);
+//		ft_printf("GOT HERE 3\n");
 	}
 	return (total_array);
 }

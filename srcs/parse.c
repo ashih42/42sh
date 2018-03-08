@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   parse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: apuel <apuel@student.42.fr>                +#+  +:+       +#+        */
+/*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 16:26:40 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/07 01:51:11 by apuel            ###   ########.fr       */
+/*   Updated: 2018/03/07 17:32:13 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,59 @@
 **	redirections, escaped characters, etc.
 */
 
-char	**sh_parse(t_env *e, int *argc)
+
+
+void	append_terms(t_list **list, char **terms)
 {
-	return (split_argv(e->buffer, WHITESPACE, argc));
+	int i;
+	i = -1;
+	while (terms[++i])
+	{
+		ft_lst_add_last(list, ft_lstnew(terms[i], ft_strlen(terms[i]) + 1));
+	}
+//	ft_char_array_del(terms);
+}
+
+char   **list_to_array(t_list *list)
+{
+	char **array = malloc(sizeof(char *) * (ft_lst_size(list) + 1));
+	int i = 0;
+	while (list != 0)
+	{
+		array[i++] = ft_strdup(list->content);
+		list = list->next;
+	}
+	array[i] = 0;
+	return (array);
+}
+
+char	**sh_parse(t_env *e)
+{
+
+/*	
+	ft_printf("e->buffer: %s\n", e->buffer);
+	char **args = split_argv(e->buffer, WHITESPACE);
+	char **terms;
+	t_list *list = 0;
+
+	int i = -1;
+	while (args[++i])
+	{
+		ft_printf("i = %d, args[i] = %s\n", i, args[i]);
+		terms = str_explode(args[i], DELIM);
+		ft_printf("wut happened\n");
+//		append_terms(&list, terms);
+	}
+*/
+//	ft_char_array_del(args);
+/*
+	char **all_terms = list_to_array(list);
+	ft_printf("str_explode:\n");
+	ft_print_char_array(all_terms);
+*/
+//	ft_printf("e->buffer: %s\n", e->buffer);
+	
+
+	return (split_argv(e->buffer, WHITESPACE));
+
 }

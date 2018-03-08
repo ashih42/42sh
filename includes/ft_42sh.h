@@ -3,12 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   ft_42sh.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 14:08:33 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/07 16:24:28 by nmei             ###   ########.fr       */
+/*   Updated: 2018/03/07 17:24:14 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+// IMPORTANT: renamed Makefile variable to CFLAGZ so it does nothing while I test things for now
 
 #ifndef FT_42SH_H
 # define FT_42SH_H
@@ -16,12 +18,10 @@
 # include <signal.h>
 # include "libft.h"
 
-
 # define HASHMAP_SIZE	256
 # define BUFFER_SIZE	4096
 # define WHITESPACE		" \t\n\v\r\f"
-
-
+# define DELIM 			"\"'|<>"
 
 typedef struct			s_env
 {
@@ -36,7 +36,6 @@ t_env					*g_e;
 /*
 **	envp.c
 */
-t_list					*new_entry(char *key, char *value);
 void					del_variable(t_env *e, char *key);
 char					*get_variable(t_env *e, char *key);
 int						set_variable(t_env *e, char *key, char *value);
@@ -55,7 +54,7 @@ void					sh_listen(t_env *e);
 /*
 **	parse.c
 */
-char					**sh_parse(t_env *e, int *argc);
+char					**sh_parse(t_env *e);
 
 /*
 **	dispatcher.c
@@ -93,20 +92,21 @@ void					ft_unsetenv(t_env *e, int argc, char **argv);
 void					ft_exit(t_env *e, int argc, char **argv);
 
 /*
+**	signal.c
+*/
+void					ft_ctrl_c(int signo);
+
+/*
 **	ft_history.c
 */
 int						add_cmd_history(t_env *e);
 void					ft_history(t_env *e, int argc, char **argv);
 
 /*
-**	signal.c
-*/
-void					ft_ctrl_c(int signo);
-
-/*
 **	split_argv.c
 */
+char					**split_argv(char const *s, char *ws);
 
-char					**split_argv(char const *s, char *ws, int *argc);
+char		**str_explode(char const *s, char *delim);
 
 #endif
