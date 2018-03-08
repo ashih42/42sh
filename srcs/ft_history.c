@@ -11,16 +11,11 @@
 
 int		add_cmd_history(t_env *e)
 {
-	static int	cmd_count = 1;
-	char		*ind;
 	t_list		*node;
 
-	ind = ft_itoa(cmd_count);
-	if ((node = new_entry(ind, e->buffer)))
+	if ((node = ft_lstnew(e->buffer, ft_strlen(e->buffer) + 1)))
 	{
-		free(ind);
 		ft_lst_add_last(&(e->cmd_history), node);
-		cmd_count++;
 		return (1);
 	}
 	return (0);
@@ -32,20 +27,25 @@ int		add_cmd_history(t_env *e)
 **	Display the command history of our shell.
 */
 
-// TODO:
-// `history 5` should display commands from ind 5 onwards...
-
-
 void	ft_history(t_env *e, int argc, char **argv)
 {
 	t_list	*node;
 	char	**content;
+	int		i;
+	int		cmp;
 
+	i = 1;
+	cmp = 1;
 	node = e->cmd_history;
+	if (argc > 1)
+		cmp = ft_atoi(argv[1]);
+	if (cmp < 0)
+		cmp = ft_lst_size(node) + cmp + 1;
 	while (node)
 	{
-		content = node->content;
-		ft_printf("%5s  %s\n", content[0], content[1]);
+		if (cmp <= i)
+			ft_printf("%5d  %s\n", i, node->content);
+		i++;
 		node = node->next;
 	}
 }

@@ -12,7 +12,7 @@
 **	Turning off ICANON causes read() to grab input byte-by-byte
 */
 
-void enable_raw_mode(struct termios *orig_termios)
+void	enable_raw_mode(struct termios *orig_termios)
 {
 	struct termios	raw;
 
@@ -22,9 +22,76 @@ void enable_raw_mode(struct termios *orig_termios)
 	tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
 }
 
-void disable_raw_mode(struct termios *orig_termios)
+void	disable_raw_mode(struct termios *orig_termios)
 {
 	tcsetattr(STDIN_FILENO, TCSAFLUSH, orig_termios);
+}
+
+/*
+**	Extends e->buffer when there's no more space.
+*/
+
+int		extend_buffer(t_env *e)
+{
+	char	*new_buffer;
+
+	if ((new_buffer = ft_strnew(e->buffer_size + BUFFER_SIZE)))
+	{
+		ft_memcpy(new_buffer, e->buffer, e->buffer_size);
+		free(e->buffer);
+		e->buffer = new_buffer;
+		return (1);
+	}
+	return (0);
+}
+
+/*
+**	Handles special characters like TAB, LEFT, RIGHT, and DEL
+*/
+
+//NEEDS SOME MAJOR NORM LOL
+
+int		char_specs(t_env *e, char c)
+{
+	size_t	i;
+
+	if (c == 127 || c == '\b') //BACKSPACE
+	{
+		if (e->cursor)
+		{
+			ft_memmove(e->buffer + e->cursor - 1, e->buffer + e->cursor, e->buffer_end - e->cursor);
+			e->buffer[(i = --e->buffer_end)] = '\0';
+			ft_printf("\b%s \b", e->buffer + --e->cursor);
+			while (i-- > e->cursor)
+				ft_putchar('\b');
+		}
+		return (1);
+	}
+	if (c == '\t') //TAB
+	{
+		//lol no thanks
+		return (1);
+	}
+	if (c == '\x1B') //ESC
+	{
+		read(STDIN_FILENO, &c, 1);
+		if (c == '[')
+		{
+			read(STDIN_FILENO, &c, 1);
+			if (c == 'D' && e->cursor) //LEFT
+			{
+				e->cursor--;
+				ft_putstr("\x1B[D");
+			}
+			if (c == 'C' && e->cursor < e->buffer_end) //RIGHT
+			{
+				e->cursor++;
+				ft_putstr("\x1B[C");
+			}
+		}
+		return (1);
+	}
+	return (0);
 }
 
 /*
@@ -42,22 +109,25 @@ void	sh_listen(t_env *e)
 {
 	struct termios	orig_termios;
 	char			c;
+	size_t			i;
 
+	ft_bzero(e->buffer, e->buffer_size + 1);
+	e->cursor = 0;
+	e->buffer_end = 0;
 	ft_printf("{robot} %s > ", get_variable(e, "PWD"));
-	//keeping this for now if people want to test other parts of program
-	//del_and_gnl(STDIN_FILENO, &(e->buffer)); //TODO: read one character at a time to detect tabs :sob:
-	
-	//TODO: Need a way to recognize escaped multibyte inputs (i.e. ^[[A)
-	//		Need a way to store read in bytes into a buffer that can expand
-	//		Need a way to edit bytes in buffer when getting 'backspace' input
-	//		Need a way to edit bytes in buffer if cursor is moved left or right
-	//		And more!!
 	enable_raw_mode(&orig_termios);
-	while (read(STDIN_FILENO, &c, 1) == 1 && c != '\n')
+	while (read(STDIN_FILENO, &c, 1) > 0 && c != '\n')
 	{
-		if (ft_isprint(c))
-			ft_printf("%c", c);
+		if (char_specs(e, c))
+			continue ;
+		if (e->buffer_end == e->buffer_size)
+			extend_buffer(e);
+		ft_memmove(e->buffer + e->cursor + 1, e->buffer + e->cursor, e->buffer_end++ - e->cursor);
+		e->buffer[(i = e->cursor)] = c;
+		ft_printf("%s", e->buffer + e->cursor++);
+		while (++i < e->buffer_end)
+			ft_putchar('\b');
 	}
+	ft_putchar('\n');
 	disable_raw_mode(&orig_termios);
-
 }

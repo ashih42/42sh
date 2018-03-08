@@ -1,5 +1,3 @@
-// IMPORTANT: renamed Makefile variable to CFLAGZ so it does nothing while I test things for now
-
 #ifndef FT_42SH_H
 # define FT_42SH_H
 
@@ -17,6 +15,9 @@ typedef struct			s_env
 	t_list				*envp;
 	t_list				*cmd_history;
 	char				*buffer;
+	size_t				cursor;
+	size_t				buffer_end;
+	size_t				buffer_size;
 	int 				child_pid;
 }						t_env;
 
