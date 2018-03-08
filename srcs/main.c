@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/05 13:41:33 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/07 18:03:41 by hiroshius        ###   ########.fr       */
+/*   Updated: 2018/03/07 18:05:34 by hiroshius        ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,7 +28,7 @@ void	print_list(t_list *list)
 	t_list *node = list;
 	while (node != 0)
 	{
-		printf("%s\n", node->content);
+		ft_printf("%s\n", node->content);
 		node = node->next;
 	}
 }
