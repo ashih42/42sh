@@ -1,6 +1,6 @@
 #include "ft_42sh.h"
 
-t_list			*new_entry(char *key, char *value)
+static t_list	*new_entry(char *key, char *value)
 {
 	char	**entry;
 

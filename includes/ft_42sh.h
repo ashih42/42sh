@@ -58,7 +58,6 @@ t_env					*g_e;
  */
 void					del_variable(t_env *e, char *key);
 char					*get_variable(t_env *e, char *key);
-t_list					*new_entry(char *key, char *value);
 int						set_variable(t_env *e, char *key, char *value);
 char					**serialize_envp(t_env *e);
 
