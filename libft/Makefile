@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ashih <marvin@42.fr>                       +#+  +:+       +#+         #
+#    By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/27 10:22:08 by ashih             #+#    #+#              #
-#    Updated: 2018/03/03 02:54:52 by ashih            ###   ########.fr        #
+#    Updated: 2018/03/09 12:52:06 by nmei             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -129,7 +129,8 @@ SRC = del_and_gnl.c\
 	  ft_tolower.c\
 	  ft_toupper.c\
 	  get_next_line.c\
-	  skip_next_line.c
+	  skip_next_line.c\
+	  ft_dl_lst_utils.c
 
 all: $(NAME)
 

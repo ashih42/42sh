@@ -12,14 +12,6 @@
 # define WHITESPACE		" \t\n\v\r\f"
 # define DELIM 			"\"'|<>"
 
-typedef struct			s_dl_list
-{
-	void				*content;
-	size_t				content_size;
-	struct s_dl_list	*next;
-	struct s_dl_list	*prev;
-}						t_dl_list;
-
 typedef struct			s_env
 {
 	t_list				*envp;
