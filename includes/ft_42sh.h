@@ -60,6 +60,15 @@ char					**serialize_envp(t_env *e);
 void					sh_init(t_env *e, char **envp);
 
 /*
+** job_control_utils.c
+*/
+
+t_job					*find_job(pid_t pgid);
+bool					job_is_stopped(t_job *j);
+bool					job_is_completed(t_job *j);
+
+
+/*
  **	listen.c
  */
 void					sh_listen(t_env *e);
@@ -121,6 +130,6 @@ void					ft_history(t_env *e, int argc, char **argv);
  */
 char					**split_argv(char const *s, char *ws);
 
-char		**str_explode(char const *s, char *delim);
+char					**str_explode(char const *s, char *delim);
 
 #endif
