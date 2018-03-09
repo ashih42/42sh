@@ -46,6 +46,33 @@ int		extend_buffer(t_env *e)
 }
 
 /*
+**	move_cursor()
+**
+**	Moves our terminal cursor:
+**	RIGHT (direction = 1)
+**	LEFT (direction = 0)
+**
+**	The cursor will be moved in 'direction' a total of 'n_times'
+*/
+
+void	move_cursor(t_env *e, int direction, size_t n_times)
+{
+	while (n_times--)
+	{
+		if (direction && e->cursor < e->buffer_end)
+		{
+			e->cursor++;
+			ft_putstr("\x1B[C");
+		}
+		else if (!direction && e->cursor)
+		{
+			e->cursor--;
+			ft_putstr("\x1B[D");
+		}
+	}
+}
+
+/*
 **	handle_esc_seq()
 **
 **	After getting an escape byte '\027' ('\x1B') need to read more bytes to
@@ -55,6 +82,8 @@ int		extend_buffer(t_env *e)
 **	'\027[C'	RIGHT
 **	'\027[A'	UP
 **	'\027[B'	DOWN
+**	'\027[H'	HOME key
+**	'\027[F'	END key
 */
 
 int		handle_esc_seq(t_env *e, char c)
@@ -63,24 +92,18 @@ int		handle_esc_seq(t_env *e, char c)
 	if (c == '[')
 	{
 		read(STDIN_FILENO, &c, 1);
-		if (c == 'D' && e->cursor)
-		{
-			e->cursor--;
-			ft_putstr("\x1B[D");
-		}
-		if (c == 'C' && e->cursor < e->buffer_end)
-		{
-			e->cursor++;
-			ft_putstr("\x1B[C");
-		}
-		if (c == 'A')
-		{
+		if (c == 'D')
+			move_cursor(e, 0, 1);
+		else if (c == 'C')
+			move_cursor(e, 1, 1);
+		else if (c == 'A')
 			get_cmd_history(e, 0);
-		}
-		if (c == 'B')
-		{
+		else if (c == 'B')
 			get_cmd_history(e, 1);
-		}
+		else if (c == 'H')
+			move_cursor(e, 0, e->cursor);
+		else if (c == 'F')
+			move_cursor(e, 1, e->buffer_end - e->cursor);
 	}
 	return (1);
 }
