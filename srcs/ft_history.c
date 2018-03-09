@@ -89,7 +89,6 @@ static t_dl_list	*ft_dl_lst_at(t_dl_list *a_dl_lst, unsigned int n)
 
 void				get_cmd_history(t_env *e, int mode)
 {
-	static int	position = -1;	
 	static char	*orig_term = NULL;
 	t_dl_list	*curr_cmd;
 	char		*curr_term;
