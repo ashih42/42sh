@@ -1,5 +1,19 @@
 #include "ft_42sh.h"
 
+/*
+**	clear_and_update_term()
+**
+**	If the user pressed the up/down arrow then we need to clear the current
+**	text in the terminal.
+**
+**	1) If the user's cursor is not at the end of the curr text, move it there
+**	2) Erase text on screen (amount of text is specified by e->buff_end)
+**	3) Now we can bzero the buffer
+**	4) cpy the contents of the history cmd into the buffer
+**	5) set our cursor position and buffer_end to the size of the history cmd
+**	6) Print the updated e->buffer to show it on screen.
+*/
+
 static	void		clear_and_update_term(t_env *e, char *curr_term,
 								t_dl_list *curr_cmd, char **orig_term)
 {
@@ -28,6 +42,10 @@ static	void		clear_and_update_term(t_env *e, char *curr_term,
 **
 **	UP arrow calls get_cmd_history() with mode = 0
 **	DOWN arrow calls with mode = 1
+**
+**	If the user has previously typed something in the terminal before
+**	pressing the UP or DOWN arrows, we need to remember what that text was so
+**	we can restore it if they DOWN arrow all the way to the end of the history.
 */
 
 void				get_cmd_history(t_env *e, int mode)
