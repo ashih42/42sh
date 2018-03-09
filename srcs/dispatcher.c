@@ -121,9 +121,9 @@ void		sh_dispatcher(t_env *e, int argc, char **argv)
 	{
 		if ((envp = serialize_envp(e)))
 		{
+			add_cmd_history(e);
 			if (execute(e, argv, envp) < 0)
 				ft_printf("42sh: command not found: %s\n", argv[0]);
-			add_cmd_history(e);
 			ft_char_array_del(envp);
 		}
 		else
