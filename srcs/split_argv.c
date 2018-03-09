@@ -94,16 +94,7 @@ char		**split_argv(char const *s, char *ws)
 	if (s == NULL)
 		return (NULL);
 	if (ft_strlen(s) == 0)
-	{
-		total_array = ft_memalloc(sizeof(char *) * 2);
-		if (total_array == NULL)
-			return (NULL);
-		else
-		{
-			total_array[0] = ft_strnew(0);
-			return (total_array);
-		}
-	}
+		return (NULL);
 	len = count_substrings(s, ws);
 	if ((total_array = malloc(sizeof(char *) * (len + 1))))
 	{
