@@ -52,7 +52,8 @@ int		extend_buffer(t_env *e)
 **	RIGHT (direction = 1)
 **	LEFT (direction = 0)
 **
-**	The cursor will be moved in 'direction' a total of 'n_times'
+**	The cursor will be moved in 'direction' a total of 'n_times' except if
+**	the cursor hits the start or end position of the e->buffer.
 */
 
 void	move_cursor(t_env *e, int direction, size_t n_times)
@@ -82,8 +83,8 @@ void	move_cursor(t_env *e, int direction, size_t n_times)
 **	'\027[C'	RIGHT
 **	'\027[A'	UP
 **	'\027[B'	DOWN
-**	'\027[H'	HOME key
-**	'\027[F'	END key
+**	'\027[H'	HOME key - Brings cursor to position 0
+**	'\027[F'	END key - Brings cursor to e->buffer_end
 */
 
 int		handle_esc_seq(t_env *e, char c)
