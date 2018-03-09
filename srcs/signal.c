@@ -15,6 +15,7 @@ void	ft_ctrl_c(int signo)
 		signal(SIGCHLD,SIG_IGN);
 		kill(g_e->child_pid, SIGINT);
 		g_e->child_pid = 0;
+		ft_printf("\n");
 	}
 	else
 	{
