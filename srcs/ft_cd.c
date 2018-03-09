@@ -1,5 +1,11 @@
 #include "ft_42sh.h"
 
+// NOTE: our cd works correctly, but after cd'ing to a symbolic-linked directory, it shows the original directory name, not the symbolic link name
+// e.g. cd /; cd tmp;
+// now our shell shows we are in /cd/private/tmp because /tmp is a symbolic link for /private/tmp
+
+
+
 static void	change_directory(t_env *e, char *directory)
 {
 	char	*pwd;
