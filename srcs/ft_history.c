@@ -5,6 +5,8 @@ static	void		clear_and_update_term(t_env *e, char *curr_term,
 {
 	size_t	i;
 
+	while (e->cursor++ < e->buffer_end)
+		ft_printf(" ");
 	i = 0;
 	while (i++ < e->buffer_end)
 		ft_printf("\b \b");
@@ -23,10 +25,10 @@ static	void		clear_and_update_term(t_env *e, char *curr_term,
 
 /*
 **	get_cmd_history()
+**
+**	UP arrow calls get_cmd_history() with mode = 0
+**	DOWN arrow calls with mode = 1
 */
-
-//	Known issues:
-//	Changing position of cursor then pressing up/down arrows fucks shit up...
 
 void				get_cmd_history(t_env *e, int mode)
 {
