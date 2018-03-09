@@ -1,11 +1,30 @@
 #include "ft_42sh.h"
 
+static	void		clear_and_update_term(t_env *e, char *curr_term,
+								t_dl_list *curr_cmd, char **orig_term)
+{
+	size_t	i;
+
+	i = 0;
+	while (i++ < e->buffer_end)
+		ft_printf("\b \b");
+	ft_bzero(e->buffer, e->buffer_size + 1);
+	i = ft_strlen(curr_term);
+	ft_memmove(e->buffer, curr_term, i);
+	e->cursor = i;
+	e->buffer_end = i;
+	ft_printf("%s", e->buffer);
+	if (curr_cmd == NULL)
+	{
+		free(*orig_term);
+		*orig_term = NULL;
+	}
+}
 
 /*
 **	get_cmd_history()
 */
 
-//	Needs some norm....
 //	Known issues:
 //	Changing position of cursor then pressing up/down arrows fucks shit up...
 
@@ -14,7 +33,6 @@ void				get_cmd_history(t_env *e, int mode)
 	static char	*orig_term = NULL;
 	t_dl_list	*curr_cmd;
 	char		*curr_term;
-	size_t		i;
 
 	if (e->history_pos == -1)
 	{
@@ -33,22 +51,8 @@ void				get_cmd_history(t_env *e, int mode)
 	}
 	else
 		curr_term = (char *)curr_cmd->content;
-	i = 0;
-	while (i++ < e->buffer_end)
-		ft_printf("\b \b");
-	ft_bzero(e->buffer, e->buffer_size + 1);
-	i = ft_strlen(curr_term);
-	ft_memmove(e->buffer, curr_term, i);
-	e->cursor = i;
-	e->buffer_end = i;
-	ft_printf("%s", e->buffer);
-	if (curr_cmd == NULL)
-	{
-		free(orig_term);
-		orig_term = NULL;
-	}
+	clear_and_update_term(e, curr_term, curr_cmd, &orig_term);
 }
-
 
 /*
 **	add_cmd_history()
