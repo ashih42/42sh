@@ -75,11 +75,11 @@ int		handle_esc_seq(t_env *e, char c)
 		}
 		if (c == 'A')
 		{
-
+			get_cmd_history(e, 0);
 		}
 		if (c == 'B')
 		{
-
+			get_cmd_history(e, 1);
 		}
 	}
 	return (1);

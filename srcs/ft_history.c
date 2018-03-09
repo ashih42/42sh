@@ -49,18 +49,85 @@ static void			ft_dl_lst_add_last(t_dl_list **a_dl_lst, t_dl_list *new)
 	}
 }
 
-static int			ft_dl_lst_size(t_dl_list *lst)
+static int			ft_dl_lst_size(t_dl_list *dl_lst)
 {
 	int	total;
 
 	total = 0;
-	while (lst)
+	while (dl_lst)
 	{
 		total++;
-		lst = lst->next;
+		dl_lst = dl_lst->next;
 	}
 	return (total);
 }
+
+static t_dl_list	*ft_dl_lst_at(t_dl_list *a_dl_lst, unsigned int n)
+{
+	unsigned int	i;
+
+	if (!a_dl_lst)
+		return (NULL);
+	i = 0;
+	while (i < n)
+	{
+		if (a_dl_lst->next == NULL)
+			return (NULL);
+		a_dl_lst = a_dl_lst->next;
+		i++;
+	}
+	return (a_dl_lst);
+}
+
+/*
+**	get_cmd_history()
+*/
+
+//	Needs some norm....
+//	Known issues:
+//	Changing position of cursor then pressing up/down arrows fucks shit up...
+
+void				get_cmd_history(t_env *e, int mode)
+{
+	static int	position = -1;	
+	static char	*orig_term = NULL;
+	t_dl_list	*curr_cmd;
+	char		*curr_term;
+	size_t		i;
+
+	if (e->history_pos == -1)
+	{
+		if (orig_term)
+			free(orig_term);
+		orig_term = strdup(e->buffer);
+		e->history_pos = ft_dl_lst_size(e->cmd_history);
+	}
+	e->history_pos = (mode == 1) ? e->history_pos + 1 : e->history_pos - 1;
+	e->history_pos = (e->history_pos < 0) ? 0 : e->history_pos;
+	curr_cmd = ft_dl_lst_at(e->cmd_history, e->history_pos);
+	if (curr_cmd == NULL)
+	{
+		curr_term = orig_term;
+		e->history_pos = -1;
+	}
+	else
+		curr_term = (char *)curr_cmd->content;
+	i = 0;
+	while (i++ < e->buffer_end)
+		ft_printf("\b \b");
+	ft_bzero(e->buffer, e->buffer_size + 1);
+	i = ft_strlen(curr_term);
+	ft_memmove(e->buffer, curr_term, i);
+	e->cursor = i;
+	e->buffer_end = i;
+	ft_printf("%s", e->buffer);
+	if (curr_cmd == NULL)
+	{
+		free(orig_term);
+		orig_term = NULL;
+	}
+}
+
 
 /*
 **	add_cmd_history()

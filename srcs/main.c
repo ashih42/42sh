@@ -24,12 +24,16 @@ int		main(int argc, char **argv, char **envp)
 		sh_init(&e, envp);
 		while (1)
 		{
+			e.history_pos = -1;
 			sh_listen(&e);
 			if (!e.buffer)
 				break ;
 			argv = sh_parse(&e);
 			if (argv)
 				sh_dispatcher(&e, ft_char_array_length(argv), argv);
+			// Known issue:
+			// argv appears to be leaking...
+			// Hopefully the sh_parse rewrite will fix it >_>
 		}
 	}
 	return (0);

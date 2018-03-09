@@ -29,6 +29,7 @@ typedef struct			s_env
 	size_t				buffer_end;
 	size_t				buffer_size;
 	int 				child_pid;
+	int					history_pos;
 }						t_env;
 
 typedef struct			s_process
@@ -131,6 +132,7 @@ void					ft_ctrl_z(int signo);
  */
 int						add_cmd_history(t_env *e);
 void					ft_history(t_env *e, int argc, char **argv);
+void					get_cmd_history(t_env *e, int mode);
 
 /*
  **	split_argv.c
