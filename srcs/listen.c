@@ -46,51 +46,76 @@ int		extend_buffer(t_env *e)
 }
 
 /*
-**	Handles special characters like TAB, LEFT, RIGHT, and DEL
+**	handle_esc_seq()
+**
+**	After getting an escape byte '\027' ('\x1B') need to read more bytes to
+**	see what the full escape sequence is...
+**
+**	'\027[D'	LEFT
+**	'\027[C'	RIGHT
+**	'\027[A'	UP
+**	'\027[B'	DOWN
 */
 
-//NEEDS SOME MAJOR NORM LOL
+int		handle_esc_seq(t_env *e, char c)
+{
+	read(STDIN_FILENO, &c, 1);
+	if (c == '[')
+	{
+		read(STDIN_FILENO, &c, 1);
+		if (c == 'D' && e->cursor)
+		{
+			e->cursor--;
+			ft_putstr("\x1B[D");
+		}
+		if (c == 'C' && e->cursor < e->buffer_end)
+		{
+			e->cursor++;
+			ft_putstr("\x1B[C");
+		}
+		if (c == 'A')
+		{
+
+		}
+		if (c == 'B')
+		{
+
+		}
+	}
+	return (1);
+}
+
+/*
+**	Handles special characters like TAB, LEFT, RIGHT, and DEL
+**
+**	127 ('\b'):		BACKSPACE
+**	027 ('\x1B'):	ESC
+*/
 
 int		char_specs(t_env *e, char c)
 {
 	size_t	i;
 
-	if (c == 127 || c == '\b') //BACKSPACE
+	if (c == 127 || c == '\b')
 	{
 		if (e->cursor)
 		{
-			ft_memmove(e->buffer + e->cursor - 1, e->buffer + e->cursor, e->buffer_end - e->cursor);
-			e->buffer[(i = --e->buffer_end)] = '\0';
+			ft_memmove(e->buffer + e->cursor - 1,
+						e->buffer + e->cursor, e->buffer_end - e->cursor);
+			i = --e->buffer_end;
+			e->buffer[i] = '\0';
 			ft_printf("\b%s \b", e->buffer + --e->cursor);
 			while (i-- > e->cursor)
 				ft_putchar('\b');
 		}
 		return (1);
 	}
-	if (c == '\t') //TAB
+	if (c == '\t')
 	{
-		//lol no thanks
 		return (1);
 	}
-	if (c == '\x1B') //ESC
-	{
-		read(STDIN_FILENO, &c, 1);
-		if (c == '[')
-		{
-			read(STDIN_FILENO, &c, 1);
-			if (c == 'D' && e->cursor) //LEFT
-			{
-				e->cursor--;
-				ft_putstr("\x1B[D");
-			}
-			if (c == 'C' && e->cursor < e->buffer_end) //RIGHT
-			{
-				e->cursor++;
-				ft_putstr("\x1B[C");
-			}
-		}
-		return (1);
-	}
+	if (c == '\x1B')
+		return (handle_esc_seq(e, c));
 	return (0);
 }
 
@@ -122,8 +147,10 @@ void	sh_listen(t_env *e)
 			continue ;
 		if (e->buffer_end == e->buffer_size)
 			extend_buffer(e);
-		ft_memmove(e->buffer + e->cursor + 1, e->buffer + e->cursor, e->buffer_end++ - e->cursor);
-		e->buffer[(i = e->cursor)] = c;
+		ft_memmove(e->buffer + e->cursor + 1,
+					e->buffer + e->cursor, e->buffer_end++ - e->cursor);
+		i = e->cursor;
+		e->buffer[i] = c;
 		ft_printf("%s", e->buffer + e->cursor++);
 		while (++i < e->buffer_end)
 			ft_putchar('\b');
