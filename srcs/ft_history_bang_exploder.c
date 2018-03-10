@@ -37,13 +37,15 @@ static int		history_bang_str_exploder(t_env *e, char *buf)
 	t_dl_list	*curr;
 	char		*last_content;
 	char		*content;
+	size_t		buf_len;
 
 	last_content = NULL;
 	curr = e->cmd_history;
+	buf_len = ft_strlen(buf);
 	while (curr)
 	{
 		content = (char *)curr->content;
-		if (ft_strncmp(buf, content, ft_strlen(buf)) == 0)
+		if (ft_strncmp(buf, content, buf_len) == 0)
 			last_content = content;
 		curr = curr->next;
 	}
