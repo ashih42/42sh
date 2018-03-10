@@ -26,6 +26,8 @@ int		main(int argc, char **argv, char **envp)
 		{
 			e.history_pos = -1;
 			sh_listen(&e);
+			//Need to do stuff with the return of history_bang_exploder
+			history_bang_exploder(&e);
 			if (!e.buffer)
 				break ;
 			argv = sh_parse(&e);
