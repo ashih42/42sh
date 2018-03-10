@@ -140,6 +140,14 @@ char					**split_argv(char const *s, char *ws);
 void					str_explode(char *s, t_list **list);
 
 /*
+**	redir.c
+*/
+int 					redir_input(char **expr, char *filename);
+int 					redir_output(char **expr, char *filename);
+int 					redir_append(char **expr, char *filename);
+int						pipe_exprs(char **expr1, char **expr2);
+
+/*
 **	debug.c
 */
 void					print_list(t_list *list);

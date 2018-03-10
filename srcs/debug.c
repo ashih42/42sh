@@ -14,12 +14,17 @@ void	print_list(t_list *list)
 
 void	print_expr_list(t_list *expr_list)
 {
+	int i;
+	char **array;
+
 	ft_printf("expr_list size = %d\n", ft_lst_size(expr_list));
-	ft_printf("BEGIN\n");
 	while (expr_list != 0)
 	{
-		print_list(expr_list->content);
+		ft_printf("Next expr:\n");
+		array = expr_list->content;
+		i = -1;
+		while (array[++i])
+			ft_printf("   %s\n", array[i]);
 		expr_list = expr_list->next;
 	}
-	ft_printf("END\n");
 }

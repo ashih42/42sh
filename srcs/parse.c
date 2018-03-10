@@ -7,22 +7,10 @@
 **	redirections, escaped characters, etc.
 */
 
-// The commented out stuff is probably not needed, but let's keep them here for now :>
-/*
-// not sure if needed
-char   **list_to_array(t_list *list)
-{
-	char **array = malloc(sizeof(char *) * (ft_lst_size(list) + 1));
-	int i = 0;
-	while (list != 0)
-	{
-		array[i++] = ft_strdup(list->content);
-		list = list->next;
-	}
-	array[i] = 0;
-	return (array);
-}
 
+
+// Leave these useless things here for now :>
+/*
 char	*queue_to_str(t_list *queue)
 {
 	char *str = ft_strnew(0);
@@ -82,6 +70,25 @@ t_list	*merge_quotes(t_list *list)
 }
 */
 
+
+// WARNING: I made no attempt to free anything correctly.
+
+
+// not sure if needed
+char   **list_to_array(t_list *list)
+{
+	char **array = malloc(sizeof(char *) * (ft_lst_size(list) + 1));
+	int i = 0;
+	while (list != 0)
+	{
+		array[i++] = ft_strdup(list->content);
+		list = list->next;
+	}
+	array[i] = 0;
+	return (array);
+}
+
+
 int 	is_operator(char *str)
 {
 	if (ft_strequ(str, "|"))
@@ -100,14 +107,15 @@ t_list	*list_to_expr(t_list *list)
 {
 	t_list *expr_list = 0;
 	t_list *expr;
+	char **array;
 
 	while (list != 0)
 	{
 		if (is_operator(list->content))
 		{
-			expr = 0;
-			ft_lst_add_last(&expr, ft_lst_new_ref(list->content, sizeof(char *)));
-			ft_lst_add_last(&expr_list, ft_lst_new_ref(expr, sizeof(t_list *)));
+			array = ft_memalloc(sizeof(char *) * 2);
+			array[0] = list->content;
+			ft_lst_add_last(&expr_list, ft_lst_new_ref(array, sizeof(char **)));
 			list = list->next;
 		}
 		else
@@ -120,7 +128,8 @@ t_list	*list_to_expr(t_list *list)
 				ft_lst_add_last(&expr, ft_lst_new_ref(list->content, sizeof(char *)));
 				list = list->next;
 			}
-			ft_lst_add_last(&expr_list, ft_lst_new_ref(expr, sizeof(t_list *)));
+			array = list_to_array(expr);
+			ft_lst_add_last(&expr_list, ft_lst_new_ref(array, sizeof(char **)));
 		}
 	}
 	return (expr_list);
@@ -136,13 +145,10 @@ char	**sh_parse(t_env *e)
 	{
 		str_explode(args[i], &list);
 	}
-//	print_list(list);
 
-//  fuck this shit
-//	list = merge_quotes(list);
-//	print_list(list);
-	// this gets rid of whitespaces and then fails to add back whitespaces when merging the terms :'(
-
+	// okay now I have an expr_list, where each node is a char** array, which could contain
+	// a long expression, e.g. "ls -l -R",
+	// or a single operator: "|", ">", ">>", "<"
 	t_list *expr_list = list_to_expr(list);
 	print_expr_list(expr_list);
 
