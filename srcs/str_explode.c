@@ -1,121 +1,60 @@
 #include "ft_42sh.h"
 
-static int is_delim(char c, char *delim)
+static int is_delim(char *s)
 {
+	static char *delim_table[] = {"|", ">>", ">", "<", 0};
 	int i;
 
 	i = 0;
-	while (delim[i])
+	while (delim_table[i])
 	{
-		if (delim[i] == c)
-			return (1);
+		if (ft_strnequ(s, delim_table[i],
+			ft_strlen(delim_table[i])))
+			return (ft_strlen(delim_table[i]));
 		i++;
 	}
 	return (0);
 }
 
-static int	count_substrings(char const *s, char *delim)
+static void		add_terms(char *s, t_list **list)
 {
-	int		count;
-	int		i;
+	int head;
+	int i;
+	char *word;
+	char *d;
+	int inc;
 
-	count = 0;
 	i = 0;
 	while (1)
 	{
-		while (is_delim(s[i], delim))
-			i++;
-		if (s[i] == '\0')
-			return (count * 2 - 1);
-		while (!(is_delim(s[i], delim) || s[i] == '\0'))
-			i++;
-		count++;
-	}
-}
-
-static void	initialize_strings(char **array, char const *s, char *delim)
-{
-	int		i;
-	int		j;
-	int		head;
-
-	i = 0;
-	j = 0;
-	head = 0;
-	while (1)
-	{
-		while (is_delim(s[i], delim))
-			i++;
-		if (s[i] == '\0')
-		{
-			array[j] = 0;
-			return ;
-		}
 		head = i;
-		while (!(is_delim(s[i], delim) || s[i] == '\0'))
+		while (!(inc = is_delim(s + i)) && s[i] != '\0')
 			i++;
-		array[j++] = malloc(sizeof(char) * (i - head + 1));
-		array[j++] = malloc(sizeof(char) * 2);
-	}
-}
-
-static void	fill_array(char **array, char const *s, char *delim)
-{
-	int		i;
-	int		j;
-	int		k;
-
-	i = 0;
-	j = 0;
-	k = 0;
-	while (1)
-	{
-		while (is_delim(s[i], delim))
-			i++;
+		if (i > head)
+		{
+			word = ft_strnew(i - head);
+			ft_strncpy(word, s + head, i - head);
+			ft_lst_add_last(list, ft_lst_new_ref(word, sizeof(char *)));
+		}
 		if (s[i] == '\0')
 			return ;
-		k = 0;
-		while (!(is_delim(s[i], delim) || s[i] == '\0'))
-		{
-			array[j][k] = s[i];
-			k++;
-			i++;
-		}
-		array[j++][k] = '\0';
-		array[j][0] = s[i++];
-		array[j++][1] = '\0';
+		d = ft_strnew(inc);
+		ft_strncpy(d, s + i, inc);
+		ft_lst_add_last(list, ft_lst_new_ref(d, sizeof(char *)));
+		i += inc;
 	}
 }
 
-char		**str_explode(char const *s, char *delim)
+/*
+** This amazing function makes a string explode and adds the pieces to end of list.
+** e.g. "ls|cat>>txt" becomes "ls" -> "|" -> "cat" -> ">>" -> "txt"
+*/
+
+void		str_explode(char *s, t_list **list)
 {
-	char	**total_array;
-	int		len;
-
-	if (s == NULL)
-		return (NULL);
+	if (s == NULL || s[0] == '\0')
+		return ;
 	
-	len = count_substrings(s, delim);
-	if (len <= 1)
-	{
-		total_array = ft_memalloc(sizeof(char *) * 2);
-		if (total_array == NULL)
-			return (NULL);
-		else
-		{
-			total_array[0] = ft_strdup(s);
-			return (total_array);
-		}
-	}
+	add_terms(s, list);
 
-//	ft_printf("len = %d\n", len);
-	if ((total_array = malloc(sizeof(char *) * (len + 1))))
-	{
-//		ft_printf("GOT HERE 1\n");
-		initialize_strings(total_array, s, delim);
-//		ft_printf("GOT HERE 2\n");
-		fill_array(total_array, s, delim);
-//		ft_printf("GOT HERE 3\n");
-	}
-	return (total_array);
 }

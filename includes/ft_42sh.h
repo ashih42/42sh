@@ -44,6 +44,10 @@ typedef struct			s_job
 	struct termios		tmodes;/* saved terminal modes */
 }						t_job;
 
+
+
+
+
 t_env					*g_e;
 
 /*
@@ -131,6 +135,15 @@ void					get_cmd_history(t_env *e, int mode);
  */
 char					**split_argv(char const *s, char *ws);
 
-char					**str_explode(char const *s, char *delim);
+/*
+ **	str_explode.c
+ */
+void					str_explode(char *s, t_list **list);
+
+/*
+ **	debug.c
+ */
+void	print_list(t_list *list);
+void	print_expr_list(t_list *expr_list);
 
 #endif
