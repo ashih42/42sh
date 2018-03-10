@@ -50,28 +50,30 @@ static	void		clear_and_update_term(t_env *e, char *curr_term,
 
 void				get_cmd_history(t_env *e, int mode)
 {
-	static char	*orig_term = NULL;
-	t_dl_list	*curr_cmd;
-	char		*curr_term;
+	static char			*orig_term = NULL;
+	char				*curr_term;
 
-	if (e->history_pos == -1)
+	if (!(e->history_pos))
 	{
-		if (orig_term)
-			free(orig_term);
-		orig_term = strdup(e->buffer);
-		e->history_pos = ft_dl_lst_size(e->cmd_history);
+		if (!mode)
+		{
+			if (orig_term)
+				free(orig_term);
+			orig_term = ft_strdup(e->buffer);
+			e->history_pos = e->history_end;
+		}
+		else
+			return ;
 	}
-	e->history_pos = (mode == 1) ? e->history_pos + 1 : e->history_pos - 1;
-	e->history_pos = (e->history_pos < 0) ? 0 : e->history_pos;
-	curr_cmd = ft_dl_lst_at(e->cmd_history, e->history_pos);
-	if (curr_cmd == NULL)
-	{
+	else if (mode == 1)
+		e->history_pos = e->history_pos->next;
+	else if (e->history_pos->prev)
+		e->history_pos = e->history_pos->prev;
+	if (!(e->history_pos))
 		curr_term = orig_term;
-		e->history_pos = -1;
-	}
 	else
-		curr_term = (char *)curr_cmd->content;
-	clear_and_update_term(e, curr_term, curr_cmd, &orig_term);
+		curr_term = (char *)e->history_pos->content;
+	clear_and_update_term(e, curr_term, e->history_pos, &orig_term);
 }
 
 /*
@@ -90,6 +92,7 @@ int					add_cmd_history(t_env *e)
 	if ((node = ft_dl_lstnew(e->buffer, ft_strlen(e->buffer) + 1)))
 	{
 		ft_dl_lst_add_last(&(e->cmd_history), node);
+		e->history_end = node;
 		return (1);
 	}
 	return (0);

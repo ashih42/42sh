@@ -16,12 +16,13 @@ typedef struct			s_env
 {
 	t_list				*envp;
 	t_dl_list			*cmd_history;
+	t_dl_list			*history_end;
+	t_dl_list			*history_pos;
 	char				*buffer;
 	size_t				cursor;
 	size_t				buffer_end;
 	size_t				buffer_size;
 	int					child_pid;
-	int					history_pos;
 }						t_env;
 
 typedef struct			s_process

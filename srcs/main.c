@@ -24,7 +24,7 @@ int		main(int argc, char **argv, char **envp)
 		sh_init(&e, envp);
 		while (1)
 		{
-			e.history_pos = -1;
+			e.history_pos = NULL;
 			sh_listen(&e);
 			//Need to do stuff with the return of history_bang_exploder
 			history_bang_exploder(&e);
@@ -33,9 +33,6 @@ int		main(int argc, char **argv, char **envp)
 			argv = sh_parse(&e);
 			if (argv)
 				sh_dispatcher(&e, ft_char_array_length(argv), argv);
-			// Known issue:
-			// argv appears to be leaking...
-			// Hopefully the sh_parse rewrite will fix it >_>
 		}
 	}
 	return (0);
