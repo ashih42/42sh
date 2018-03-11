@@ -49,6 +49,12 @@ typedef struct			s_job
 t_env					*g_e;
 
 /*
+**	path_utils.c
+**	Used by dispatcher.c and tab_autocomplete.c
+*/
+char					*build_filepath(char *path, char *file);
+
+/*
 **	envp.c
 */
 void					del_variable(t_env *e, char *key);

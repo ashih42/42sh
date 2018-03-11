@@ -29,21 +29,7 @@ static int	built_ins(t_env *e, int argc, char **argv)
 		ft_history(e, argc, argv);
 	else
 		return (0);
-	add_cmd_history(e);
 	return (1);
-}
-
-static char	*build_filepath(char *path, char *file)
-{
-	char	*filepath;
-
-	if ((filepath = ft_strnew(ft_strlen(path) + 1 + ft_strlen(file))))
-	{
-		ft_strcpy(filepath, path);
-		ft_strcat(filepath, "/");
-		ft_strcat(filepath, file);
-	}
-	return (filepath);
 }
 
 int		fork_execve(t_env *e, char *path, char **argv, char **envp)
