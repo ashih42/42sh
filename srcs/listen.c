@@ -40,6 +40,7 @@ int		extend_buffer(t_env *e)
 		ft_memcpy(new_buffer, e->buffer, e->buffer_size);
 		free(e->buffer);
 		e->buffer = new_buffer;
+		e->buffer_size += BUFFER_SIZE;
 		return (1);
 	}
 	return (0);
@@ -135,9 +136,7 @@ int		char_specs(t_env *e, char c)
 		return (1);
 	}
 	if (c == '\t')
-	{
 		return (1);
-	}
 	if (c == '\x1B')
 		return (handle_esc_seq(e, c));
 	return (0);
@@ -167,10 +166,10 @@ void	sh_listen(t_env *e)
 	enable_raw_mode(&orig_termios);
 	while (read(STDIN_FILENO, &c, 1) > 0 && c != '\n')
 	{
+		if (e->buffer_end == e->buffer_size && !extend_buffer(e))
+			return ;
 		if (char_specs(e, c))
 			continue ;
-		if (e->buffer_end == e->buffer_size)
-			extend_buffer(e);
 		ft_memmove(e->buffer + e->cursor + 1,
 					e->buffer + e->cursor, e->buffer_end++ - e->cursor);
 		i = e->cursor;

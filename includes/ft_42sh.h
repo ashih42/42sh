@@ -5,6 +5,7 @@
 # include <termios.h>
 # include <sys/types.h>
 # include <stdbool.h>
+# include <errno.h>
 # include "libft.h"
 
 # define HASHMAP_SIZE	256
@@ -81,13 +82,13 @@ char					****ft_4d_parser(char *input);
 /*
 **	parse.c
 */
-char					**sh_parse(t_env *e);
+char					****sh_parse(t_env *e);
 char 					**list_to_array(t_list *list);
 
 /*
 **	dispatcher.c
 */
-void					sh_dispatcher(t_env *e, int argc, char **argv);
+void					sh_dispatcher(t_env *e, char ****cmds);
 
 /*
 **	ft_cd.c

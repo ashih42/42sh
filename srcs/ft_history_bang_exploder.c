@@ -22,6 +22,7 @@ static int		history_bang_num_exploder(t_env *e, char *buf)
 		ft_memmove(e->buffer, content, ft_strlen(content));
 		return (1);
 	}
+	ft_printf("42sh: no such event: %d\n", (indx > 0) ? indx : 0);
 	return (-1);
 }
 
@@ -55,6 +56,7 @@ static int		history_bang_str_exploder(t_env *e, char *buf)
 		ft_memmove(e->buffer, last_content, ft_strlen(last_content));
 		return (1);
 	}
+	ft_printf("42sh: event not found: %s\n", buf);
 	return (-1);
 }
 
@@ -91,7 +93,7 @@ int				history_bang_exploder(t_env *e)
 	char		*buf;
 
 	buf = e->buffer;
-	if (ft_strncmp(buf, "!", 1) == 0)
+	if (*buf == '!')
 	{
 		buf++;
 		if (*buf && (ft_isdigit(*buf) ||

@@ -6,7 +6,7 @@
 /*   By: apuel <apuel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 18:49:13 by apuel             #+#    #+#             */
-/*   Updated: 2018/03/08 04:31:04 by apuel            ###   ########.fr       */
+/*   Updated: 2018/03/11 12:26:06 by apuel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,7 +45,7 @@
 
 static int is_delim(char *s)
 {
-	static char *delim_table[] = {"||", "&&", 0};
+	static char *delim_table[] = {"||", "&&", "|", 0};
 	int i;
 
 	i = 0;
