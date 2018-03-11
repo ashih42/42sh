@@ -1,51 +1,20 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_4d_parser.c                                     :+:      :+:    :+:   */
+/*   ft_3d_parser.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: apuel <apuel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 18:49:13 by apuel             #+#    #+#             */
-/*   Updated: 2018/03/11 12:26:06 by apuel            ###   ########.fr       */
+/*   Updated: 2018/03/11 13:48:39 by apuel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_42sh.h"
 
-/*
-**	group
-**	{
-**		argv{},
-**		argv{},
-**		argv{},
-**		argv{}
-**	},
-**	group
-**	{
-**		argv{},
-**		argv{},
-**		argv{},
-**		argv{}
-**	},
-**	group
-**	{
-**		argv{},
-**		argv{},
-**		argv{},
-**		argv{}
-**	},
-**	group
-**	{
-**		argv{},
-**		argv{},
-**		argv{},
-**		argv{}
-**	}
-*/
-
 static int is_delim(char *s)
 {
-	static char *delim_table[] = {"||", "&&", "|", 0};
+	static char *delim_table[] = {";", "||", "&&", "|", 0};
 	int i;
 
 	i = 0;
@@ -102,27 +71,17 @@ static char		**str_explode2(char *s)
 	return (list_to_array(list));
 }
 
-char	****ft_4d_parser(char *input)
+char	***ft_3d_parser(char *input)
 {
-	char	**groups;
 	char	**cmds;
-	char	****result;
+	char	***result;
 	size_t	i;
-	size_t	j;
 
-	groups = ft_strsplit(input, ';');
-	result = ft_memalloc((ft_char_array_length(groups) + 1) * sizeof(char ****));
+	cmds = str_explode2(input);
+	result = ft_memalloc((ft_char_array_length(cmds) + 1) * sizeof(char ***));
 	i = -1;
-	while (groups[++i])
-	{
-//		cmds = //a form of ft_strsplit that splits between '|' and '&&' (shouldn't remove '|', leave it at the end of the left string)
-		cmds = str_explode2(groups[i]);		// e.g. commands: (ls -a), (&&), (echo hello)
-		result[i] = ft_memalloc((ft_char_array_length(cmds) + 1) * sizeof(char ***));
-		j = -1;
-		while (cmds[++j])
-			result[i][j] = split_argv(cmds[j], WHITESPACE);
-		ft_char_array_del(cmds);
-	}
-	ft_char_array_del(groups);
+	while (cmds[++i])
+		result[i] = split_argv(cmds[i], WHITESPACE);
+	ft_char_array_del(cmds);
 	return (result);
 }

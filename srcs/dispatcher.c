@@ -120,45 +120,72 @@ int		execute(t_env *e, char **argv, char **envp, int *status)
 	return (0);
 }
 
-void		sh_dispatcher(t_env *e, char ****cmds)
+int			should_fork(char **argv) //For hiroshi, use this to check if the current argv should be used as a forked job! <3
+{
+	size_t	i;
+	size_t	len;
+
+	i = 0;
+	while (argv[i + 1])
+		i++;
+	len = ft_strlen(argv[i]);
+	if (argv[i][len - 1] == '&')
+	{
+		if (len > 1)
+			argv[i][len - 1] = '\0';
+		else
+		{
+			free(argv[i]);
+			argv[i] = NULL;
+		}
+		return (1);
+	}
+	return (0);
+}
+
+void		sh_dispatcher(t_env *e, char ***cmds)
 {
 	char	**envp;
+	char	**argv;
 	size_t	i;
 	int		status;
 
-	while (*cmds)
+	status = 0;
+	i = -1;
+	while (cmds[++i])
 	{
-		status = 0;
-		i = -1;
-		while ((*cmds)[++i])
+		argv = cmds[i];
+		if (argv[0][0] == ';')
+			continue ;
+		if (!ft_strcmp(argv[0], "||"))
 		{
-			if (ft_strcmp((*cmds)[i][0], "||") == 0)
-				continue ;
-			if (!ft_strcmp((*cmds)[i][0], "&&"))
+			if (!status)
+				break ;
+			continue ;
+		}
+		if (!ft_strcmp(argv[0], "&&"))
+		{
+			if (status)
+				break ;
+			continue ;
+		}
+		if (!built_ins(e, ft_char_array_length(argv), argv))
+		{
+			if ((envp = serialize_envp(e)))
 			{
-				if (status)
-					break ;
-				continue ;
-			}
-			if (!built_ins(e, ft_char_array_length((*cmds)[i]), (*cmds)[i]))
-			{
-				if ((envp = serialize_envp(e)))
-				{
-					add_cmd_history(e);
-					if (execute(e, (*cmds)[i], envp, &status) < 0 ||
-						status < 0 || !WIFEXITED(status))
-						status = -1;
-					else
-						status = WEXITSTATUS(status);
-					ft_char_array_del(envp);
-				}
-				else
-				{
-					ft_printf("42sh: failed to allocate memory for envp\n");
+				if (execute(e, argv, envp, &status) < 0 ||
+					status < 0 || !WIFEXITED(status))
 					status = -1;
-				}
+				else
+					status = WEXITSTATUS(status);
+				ft_char_array_del(envp);
+			}
+			else
+			{
+				ft_printf("42sh: failed to allocate memory for envp\n");
+				status = -1;
 			}
 		}
-		cmds++;
+		ft_char_array_del(argv);
 	}
 }

@@ -74,21 +74,21 @@ bool					job_is_completed(t_job *j);
 void					sh_listen(t_env *e);
 
 /*
-**	ft_4d_parser.c
+**	ft_3d_parser.c
 */
-char					****ft_4d_parser(char *input);
+char					***ft_3d_parser(char *input);
 
 
 /*
 **	parse.c
 */
-char					****sh_parse(t_env *e);
+char					***sh_parse(t_env *e);
 char 					**list_to_array(t_list *list);
 
 /*
 **	dispatcher.c
 */
-void					sh_dispatcher(t_env *e, char ****cmds);
+void					sh_dispatcher(t_env *e, char ***cmds);
 
 /*
 **	ft_cd.c

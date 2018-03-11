@@ -136,7 +136,7 @@ t_list	*list_to_expr(t_list *list)
 }
 
 
-char	****sh_parse(t_env *e)
+char	***sh_parse(t_env *e)
 {
 	/*
 	char **args = split_argv(e->buffer, WHITESPACE);
@@ -154,10 +154,10 @@ char	****sh_parse(t_env *e)
 	print_expr_list(expr_list);
 	*/
 
-	char ****array_4d = ft_4d_parser(e->buffer);
+	char ***array_3d = ft_3d_parser(e->buffer);
 //	print_char4d(array_4d);
 
 
-	return (array_4d);
+	return (array_3d);
 
 }

@@ -13,7 +13,7 @@
 int		main(int argc, char **argv, char **envp)
 {
 	t_env	e;
-	char	****cmds;
+	char	***cmds;
 
 	g_e = &e;
 	signal(SIGINT, ft_ctrl_c);
@@ -31,9 +31,13 @@ int		main(int argc, char **argv, char **envp)
 				break ;
 			if (history_bang_exploder(&e) != -1)
 			{
+				add_cmd_history(&e);
 				cmds = sh_parse(&e);
 				if (cmds)
+				{
 					sh_dispatcher(&e, cmds);
+					free(cmds);
+				}
 			}
 		}
 	}
