@@ -51,7 +51,7 @@ int		fork_execve(t_env *e, char *path, char **argv, char **envp)
 	int	pid;
 	int	status;
 
-	status = 0;
+	status = -1;
 	pid = fork();
 	e->child_pid = pid;
 	if (pid < 0)
@@ -153,7 +153,10 @@ void		sh_dispatcher(t_env *e, char ****cmds)
 					ft_char_array_del(envp);
 				}
 				else
+				{
 					ft_printf("42sh: failed to allocate memory for envp\n");
+					status = -1;
+				}
 			}
 		}
 		cmds++;
