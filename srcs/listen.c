@@ -136,7 +136,7 @@ int		char_specs(t_env *e, char c)
 		return (1);
 	}
 	if (c == '\t')
-		return (1);
+		return (tab_autocomplete(e));
 	if (c == '\x1B')
 		return (handle_esc_seq(e, c));
 	return (0);

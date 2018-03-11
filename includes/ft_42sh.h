@@ -139,6 +139,11 @@ void					get_cmd_history(t_env *e, int mode);
 int						history_bang_exploder(t_env *e);
 
 /*
+**	tab_autocomplete.c
+*/
+int						tab_autocomplete(t_env *e);
+
+/*
 **	split_argv.c
 */
 char					**split_argv(char const *s, char *ws);
