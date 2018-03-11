@@ -13,7 +13,7 @@ OBJS_DIR = ./objects/
 
 FILES = init.c listen.c parse.c dispatcher.c envp.c split_argv.c ft_cd.c \
 ft_echo.c ft_exit.c ft_setenv.c ft_unsetenv.c ft_env.c signal.c ft_history.c \
-str_explode.c ft_history_bang_exploder.c debug.c redir.c
+job_control_utils.c str_explode.c ft_history_bang_exploder.c debug.c redir.c
 
 ifeq ($(TESTING_ENV),)
     FILES += main.c
