@@ -73,9 +73,16 @@ bool					job_is_completed(t_job *j);
 void					sh_listen(t_env *e);
 
 /*
+**	ft_4d_parser.c
+*/
+char					****ft_4d_parser(char *input);
+
+
+/*
 **	parse.c
 */
 char					**sh_parse(t_env *e);
+char 					**list_to_array(t_list *list);
 
 /*
 **	dispatcher.c
@@ -153,5 +160,7 @@ int						pipe_exprs(char **expr1, char **expr2);
 */
 void					print_list(t_list *list);
 void					print_expr_list(t_list *expr_list);
+void					print_char2d(char **array);
+void					print_char4d(char ****array);
 
 #endif
