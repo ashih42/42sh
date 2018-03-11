@@ -87,7 +87,7 @@ int		execute(t_env *e, char **argv, char **envp, int *status)
 	temp_path = get_variable(e, "PATH");
 	if (!ft_strchr(argv[0], '/'))
 	{
-		if ((path = ft_strsplit(temp_path, ':')))
+		if (temp_path && (path = ft_strsplit(temp_path, ':')))
 		{
 			i = -1;
 			while (path[++i])
