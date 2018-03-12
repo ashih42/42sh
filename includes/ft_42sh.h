@@ -33,6 +33,11 @@ typedef struct			s_job
 	struct termios		tmodes;/* saved terminal modes */
 }						t_job;
 
+typedef struct			s_job_stack
+{
+	t_job				*top;
+}						t_stack;
+
 typedef struct			s_env
 {
 	t_list				*envp;
@@ -49,6 +54,7 @@ typedef struct			s_env
 	pid_t				child_pid;
 	t_job				*job;
 	pid_t				shell_pgid;
+	pid_t				shell_stopped;
 	struct termios		shell_tmodes;
 	bool				shell_terminal;
 	bool				shell_is_interactive;
@@ -80,10 +86,15 @@ void					sh_init(t_env *e, char **envp);
 **	job_control_utils.c
 */
 t_job					*job_new(void);
-t_process				*process_new(char **argv);
 t_job					*find_job(pid_t pgid);
 bool					job_is_stopped(t_job *j);
 bool					job_is_completed(t_job *j);
+
+/*
+** process_utils.c
+*/
+t_process				*process_new(t_env *e, char **argv);
+void					process_add(t_job *j, t_process *added_process);
 
 /*
 **	listen.c
