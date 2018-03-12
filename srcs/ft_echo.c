@@ -6,7 +6,7 @@
 // have any quotes,
 // have an opening quote only -> need shell to ask for more args
 
-
+/* ANDY NO
 int		print_term(t_env *e, char *str)
 {
 	char	*value;
@@ -24,6 +24,7 @@ int		print_term(t_env *e, char *str)
 		ft_printf(str);
 	return (1);
 }
+*/
 
 void		ft_echo(t_env *e, int argc, char **argv)
 {
@@ -31,21 +32,15 @@ void		ft_echo(t_env *e, int argc, char **argv)
 	int newline;
 	int need_space;
 
-	i = (argc >= 1 && ft_strequ(argv[1], "-n")) ? 1 : 0;
-	newline = (argc >= 1 && ft_strequ(argv[1], "-n")) ? 0 : 1;
+	i = (argc > 1 && ft_strnequ(argv[1], "-n", 2)) ? 1 : 0;
+	newline = !i;
 	need_space = 0;
-	
-	if (argc >= 1 && ft_strequ(argv[1], "-n"))
-	{
-		newline = 0;
-		i = 1;
-	}
 	while (++i < argc)
 	{
 		if (need_space)
 			ft_printf(" ");
-		if (print_term(e, argv[i]))
-			need_space = 1;
+		ft_printf(argv[i]);
+		need_space = 1;
 	}
 	ft_printf((newline) ? "\n" : "");
 }

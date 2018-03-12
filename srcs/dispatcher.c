@@ -29,21 +29,7 @@ static int	built_ins(t_env *e, int argc, char **argv)
 		ft_history(e, argc, argv);
 	else
 		return (0);
-	add_cmd_history(e);
 	return (1);
-}
-
-static char	*build_filepath(char *path, char *file)
-{
-	char	*filepath;
-
-	if ((filepath = ft_strnew(ft_strlen(path) + 1 + ft_strlen(file))))
-	{
-		ft_strcpy(filepath, path);
-		ft_strcat(filepath, "/");
-		ft_strcat(filepath, file);
-	}
-	return (filepath);
 }
 
 int		fork_execve(t_env *e, char *path, char **argv, char **envp)
@@ -51,22 +37,19 @@ int		fork_execve(t_env *e, char *path, char **argv, char **envp)
 	int	pid;
 	int	status;
 
-	status = 0;
+	status = -1;
 	pid = fork();
 	e->child_pid = pid;
 	if (pid < 0)
-	{
-		ft_puterror("fork() failed", 0, 0);
-		exit(0);
-	}
-	if (pid == 0)
+		ft_printf("42sh: failed to fork process\n");
+	else if (pid == 0)
 		exit(execve(path, argv, envp));
 	else
 	{
 		waitpid(pid, &status, 0);
 		e->child_pid = 0;
 	}
-	return ((status == 0) ? 0 : -1);
+	return (status);
 }
 
 // TO-DO NOTES:
@@ -81,7 +64,7 @@ int		fork_execve(t_env *e, char *path, char **argv, char **envp)
 // it seems the OS just knows what . and .. mean,
 // so the shell doesn't have to do anything special about them
 
-int		execute(t_env *e, char **argv, char **envp)
+int		execute(t_env *e, char **argv, char **envp, int *status)
 {
 	char	*temp_path;
 	char	**path;
@@ -90,7 +73,7 @@ int		execute(t_env *e, char **argv, char **envp)
 	temp_path = get_variable(e, "PATH");
 	if (!ft_strchr(argv[0], '/'))
 	{
-		if ((path = ft_strsplit(temp_path, ':')))
+		if (temp_path && (path = ft_strsplit(temp_path, ':')))
 		{
 			i = -1;
 			while (path[++i])
@@ -98,7 +81,7 @@ int		execute(t_env *e, char **argv, char **envp)
 				temp_path = build_filepath(path[i], argv[0]);
 				if (temp_path && access(temp_path, X_OK) == 0)
 				{
-					fork_execve(e, temp_path, argv, envp);
+					*status = fork_execve(e, temp_path, argv, envp);
 					free(temp_path);
 					ft_char_array_del(path);
 					return (0);
@@ -107,27 +90,88 @@ int		execute(t_env *e, char **argv, char **envp)
 			}
 			ft_char_array_del(path);
 		}
+		ft_printf("42sh: command not found: %s\n", argv[0]);
 		return (-1);
 	}
+	if (access(argv[0], X_OK) == 0)
+		*status = fork_execve(e, argv[0], argv, envp);
 	else
-		return (fork_execve(e, argv[0], argv, envp));
+	{
+		if (errno & ENOENT)
+			ft_printf("42sh: no such file or directory: %s\n", argv[0]);
+		if (errno & EACCES)
+			ft_printf("42sh: permission denied: %s\n", argv[0]);
+		return (-1);
+	}
+	return (0);
 }
 
-void		sh_dispatcher(t_env *e, int argc, char **argv)
+int			should_fork(char **argv) //For hiroshi, use this to check if the current argv should be used as a forked job! <3
+{
+	size_t	i;
+	size_t	len;
+
+	i = 0;
+	while (argv[i + 1])
+		i++;
+	len = ft_strlen(argv[i]);
+	if (argv[i][len - 1] == '&')
+	{
+		if (len > 1)
+			argv[i][len - 1] = '\0';
+		else
+		{
+			free(argv[i]);
+			argv[i] = NULL;
+		}
+		return (1);
+	}
+	return (0);
+}
+
+void		sh_dispatcher(t_env *e, char ***cmds)
 {
 	char	**envp;
+	char	**argv;
+	size_t	i;
+	int		status;
 
-	if (argc && !built_ins(e, argc, argv))
+	status = 0;
+	i = -1;
+	while (cmds[++i])
 	{
-		if ((envp = serialize_envp(e)))
+		argv = cmds[i];
+		if (argv[0][0] == ';')
+			continue ;
+		if (!ft_strcmp(argv[0], "||"))
 		{
-			add_cmd_history(e);
-			if (execute(e, argv, envp) < 0)
-				ft_printf("42sh: command not found: %s\n", argv[0]);
-			ft_char_array_del(envp);
+			if (!status)
+				break ;
+			continue ;
 		}
-		else
-			ft_printf("{robot} [!] Failed to allocate envp!\n");
+		if (!ft_strcmp(argv[0], "&&"))
+		{
+			if (status)
+				break ;
+			continue ;
+		}
+		if (!built_ins(e, ft_char_array_length(argv), argv))
+		{
+			if ((envp = serialize_envp(e)))
+			{
+				if (execute(e, argv, envp, &status) < 0 ||
+					status < 0 || !WIFEXITED(status))
+					status = -1;
+				else
+					status = WEXITSTATUS(status);
+				ft_char_array_del(envp);
+			}
+			else
+			{
+				ft_printf("42sh: failed to allocate memory for envp\n");
+				status = -1;
+			}
+		}
 		ft_char_array_del(argv);
 	}
 }

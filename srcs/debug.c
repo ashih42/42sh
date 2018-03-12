@@ -28,3 +28,36 @@ void	print_expr_list(t_list *expr_list)
 		expr_list = expr_list->next;
 	}
 }
+
+void	print_char2d(char **array)
+{
+	int i;
+
+	ft_printf("    array_2d:\n");
+	i = -1;
+	while (array[++i])
+	{
+		ft_printf("      %s ", array[i]);
+	}
+	ft_printf("\n");
+}
+
+void	print_char4d(char ****array)
+{
+	int i;
+	int j;
+	char ***array_3d;
+
+	i = -1;
+	while (array[++i])
+	{
+		ft_printf("array_4d:\n");
+		array_3d = array[i];
+		j = -1;
+		while (array_3d[++j])
+		{
+			ft_printf("  array_3d:\n");
+			print_char2d(array_3d[j]);
+		}
+	}
+}

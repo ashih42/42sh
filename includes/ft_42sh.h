@@ -5,6 +5,7 @@
 # include <termios.h>
 # include <sys/types.h>
 # include <stdbool.h>
+# include <errno.h>
 # include "libft.h"
 
 # define HASHMAP_SIZE	256
@@ -49,6 +50,12 @@ typedef struct			s_env
 t_env					*g_e;
 
 /*
+**	path_utils.c
+**	Used by dispatcher.c and tab_autocomplete.c
+*/
+char					*build_filepath(char *path, char *file);
+
+/*
 **	envp.c
 */
 void					del_variable(t_env *e, char *key);
@@ -76,14 +83,21 @@ bool					job_is_completed(t_job *j);
 void					sh_listen(t_env *e);
 
 /*
+**	ft_3d_parser.c
+*/
+char					***ft_3d_parser(char *input);
+
+
+/*
 **	parse.c
 */
-char					**sh_parse(t_env *e);
+char					***sh_parse(t_env *e);
+char 					**list_to_array(t_list *list);
 
 /*
 **	dispatcher.c
 */
-void					sh_dispatcher(t_env *e, int argc, char **argv);
+void					sh_dispatcher(t_env *e, char ***cmds);
 
 /*
 **	ft_cd.c
@@ -134,6 +148,11 @@ void					get_cmd_history(t_env *e, int mode);
 int						history_bang_exploder(t_env *e);
 
 /*
+**	tab_autocomplete.c
+*/
+int						tab_autocomplete(t_env *e);
+
+/*
 **	split_argv.c
 */
 char					**split_argv(char const *s, char *ws);
@@ -156,5 +175,7 @@ int						pipe_exprs(char **expr1, char **expr2);
 */
 void					print_list(t_list *list);
 void					print_expr_list(t_list *expr_list);
+void					print_char2d(char **array);
+void					print_char4d(char ****array);
 
 #endif
