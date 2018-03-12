@@ -88,9 +88,12 @@ void	init_tab_auto(t_env *e)
 	}
 }
 
-//	TODO:
-//	Implement mergesort for linked list as executable names will not be in order.
-//	Implement the rest of tab autocompletion.
+/*
+**	TODO:
+**	Implement mergesort for linked list as executable names will not be in
+**	order.
+**	Implement the rest of tab autocompletion.
+*/
 
 int		tab_autocomplete(t_env *e)
 {
