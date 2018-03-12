@@ -1,4 +1,6 @@
 #include "ft_42sh.h"
+#include <sys/types.h>
+#include <sys/stat.h>
 
 char	*build_filepath(char *path, char *file)
 {
@@ -11,4 +13,13 @@ char	*build_filepath(char *path, char *file)
 		ft_strcat(filepath, file);
 	}
 	return (filepath);
+}
+
+int		is_dir(char *path)
+{
+	struct stat	s_stat;
+
+	if (stat(path, &s_stat) != 0)
+		return (0);
+	return (S_ISDIR(s_stat.st_mode));
 }

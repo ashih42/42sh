@@ -36,12 +36,15 @@ typedef struct			s_job
 typedef struct			s_env
 {
 	t_list				*envp;
+	t_list				*tab_execs;
+	t_list				*tab_pwd;
 	t_dl_list			*cmd_history;
 	t_dl_list			*history_end;
 	t_dl_list			*history_pos;
 	char				*buffer;
 	size_t				cursor;
 	size_t				buffer_end;
+	size_t				buffer_lock;
 	size_t				buffer_size;
 	pid_t				child_pid;
 	t_job				*job;
@@ -58,6 +61,7 @@ t_env					*g_e;
 **	Used by dispatcher.c and tab_autocomplete.c
 */
 char					*build_filepath(char *path, char *file);
+int						is_dir(char *path);
 
 /*
 **	envp.c
@@ -84,6 +88,7 @@ bool					job_is_completed(t_job *j);
 /*
 **	listen.c
 */
+int						extend_buffer(t_env *e);
 void					sh_listen(t_env *e);
 
 /*
@@ -121,7 +126,7 @@ void					ft_env(t_env *e, int argc, char **argv);
 /*
 **	ft_setenv.c
 */
-void					ft_setenv(t_env *e, int argc, char **argv);
+int						ft_setenv(t_env *e, int argc, char **argv);
 
 /*
 **	ft_unsetenv.c

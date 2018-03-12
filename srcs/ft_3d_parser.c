@@ -6,7 +6,7 @@
 /*   By: apuel <apuel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 18:49:13 by apuel             #+#    #+#             */
-/*   Updated: 2018/03/11 13:48:39 by apuel            ###   ########.fr       */
+/*   Updated: 2018/03/11 23:16:58 by apuel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,11 +64,15 @@ static void		add_terms(char *s, t_list **list)
 
 static char		**str_explode2(char *s)
 {
+	char	**result;
+
 	if (s == NULL || s[0] == '\0')
 		return (NULL);
 	t_list *list = 0;
 	add_terms(s, &list);
-	return (list_to_array(list));
+	result = list_to_array(list);
+	ft_lstdel(&list, (void (*)(void *, size_t))free);
+	return (result);
 }
 
 char	***ft_3d_parser(char *input)
