@@ -13,19 +13,6 @@
 # define WHITESPACE		" \t\n\v\r\f"
 # define DELIM 			"\"'|<>"
 
-typedef struct			s_env
-{
-	t_list				*envp;
-	t_dl_list			*cmd_history;
-	t_dl_list			*history_end;
-	t_dl_list			*history_pos;
-	char				*buffer;
-	size_t				cursor;
-	size_t				buffer_end;
-	size_t				buffer_size;
-	int					child_pid;
-}						t_env;
-
 typedef struct			s_process
 {
 	struct s_process	*next;/* next process in pipeline */
@@ -45,6 +32,20 @@ typedef struct			s_job
 	bool				notified;/* true if user told about stopped job */
 	struct termios		tmodes;/* saved terminal modes */
 }						t_job;
+
+typedef struct			s_env
+{
+	t_list				*envp;
+	t_dl_list			*cmd_history;
+	t_dl_list			*history_end;
+	t_dl_list			*history_pos;
+	char				*buffer;
+	size_t				cursor;
+	size_t				buffer_end;
+	size_t				buffer_size;
+	pid_t				child_pid;
+	t_job				*job;
+}						t_env;
 
 t_env					*g_e;
 
@@ -71,6 +72,8 @@ void					sh_init(t_env *e, char **envp);
 /*
 **	job_control_utils.c
 */
+t_job					*job_new(void);
+t_process				*process_new(char **argv);
 t_job					*find_job(pid_t pgid);
 bool					job_is_stopped(t_job *j);
 bool					job_is_completed(t_job *j);
@@ -78,6 +81,7 @@ bool					job_is_completed(t_job *j);
 /*
 **	listen.c
 */
+int						extend_buffer(t_env *e);
 void					sh_listen(t_env *e);
 
 /*
@@ -115,7 +119,7 @@ void					ft_env(t_env *e, int argc, char **argv);
 /*
 **	ft_setenv.c
 */
-void					ft_setenv(t_env *e, int argc, char **argv);
+int						ft_setenv(t_env *e, int argc, char **argv);
 
 /*
 **	ft_unsetenv.c
