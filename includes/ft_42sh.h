@@ -45,6 +45,10 @@ typedef struct			s_env
 	size_t				buffer_size;
 	pid_t				child_pid;
 	t_job				*job;
+	pid_t				shell_pgid;
+	struct termios		shell_tmodes;
+	bool				shell_terminal;
+	bool				shell_is_interactive;
 }						t_env;
 
 t_env					*g_e;

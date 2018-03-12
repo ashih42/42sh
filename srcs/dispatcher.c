@@ -135,6 +135,7 @@ void		sh_dispatcher(t_env *e, char ***cmds)
 	char	**argv;
 	size_t	i;
 	int		status;
+	t_job	*j;
 
 	status = 0;
 	i = -1;
