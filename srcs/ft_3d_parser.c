@@ -33,15 +33,26 @@ static void		add_terms(char *s, t_list **list)
 	int head;
 	int i;
 	char *word;
-	char *d;
 	int inc;
+	char quote;
 
 	i = 0;
+	quote = 0;
 	while (1)
 	{
 		head = i;
-		while (!(inc = is_delim(s + i)) && s[i] != '\0')
+		while (s[i] && (quote || !(inc = is_delim(s + i))))
+		{
+			if (s[i] == '\\')
+				i++;
+			else if (!quote && (s[i] == '\'' || s[i] == '\"'))
+				quote = s[i];
+			else if (quote && s[i] == quote)
+				quote = 0;
+			if (!s[i])
+				break ;
 			i++;
+		}
 		if (i > head)
 		{
 			word = ft_strnew(i - head);
@@ -50,9 +61,9 @@ static void		add_terms(char *s, t_list **list)
 		}
 		if (s[i] == '\0')
 			return ;
-		d = ft_strnew(inc);
-		ft_strncpy(d, s + i, inc);
-		ft_lst_add_last(list, ft_lst_new_ref(d, sizeof(char *)));
+		word = ft_strnew(inc);
+		ft_strncpy(word, s + i, inc);
+		ft_lst_add_last(list, ft_lst_new_ref(word, sizeof(char *)));
 		i += inc;
 	}
 }
