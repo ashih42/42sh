@@ -6,7 +6,7 @@
 /*   By: msharpe <marvin@42.fr>                     +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/07 21:56:53 by msharpe           #+#    #+#             */
-/*   Updated: 2018/03/11 22:50:16 by msharpe          ###   ########.fr       */
+/*   Updated: 2018/03/12 01:25:10 by msharpe          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 /*
 **match pattern ? = one character can equal any characters
 ** match pattern * = any character at any length.
-*/
+*//*
 int	matchstar(char *s1, char *s2)
 {
 	size_t	i;
@@ -45,7 +45,7 @@ int	matchstar(char *s1, char *s2)
 	p = 1;
 	}
 	return(0);
-}
+}*/
 /*
 ** if a bracket is used, the range of the search needs to be parsed out.
 ** this can be a literal range (a-z) or (acgfqw)
@@ -67,7 +67,7 @@ int		chk_glob_brckts(char c1, char *s2)
 			return (1);
 		return (0);
 	}
-	if (*(s2 + j) == ']' && flag == 0) //if there is no dash, all letters are accounted for.
+	if (*(s2 + j) == ']') //if there is no dash, all letters are accounted for.
 	{
 		search = malloc(sizeof(char) * j); //create an array the size of the number of characters we're looking for.
 		search[j] = '\0'; // the end of the array has a null character.
@@ -119,20 +119,31 @@ int matchparse (char *s1, char *s2)
 	{
 		if (s1[i] == '\0' && s2[j] == '\0')
 			return (1);
-		if ((s1[i] == s2[j] && s1[i] != '*' && s1[i] != '\\' && s1[i] != '[') || (s2[j] == '\?') || (s2[j]))
+		if ((s1[i] == s2[j] && s1[i] != '*' && s1[i] != '\\' && s1[i] != '[') || (s2[j] == '\?'))
 		{
 			i++;
 			j++;
 		}
+		else if (s1[i] == '\0' && s2[j] == '*')
+			j++;
 		else if (s1[i] == '\0' || s2[j] == '\0')
 			return (0);
-	//	else if (s2[j] == '*')
-	//	   persist = matchstar(&s1[i], &s2[j]);
 		else if (s2[j] == '[') 
-			 chk_glob_brckts(s1[i], &s2[j++]);
-		else if (s2[j] != '*' || s2[j] != '?' || s2[j] != '[')
+		{
+			persist =  chk_glob_brckts(s1[i], &s2[j++]);
+				if (persist == 1)
+				{
+					while (s2[j] != ']')
+						j++;
+					j++;
+					i++;
+				}
+				else 
+					return (0);
+		}
+		else if (s2[j] != '*' && s2[j] != '?' && s2[j] != '[')
 			return (0);
-		else if (persist == 1)
-			matchparse(&s1[i++], &s2[j + 1]);
+		else if (matchparse(&s1[i++], &s2[j + 1]))
+			return(1);
 	}
 }
