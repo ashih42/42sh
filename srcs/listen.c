@@ -66,7 +66,7 @@ void	move_cursor(t_env *e, int direction, size_t n_times)
 			e->cursor++;
 			ft_putstr("\x1B[C");
 		}
-		else if (!direction && e->cursor)
+		else if (!direction && e->cursor > e->buffer_lock)
 		{
 			e->cursor--;
 			ft_putstr("\x1B[D");
@@ -123,7 +123,7 @@ int		char_specs(t_env *e, char c)
 
 	if (c == 127 || c == '\b')
 	{
-		if (e->cursor)
+		if (e->cursor > e->buffer_lock)
 		{
 			ft_memmove(e->buffer + e->cursor - 1,
 						e->buffer + e->cursor, e->buffer_end - e->cursor);
@@ -140,6 +140,33 @@ int		char_specs(t_env *e, char c)
 	if (c == '\x1B')
 		return (handle_esc_seq(e, c));
 	return (0);
+}
+
+int		submit_attempt(t_env *e)
+{
+	char	quote;
+	size_t	i;
+
+	quote = 0;
+	i = 0;
+	while (e->buffer[i])
+	{
+		if (!quote && (e->buffer[i] == '\'' || e->buffer[i] == '\"'))
+			quote = e->buffer[i];
+		else if (e->buffer[i] == quote)
+			quote = 0;
+		i++;
+	}
+	if (quote)
+	{
+		if (quote == '\'')
+			ft_printf("\nquote> ");
+		if (quote == '\"')
+			ft_printf("\ndquote> ");
+		e->buffer_lock = e->buffer_end + 1;
+		return (0);
+	}
+	return (1);
 }
 
 /*
@@ -161,20 +188,25 @@ void	sh_listen(t_env *e)
 
 	ft_bzero(e->buffer, e->buffer_size + 1);
 	e->cursor = 0;
+	e->buffer_lock = 0;
 	e->buffer_end = 0;
 	ft_printf("{robot} %s > ", get_variable(e, "PWD"));
 	enable_raw_mode(&orig_termios);
-	while (read(STDIN_FILENO, &c, 1) > 0 && c != '\n')
+	while (read(STDIN_FILENO, &c, 1) > 0)
 	{
+		if (c == '\n' && submit_attempt(e))
+			break ;
 		if (e->buffer_end == e->buffer_size && !extend_buffer(e))
 			return ;
 		if (char_specs(e, c))
 			continue ;
 		ft_memmove(e->buffer + e->cursor + 1,
 					e->buffer + e->cursor, e->buffer_end++ - e->cursor);
-		i = e->cursor;
+		i = e->cursor++;
 		e->buffer[i] = c;
-		ft_printf("%s", e->buffer + e->cursor++);
+		if (c == '\n')
+			continue ;
+		ft_printf("%s", e->buffer + (e->cursor - 1));
 		while (++i < e->buffer_end)
 			ft_putchar('\b');
 	}

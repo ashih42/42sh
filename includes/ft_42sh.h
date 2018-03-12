@@ -42,6 +42,7 @@ typedef struct			s_env
 	char				*buffer;
 	size_t				cursor;
 	size_t				buffer_end;
+	size_t				buffer_lock;
 	size_t				buffer_size;
 	pid_t				child_pid;
 	t_job				*job;

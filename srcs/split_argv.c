@@ -14,92 +14,69 @@ static int is_ws(char c, char *ws)
 	return (0);
 }
 
-static int	count_substrings(char const *s, char *ws)
+static void		add_terms(char const *s, t_list **list, char *ws)
 {
-	int		count;
-	int		i;
-
-	count = 0;
-	i = 0;
-	while (1)
-	{
-		while (is_ws(s[i], ws))
-			i++;
-		if (s[i] == '\0')
-			return (count);
-		while (!(is_ws(s[i], ws) || s[i] == '\0'))
-			i++;
-		count++;
-	}
-}
-
-static void	initialize_strings(char **array, char const *s, char *ws)
-{
-	int		i;
-	int		j;
 	int		head;
-
-	i = 0;
-	j = 0;
-	head = 0;
-	while (1)
-	{
-		while (is_ws(s[i], ws))
-			i++;
-		if (s[i] == '\0')
-		{
-			array[j] = 0;
-			return ;
-		}
-		head = i;
-		while (!(is_ws(s[i], ws) || s[i] == '\0'))
-			i++;
-		array[j] = malloc(sizeof(char) * (i - head + 1));
-		j++;
-	}
-}
-
-static void	fill_array(char **array, char const *s, char *ws)
-{
 	int		i;
-	int		j;
-	int		k;
+	char	*work_buf;
+	char	*word;
+	char	quote;
 
 	i = 0;
-	j = 0;
-	k = 0;
-	while (1)
+	quote = 0;
+	work_buf = ft_strdup(s);
+	while (work_buf[i])
 	{
-		while (is_ws(s[i], ws))
+		while (is_ws(work_buf[i], ws))
 			i++;
-		if (s[i] == '\0')
-			return ;
-		k = 0;
-		while (!(is_ws(s[i], ws) || s[i] == '\0'))
+		head = i;
+		while (work_buf[i])
 		{
-			array[j][k] = s[i];
-			k++;
+			if (!quote && (work_buf[i] == '\"' || work_buf[i] == '\''))
+			{
+				quote = work_buf[i];
+				ft_memmove(work_buf + i, work_buf + i + 1, ft_strlen(work_buf + i + 1) + 1);
+				if (!work_buf[i])
+					break ;
+			}
+			if (work_buf[i] == quote)
+			{
+				quote = 0;
+				ft_memmove(work_buf + i, work_buf + i + 1, ft_strlen(work_buf + i + 1) + 1);
+				if (!work_buf[i])
+					break ;
+			}
+			if (work_buf[i] == '\\')
+			{
+				ft_memmove(work_buf + i, work_buf + i + 1, ft_strlen(work_buf + i + 1) + 1);
+				if (!work_buf[i])
+					break ;
+			}
+			else if (!quote && is_ws(work_buf[i], ws))
+				break ;
 			i++;
 		}
-		array[j][k] = '\0';
-		j++;
+		if (i > head)
+		{
+			word = ft_strnew(i - head);
+			ft_strncpy(word, work_buf + head, i - head);
+			ft_lst_add_last(list, ft_lst_new_ref(word, sizeof(char *)));
+		}
 	}
+	free(work_buf);
 }
 
-char		**split_argv(char const *s, char *ws)
+char			**split_argv(char const *s, char *ws)
 {
-	char	**total_array;
-	int		len;
+	char	**result;
 
-	if (s == NULL)
+	if (s == NULL || s[0] == '\0')
 		return (NULL);
-	if (ft_strlen(s) == 0)
+	t_list *list = 0;
+	add_terms(s, &list, ws);
+	if (list == NULL)
 		return (NULL);
-	len = count_substrings(s, ws);
-	if ((total_array = malloc(sizeof(char *) * (len + 1))))
-	{
-		initialize_strings(total_array, s, ws);
-		fill_array(total_array, s, ws);
-	}
-	return (total_array);
+	result = list_to_array(list);
+	ft_lstdel(&list, (void (*)(void *, size_t))free);
+	return (result);
 }
