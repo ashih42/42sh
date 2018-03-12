@@ -53,6 +53,7 @@ t_env					*g_e;
 **	Used by dispatcher.c and tab_autocomplete.c
 */
 char					*build_filepath(char *path, char *file);
+int						is_dir(char *path);
 
 /*
 **	envp.c
