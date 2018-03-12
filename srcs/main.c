@@ -66,7 +66,7 @@ int		main(int argc, char **argv, char **envp)
 
 	g_e = &e;
 	signal(SIGINT, ft_ctrl_c);
-	signal(SIGSTOP, ft_ctrl_z);
+	signal(SIGTSTP, ft_ctrl_z);
 	ft_bzero(&e, sizeof(t_env));
 	if ((e.buffer = malloc(BUFFER_SIZE + 1)))
 	{

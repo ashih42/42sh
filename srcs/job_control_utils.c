@@ -1,12 +1,38 @@
 #include "ft_42sh.h"
 
 /*
+**	Malloc a job struct.
+*/
+
+t_job			*job_new(void)
+{
+	t_job		*job;
+
+	job = malloc(sizeof(t_job));
+	job->next = 0;
+	job->command = 0;
+	job->first_process = 0;
+	job->pgid = getpid();
+	job->notified = 0;
+	return (job);
+}
+
+t_process		*process_new(char **argv)
+{
+	t_process	*process;
+
+	process = malloc(sizeof(t_process));
+	process->next = 0;
+	return (process);
+}
+
+/*
 ** Find the active job with the indicated pgid.
 */
 
 t_job			*find_job(pid_t pgid)
 {
-	job *j;
+	t_job		*j;
 
 	while (j)
 	{
@@ -23,7 +49,7 @@ t_job			*find_job(pid_t pgid)
 
 bool			job_is_stopped(t_job *j)
 {
-	process		*p;
+	t_process	*p;
 
 	p = j->first_process;
 	while (p)
@@ -41,7 +67,7 @@ bool			job_is_stopped(t_job *j)
 
 bool			job_is_completed(t_job *j)
 {
-	process		*p;
+	t_process	*p;
 
 	p = j->first_process;
 	while (p)

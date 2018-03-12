@@ -34,8 +34,6 @@ void	ft_ctrl_c(int signo)
 
 void	ft_ctrl_z(int signo)
 {
-	(void)signo;
-	ft_printf("\n");
-
+	ft_printf("Caught signal %d - phew!\n", signo);
 	sh_listen(g_e);
 }
