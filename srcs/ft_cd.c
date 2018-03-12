@@ -10,7 +10,7 @@ static void	change_directory(t_env *e, char *directory)
 {
 	char	*pwd;
 
-	if (chdir(directory))
+	if (!directory || chdir(directory))
 		ft_printf("cd: no such file or directory: %s\n", directory);
 	else
 	{
@@ -24,11 +24,9 @@ static void	change_directory(t_env *e, char *directory)
 void		ft_cd(t_env *e, int argc, char **argv)
 {
 	char		*homedir;
-	char		*pwd;
 	char		*oldpwd;
 	char		*path;
 
-	pwd = get_variable(e, "PWD");
 	homedir = get_variable(e, "HOME");
 	oldpwd = get_variable(e, "OLDPWD");
 	if (argc > 1)
@@ -37,7 +35,8 @@ void		ft_cd(t_env *e, int argc, char **argv)
 			change_directory(e, oldpwd);
 		else
 		{
-			if (argv[1][0] == '~' && (path = ft_strjoin(homedir, &argv[1][1])))
+			if (argv[1][0] == '~' && homedir &&
+				(path = ft_strjoin(homedir, &argv[1][1])))
 			{
 				change_directory(e, path);
 				free(path);
