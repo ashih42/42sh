@@ -77,6 +77,7 @@ bool					job_is_completed(t_job *j);
 /*
 **	listen.c
 */
+int						extend_buffer(t_env *e);
 void					sh_listen(t_env *e);
 
 /*
@@ -114,7 +115,7 @@ void					ft_env(t_env *e, int argc, char **argv);
 /*
 **	ft_setenv.c
 */
-void					ft_setenv(t_env *e, int argc, char **argv);
+int						ft_setenv(t_env *e, int argc, char **argv);
 
 /*
 **	ft_unsetenv.c
