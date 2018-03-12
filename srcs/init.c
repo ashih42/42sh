@@ -1,7 +1,7 @@
 #include "ft_42sh.h"
 
 /*
-**	job_control_set_to_foreground()
+**	job_control()
 **
 **	https://www.gnu.org/software/libc/manual/html_node/Initializing-the-
 **	Shell.html
@@ -28,6 +28,8 @@ static void			job_control(t_env *e)
 		}
 		tcsetpgrp(e->shell_terminal, e->shell_pgid);
 		tcgetattr(e->shell_terminal, &(e->shell_tmodes));
+		ft_printf(" *DEBUG: 42sh's PGID: %d\n", getpgrp());
+		ft_printf(" *DEBUG: 42sh's PID: %d\n", getpid());
 		e->job = job_new();
 	}
 }
