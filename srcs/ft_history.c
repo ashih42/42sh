@@ -24,7 +24,7 @@ static	void		clear_and_update_term(t_env *e, char *curr_term,
 	i = 0;
 	while (i++ < e->buffer_end)
 		ft_printf("\b \b");
-	ft_bzero(e->buffer, e->buffer_size + 1);
+	ft_bzero(e->buffer, e->buffer_end + 1);
 	i = ft_strlen(curr_term);
 	ft_memmove(e->buffer, curr_term, i);
 	e->cursor = i;
@@ -89,6 +89,7 @@ int					add_cmd_history(t_env *e)
 {
 	t_dl_list		*node;
 
+	//ft_printf("|%s| %d\n", e->buffer, e->buffer_end);
 	if ((node = ft_dl_lstnew(e->buffer, ft_strlen(e->buffer) + 1)))
 	{
 		ft_dl_lst_add_last(&(e->cmd_history), node);
