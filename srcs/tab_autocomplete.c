@@ -81,8 +81,11 @@ void	init_tab_auto(t_env *e)
 	e->tab_execs = get_path_executables(e);
 	if (e->tab_pwd)
 		ft_lstdel(&e->tab_pwd, (void (*)(void *, size_t))free);
-	if ((pwd = get_variable(e, "PWD")))
+	if ((pwd = getcwd(NULL, 0)))
+	{
 		e->tab_pwd = get_dir_contents(pwd, 0);
+		free(pwd);
+	}
 }
 
 //	TODO:
