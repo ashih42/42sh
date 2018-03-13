@@ -158,7 +158,7 @@ void					ft_ctrl_z(int signo);
 /*
 **	ft_history_utils.c
 */
-char					*show_hide_escape(char *s, size_t s_size, int mode);
+char					*show_escaped(char *s, size_t s_size);
 
 /*
 **	ft_history.c
