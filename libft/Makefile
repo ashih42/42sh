@@ -6,7 +6,7 @@
 #    By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/27 10:22:08 by ashih             #+#    #+#              #
-#    Updated: 2018/03/12 14:17:04 by nmei             ###   ########.fr        #
+#    Updated: 2018/03/12 21:55:02 by nmei             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -131,7 +131,7 @@ SRC = del_and_gnl.c\
 	  get_next_line.c\
 	  skip_next_line.c\
 	  ft_dl_lst_utils.c\
-	  ft_lstsort.c
+	  ft_adv_lst_utils.c
 
 all: $(NAME)
 

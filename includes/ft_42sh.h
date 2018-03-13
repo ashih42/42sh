@@ -43,6 +43,7 @@ typedef struct			s_env
 	t_list				*envp;
 	t_list				*tab_execs;
 	t_list				*tab_pwd;
+	t_list				*tab_pos;
 	t_dl_list			*cmd_history;
 	t_dl_list			*history_end;
 	t_dl_list			*history_pos;
