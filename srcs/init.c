@@ -1,38 +1,6 @@
 #include "ft_42sh.h"
 
 /*
-**	job_control()
-**
-**	https://www.gnu.org/software/libc/manual/html_node/Initializing-the-
-**	Shell.html
-**	https://unix.stackexchange.com/questions/404054/how-is-a-process-group-id
-**	-set
-**
-**	This function ensures the interactive shell is the foreground process.
-**
-*/
-
-static void			job_control(t_env *e)
-{
-	e->shell_terminal = STDIN_FILENO;
-	e->shell_is_interactive = isatty(e->shell_terminal);
-	if (e->shell_is_interactive)
-	{
-		while (tcgetpgrp(e->shell_terminal) != (e->shell_pgid = getpgrp()))
-			kill(-e->shell_pgid, SIGTTIN);
-		e->shell_pgid = getpid();
-		if (setpgid(e->shell_pgid, e->shell_pgid) < 0)
-		{
-			ft_printf("Couldn't put the shell in its own process group\n");
-			exit(1);
-		}
-		tcsetpgrp(e->shell_terminal, e->shell_pgid);
-		tcgetattr(e->shell_terminal, &(e->shell_tmodes));
-		e->job = job_new();
-	}
-}
-
-/*
 **	sh_init()
 **
 **	This function should read in the default shell environment variables
