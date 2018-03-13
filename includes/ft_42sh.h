@@ -156,11 +156,6 @@ void					ft_ctrl_c(int signo);
 void					ft_ctrl_z(int signo);
 
 /*
-**	ft_history_utils.c
-*/
-char					*show_escaped(char *s, size_t s_size);
-
-/*
 **	ft_history.c
 */
 int						add_cmd_history(t_env *e);

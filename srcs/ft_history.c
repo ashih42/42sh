@@ -89,7 +89,6 @@ int					add_cmd_history(t_env *e)
 {
 	t_dl_list		*node;
 
-	//ft_printf("|%s| %d\n", e->buffer, e->buffer_end);
 	if ((node = ft_dl_lstnew(e->buffer, ft_strlen(e->buffer) + 1)))
 	{
 		ft_dl_lst_add_last(&(e->cmd_history), node);
@@ -97,6 +96,27 @@ int					add_cmd_history(t_env *e)
 		return (1);
 	}
 	return (0);
+}
+
+static void			print_hidden(char *str)
+{
+	while (*str)
+	{
+		if (*str == '\n')
+			ft_putstr("\\n");
+		else if (*str == '\t')
+			ft_putstr("\\t");
+		else if (*str == '\r')
+			ft_putstr("\\r");
+		else if (*str == '\v')
+			ft_putstr("\\v");
+		else if (*str == '\f')
+			ft_putstr("\\f");
+		else
+			ft_putchar(*str);
+		str++;
+	}
+	ft_putchar('\n');
 }
 
 /*
@@ -125,23 +145,7 @@ void				ft_history(t_env *e, int argc, char **argv)
 		{
 			ft_printf("%5d  ", i);
 			content = node->content;
-			while (*content)
-			{
-				if (*content == '\n')
-					ft_putstr("\\n");
-				else if (*content == '\t')
-					ft_putstr("\\t");
-				else if (*content == '\r')
-					ft_putstr("\\r");
-				else if (*content == '\v')
-					ft_putstr("\\v");
-				else if (*content == '\f')
-					ft_putstr("\\f");
-				else
-					ft_putchar(*content);
-				content++;
-			}
-			ft_putchar('\n');
+			print_hidden(content);
 		}
 		i++;
 		node = node->next;
