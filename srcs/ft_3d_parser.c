@@ -92,11 +92,15 @@ char	***ft_3d_parser(char *input)
 	char	***result;
 	size_t	i;
 
+	result = NULL;
 	cmds = str_explode2(input);
-	result = ft_memalloc((ft_char_array_length(cmds) + 1) * sizeof(char ***));
-	i = -1;
-	while (cmds[++i])
-		result[i] = split_argv(cmds[i], WHITESPACE);
-	ft_char_array_del(cmds);
+	if (cmds)
+	{
+		result = ft_memalloc((ft_char_array_length(cmds) + 1) * sizeof(char ***));
+		i = -1;
+		while (cmds[++i])
+			result[i] = split_argv(cmds[i], WHITESPACE);
+		ft_char_array_del(cmds);
+	}
 	return (result);
 }
