@@ -10,6 +10,9 @@
 **	Our 42sh will have to take care of displaying stuff
 **
 **	Turning off ICANON causes read() to grab input byte-by-byte
+**
+**	Setting c_cc[VMIN] and c_cc[VTIME] to 1 and 0 respectively will keep
+**	read() snappy! See: http://unixwiz.net/techtips/termios-vmin-vtime.html
 */
 
 void	enable_raw_mode(struct termios *orig_termios)
@@ -19,6 +22,8 @@ void	enable_raw_mode(struct termios *orig_termios)
 	tcgetattr(STDIN_FILENO, orig_termios);
 	raw = *orig_termios;
 	raw.c_lflag &= ~(ECHO | ICANON);
+	raw.c_cc[VMIN] = 1;
+	raw.c_cc[VTIME] = 0;
 	tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
 }
 

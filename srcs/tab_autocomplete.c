@@ -103,13 +103,15 @@ void	init_tab_auto(t_env *e)
 int		tab_autocomplete(t_env *e)
 {
 	t_list	*curr;
+	size_t	n_printed;
 
 	if (!(e->tab_pos))
 		init_tab_auto(e);
 	curr = e->tab_pos;
 	while (curr)
 	{
-		ft_printf("|%s|\n", curr->content);
+		if (*e->buffer && !ft_strncmp(e->buffer, curr->content, e->buffer_end))
+			ft_printf("|%s|\n", curr->content);
 		curr = curr->next;
 	}
 	return (1);
