@@ -84,17 +84,45 @@ void	init_tab_auto(t_env *e)
 	if (e->tab_execs)
 		ft_lstdel(&e->tab_execs, (void (*)(void *, size_t))free);
 	e->tab_execs = get_path_executables(e);
-	e->tab_pos = e->tab_execs;
-	// Commenting out directory autocompletion for now... BUT KEEP THIS STUFF!
-	// if (e->tab_pwd)
-	// 	ft_lstdel(&e->tab_pwd, (void (*)(void *, size_t))free);
-	// if ((pwd = getcwd(NULL, 0)))
-	// {
-	// 	e->tab_pwd = get_dir_contents(pwd, 0);
-	// 	free(pwd);
-	// }
+	if (e->tab_pwd)
+		ft_lstdel(&e->tab_pwd, (void (*)(void *, size_t))free);
+	if ((pwd = getcwd(NULL, 0)))
+	{
+		e->tab_pwd = get_dir_contents(pwd, 0);
+		free(pwd);
+	}
 }
 
+/*
+**	build_auto_lst()
+**
+**	Builds a new linked list that references the nodes in either e->tab_execs
+**	(mode = 1) or e->tab_pwd (mode = 0) that can autocomplete the content of
+**	e->buffer.
+*/
+
+t_list	*build_auto_lst(t_env *e, int mode, size_t *auto_lst_size)
+{
+	t_list	*new_auto_lst;
+	t_list	*curr;
+	t_list	*end;
+
+	new_auto_lst = NULL;
+	*auto_lst_size = 0;
+	curr = (mode) ? e->tab_execs : e->tab_pwd;
+	while (curr)
+	{
+		if (*e->buffer && !ft_strncmp(e->buffer, curr->content, e->buffer_end))
+		{
+			ft_lstadd(&new_auto_lst,
+				ft_lst_new_ref(curr->content, curr->content_size));
+			*auto_lst_size = *auto_lst_size + 1;
+		}
+		curr = curr->next;
+	}
+	ft_lstrev(&new_auto_lst);
+	return (new_auto_lst);
+}
 /*
 **	TODO:
 **	Implement the rest of tab autocompletion.
@@ -102,16 +130,23 @@ void	init_tab_auto(t_env *e)
 
 int		tab_autocomplete(t_env *e)
 {
-	t_list	*curr;
+	static char *prev_ebuf = NULL;
+	t_list	*curr_auto_lst;
+	size_t	auto_lst_size;
 	size_t	n_printed;
+
+	t_list	*curr;
 
 	if (!(e->tab_pos))
 		init_tab_auto(e);
-	curr = e->tab_pos;
+	curr_auto_lst = build_auto_lst(e, 1, &auto_lst_size);
+	curr = curr_auto_lst;
+	if (curr)
+		ft_printf("\n");
 	while (curr)
 	{
-		if (*e->buffer && !ft_strncmp(e->buffer, curr->content, e->buffer_end))
-			ft_printf("|%s|\n", curr->content);
+		if (curr->content)
+			ft_printf("%s\t", curr->content);
 		curr = curr->next;
 	}
 	return (1);

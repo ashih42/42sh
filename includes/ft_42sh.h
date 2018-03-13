@@ -6,7 +6,7 @@
 # include <sys/types.h>
 # include <stdbool.h>
 # include <errno.h>
-# include "../libft/libft.h"
+# include "libft.h"
 
 # define HASHMAP_SIZE	256
 # define BUFFER_SIZE	4096
@@ -198,10 +198,5 @@ void					print_list(t_list *list);
 void					print_expr_list(t_list *expr_list);
 void					print_char2d(char **array);
 void					print_char4d(char ****array);
-
-/*
-** globber.c
-*/
-t_list 					*get_dir_contents_search(char *dir_path, int e_mode, int ac, char **av);
 
 #endif
