@@ -1,5 +1,28 @@
 #include "ft_42sh.h"
 
+int			should_fork(char **argv) //For hiroshi, use this to check if the current argv should be used as a forked job! <3
+{
+	size_t	i;
+	size_t	len;
+
+	i = 0;
+	while (argv[i + 1])
+		i++;
+	len = ft_strlen(argv[i]);
+	if (argv[i][len - 1] == '&')
+	{
+		if (len > 1)
+			argv[i][len - 1] = '\0';
+		else
+		{
+			free(argv[i]);
+			argv[i] = NULL;
+		}
+		return (1);
+	}
+	return (0);
+}
+
 /*
 **	sh_dispatcher()
 **
@@ -27,6 +50,8 @@ static int	built_ins(t_env *e, int argc, char **argv)
 		ft_exit(e, argc, argv);
 	else if (ft_strequ(argv[0], "history"))
 		ft_history(e, argc, argv);
+	else if (ft_strequ(argv[0], "fg"))
+		ft_printf("%d, %d\n", e->shell_stopped, kill(e->shell_pgid, SIGCONT));
 	else
 		return (0);
 	return (1);
@@ -43,9 +68,20 @@ int		fork_execve(t_env *e, char *path, char **argv, char **envp)
 	if (pid < 0)
 		ft_printf("42sh: failed to fork process\n");
 	else if (pid == 0)
-		exit(execve(path, argv, envp));
+	{
+		if (should_fork(argv))
+		{
+			ft_printf("Got here.\n");
+			ft_printf("%d\n", getpgid(pid));
+			exit(execve(path, argv, envp));
+		}
+		else
+			exit(execve(path, argv, envp));
+	}
 	else
 	{
+		setpgid(pid, pid);
+		e->shell_pgid = pid;
 		waitpid(pid, &status, 0);
 		e->child_pid = 0;
 	}
@@ -106,29 +142,6 @@ int		execute(t_env *e, char **argv, char **envp, int *status)
 	return (0);
 }
 
-int			should_fork(char **argv) //For hiroshi, use this to check if the current argv should be used as a forked job! <3
-{
-	size_t	i;
-	size_t	len;
-
-	i = 0;
-	while (argv[i + 1])
-		i++;
-	len = ft_strlen(argv[i]);
-	if (argv[i][len - 1] == '&')
-	{
-		if (len > 1)
-			argv[i][len - 1] = '\0';
-		else
-		{
-			free(argv[i]);
-			argv[i] = NULL;
-		}
-		return (1);
-	}
-	return (0);
-}
-
 void		sh_dispatcher(t_env *e, char ***cmds)
 {
 	char	**envp;
@@ -137,6 +150,12 @@ void		sh_dispatcher(t_env *e, char ***cmds)
 	int		status;
 
 	status = 0;
+	i = -1;
+	e->job = job_new();
+	while (cmds[++i])
+	{
+		
+	}
 	i = -1;
 	while (cmds[++i])
 	{

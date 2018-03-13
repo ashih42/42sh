@@ -34,6 +34,9 @@ void	ft_ctrl_c(int signo)
 
 void	ft_ctrl_z(int signo)
 {
-	ft_printf("Caught signal %d - phew!\n", signo);
+	kill(g_e->shell_pgid, SIGTSTP);
+	g_e->shell_stopped = g_e->shell_pgid;
+	ft_printf("\nPID: %d\n");
 	sh_listen(g_e);
 }
+

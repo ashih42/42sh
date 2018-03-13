@@ -59,6 +59,7 @@ t_list	*get_path_executables(t_env *e)
 {
 	t_list	*path_execs;
 	char	**path_dirs;
+	t_list	*dir_cont;
 	int		i;
 
 	path_execs = NULL;
@@ -66,7 +67,11 @@ t_list	*get_path_executables(t_env *e)
 	{
 		i = 0;
 		while (path_dirs[i])
-			ft_lst_add_last(&path_execs, get_dir_contents(path_dirs[i++], 1));
+		{
+			dir_cont = get_dir_contents(path_dirs[i++], 1);
+			ft_lstrev(&dir_cont);
+			path_execs = ft_sorted_lst_merge(path_execs, dir_cont, &ft_strcmp);
+		}
 		ft_char_array_del(path_dirs);
 	}
 	return (path_execs);
@@ -79,18 +84,35 @@ void	init_tab_auto(t_env *e)
 	if (e->tab_execs)
 		ft_lstdel(&e->tab_execs, (void (*)(void *, size_t))free);
 	e->tab_execs = get_path_executables(e);
-	if (e->tab_pwd)
-		ft_lstdel(&e->tab_pwd, (void (*)(void *, size_t))free);
-	if ((pwd = get_variable(e, "PWD")))
-		e->tab_pwd = get_dir_contents(pwd, 0);
+	e->tab_pos = e->tab_execs;
+	// Commenting out directory autocompletion for now... BUT KEEP THIS STUFF!
+	// if (e->tab_pwd)
+	// 	ft_lstdel(&e->tab_pwd, (void (*)(void *, size_t))free);
+	// if ((pwd = getcwd(NULL, 0)))
+	// {
+	// 	e->tab_pwd = get_dir_contents(pwd, 0);
+	// 	free(pwd);
+	// }
 }
 
-//	TODO:
-//	Implement mergesort for linked list as executable names will not be in order.
-//	Implement the rest of tab autocompletion.
+/*
+**	TODO:
+**	Implement the rest of tab autocompletion.
+*/
 
 int		tab_autocomplete(t_env *e)
 {
-	init_tab_auto(e);
+	t_list	*curr;
+	size_t	n_printed;
+
+	if (!(e->tab_pos))
+		init_tab_auto(e);
+	curr = e->tab_pos;
+	while (curr)
+	{
+		if (*e->buffer && !ft_strncmp(e->buffer, curr->content, e->buffer_end))
+			ft_printf("|%s|\n", curr->content);
+		curr = curr->next;
+	}
 	return (1);
 }

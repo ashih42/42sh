@@ -24,7 +24,7 @@ static	void		clear_and_update_term(t_env *e, char *curr_term,
 	i = 0;
 	while (i++ < e->buffer_end)
 		ft_printf("\b \b");
-	ft_bzero(e->buffer, e->buffer_size + 1);
+	ft_bzero(e->buffer, e->buffer_end + 1);
 	i = ft_strlen(curr_term);
 	ft_memmove(e->buffer, curr_term, i);
 	e->cursor = i;
@@ -98,6 +98,27 @@ int					add_cmd_history(t_env *e)
 	return (0);
 }
 
+static void			print_hidden(char *str)
+{
+	while (*str)
+	{
+		if (*str == '\n')
+			ft_putstr("\\n");
+		else if (*str == '\t')
+			ft_putstr("\\t");
+		else if (*str == '\r')
+			ft_putstr("\\r");
+		else if (*str == '\v')
+			ft_putstr("\\v");
+		else if (*str == '\f')
+			ft_putstr("\\f");
+		else
+			ft_putchar(*str);
+		str++;
+	}
+	ft_putchar('\n');
+}
+
 /*
 **	ft_history()
 **
@@ -107,7 +128,7 @@ int					add_cmd_history(t_env *e)
 void				ft_history(t_env *e, int argc, char **argv)
 {
 	t_dl_list	*node;
-	char		**content;
+	char		*content;
 	int			i;
 	int			cmp;
 
@@ -121,7 +142,11 @@ void				ft_history(t_env *e, int argc, char **argv)
 	while (node)
 	{
 		if (cmp <= i)
-			ft_printf("%5d  %s\n", i, node->content);
+		{
+			ft_printf("%5d  ", i);
+			content = node->content;
+			print_hidden(content);
+		}
 		i++;
 		node = node->next;
 	}

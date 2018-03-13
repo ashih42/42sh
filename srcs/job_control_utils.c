@@ -17,14 +17,6 @@ t_job			*job_new(void)
 	return (job);
 }
 
-t_process		*process_new(char **argv)
-{
-	t_process	*process;
-
-	process = malloc(sizeof(t_process));
-	process->next = 0;
-	return (process);
-}
 
 /*
 ** Find the active job with the indicated pgid.
