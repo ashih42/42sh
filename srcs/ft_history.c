@@ -108,7 +108,7 @@ int					add_cmd_history(t_env *e)
 void				ft_history(t_env *e, int argc, char **argv)
 {
 	t_dl_list	*node;
-	char		**content;
+	char		*content;
 	int			i;
 	int			cmp;
 
@@ -122,7 +122,27 @@ void				ft_history(t_env *e, int argc, char **argv)
 	while (node)
 	{
 		if (cmp <= i)
-			ft_printf("%5d  %s\n", i, node->content);
+		{
+			ft_printf("%5d  ", i);
+			content = node->content;
+			while (*content)
+			{
+				if (*content == '\n')
+					ft_putstr("\\n");
+				else if (*content == '\t')
+					ft_putstr("\\t");
+				else if (*content == '\r')
+					ft_putstr("\\r");
+				else if (*content == '\v')
+					ft_putstr("\\v");
+				else if (*content == '\f')
+					ft_putstr("\\f");
+				else
+					ft_putchar(*content);
+				content++;
+			}
+			ft_putchar('\n');
+		}
 		i++;
 		node = node->next;
 	}
