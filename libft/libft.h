@@ -6,7 +6,7 @@
 /*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/27 10:07:15 by ashih             #+#    #+#             */
-/*   Updated: 2018/03/09 12:50:45 by nmei             ###   ########.fr       */
+/*   Updated: 2018/03/12 17:28:26 by msharpe          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ double					ft_exp_dbl(int base, unsigned int power);
 double					ft_atodbl(const char *str);
 void					del_and_gnl(int fd, char **line);
 void					ft_lst_cond_remove(t_list **list,
-					int (*cond)(void *, size_t), void (*del)(void *, size_t));
+					int (*cond)(char *, char *), char *key, void (*del)(void *, size_t));
 unsigned int			ft_rand(void);
 void					ft_srand(unsigned long seed);
 
