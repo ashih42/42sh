@@ -43,18 +43,35 @@ int			fork_execve(t_env *e, char *path, char **argv, char **envp)
 {
 	int		pid;
 	int		status;
+	int		fd[2];
+	char	buf[BUFFER_SIZE];
+	int		br;
 
 	status = -1;
-	pid = fork();
-	e->child_pid = pid;
-	if (pid < 0)
-		ft_printf("42sh: failed to fork process\n");
-	else if (pid == 0)
-		exit(execve(path, argv, envp));
+	if (pipe(fd) < 0)
+		ft_printf("42sh: failed to create pipe\n");
 	else
 	{
-		waitpid(pid, &status, 0);
-		e->child_pid = 0;
+		pid = fork();
+		if (pid < 0)
+			ft_printf("42sh: failed to fork process\n");
+		else if (pid == 0)
+		{
+			dup2(fd[1], STDOUT_FILENO); //TODO: if the destination is stdout, don't pipe! review LS
+			close(fd[0]);
+			close(fd[1]);
+			exit(execve(path, argv, envp));
+		}
+		else
+		{
+			e->child_pid = pid;
+			close(fd[1]);
+			while ((br = read(fd[0], buf, BUFFER_SIZE)) > 0)
+				write(1, buf, br);
+//			close(fd[0]);
+			waitpid(pid, &status, 0);
+			e->child_pid = 0;
+		}
 	}
 	return (status);
 }

@@ -82,12 +82,6 @@ static int		history_bang_str_exploder(t_env *e, char *buf)
 **	that was looked up.
 */
 
-//	TODO:
-//	1) Currently if a lookup is unsuccessful nothing happens, but in the real shell
-//	   A special error message is printed and it looks like the command is never parsed or dispatched
-//
-//	2) There are probably some edge case bugs... but I'm le tired...
-
 int				history_bang_exploder(t_env *e)
 {
 	char		*buf;
@@ -98,13 +92,9 @@ int				history_bang_exploder(t_env *e)
 		buf++;
 		if (*buf && (ft_isdigit(*buf) ||
 		((*buf == '-' || *buf == '+') && *(buf + 1) && ft_isdigit(*(buf + 1)))))
-		{
 			return (history_bang_num_exploder(e, buf));
-		}
 		else
-		{
 			return (history_bang_str_exploder(e, buf));
-		}
 	}
 	return (0);
 }

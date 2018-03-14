@@ -1,15 +1,5 @@
 #include "ft_42sh.h"
 
-/*
-**	main()
-**
-**	Our shell loop which consists of:
-**
-**	1) Listening for user input on stdin
-**	2) Parsing the input
-**	3) Calling the relevant commands specified in the parsed input
-*/
-
 char 	*get_money_key(char *expr)
 {
 	int		i;
@@ -55,10 +45,33 @@ void	replace_monies(t_env *e)
 	}
 }
 
+void	sh_loop(t_env *e)
+{
+	char	***cmds;
+
+	while (1)
+	{
+		e->history_pos = NULL;
+		sh_listen(e);
+		if (!e->buffer)
+			break ;
+		if (history_bang_exploder(e) != -1)
+		{
+			add_cmd_history(e);
+			replace_monies(e);
+			cmds = sh_parse(e);
+			if (cmds)
+			{
+				sh_dispatcher(e, cmds);
+				free(cmds);
+			}
+		}
+	}
+}
+
 int		main(int argc, char **argv, char **envp)
 {
 	t_env	e;
-	char	***cmds;
 
 	(void)argc;
 	(void)argv;
@@ -69,24 +82,7 @@ int		main(int argc, char **argv, char **envp)
 	{
 		e.buffer_size = BUFFER_SIZE;
 		sh_init(&e, envp);
-		while (1)
-		{
-			e.history_pos = NULL;
-			sh_listen(&e);
-			if (!e.buffer)
-				break ;
-			if (history_bang_exploder(&e) != -1)
-			{
-				add_cmd_history(&e);
-				replace_monies(&e);
-				cmds = sh_parse(&e);
-				if (cmds)
-				{
-					sh_dispatcher(&e, cmds);
-					free(cmds);
-				}
-			}
-		}
+		sh_loop(&e);
 	}
 	return (0);
 }

@@ -29,39 +29,27 @@ static void	add_terms(char const *s, t_list **list, char *ws)
 	{
 		while (is_ws(work_buf[i], ws))
 			i++;
-		head = i;
-		while (work_buf[i])
+		head = i--;
+		while (work_buf[++i])
 		{
-			if (!quote && (work_buf[i] == '\"' || work_buf[i] == '\''))
-			{
-				quote = work_buf[i];
-				i++;
-				if (!work_buf[i])
-					break ;
-			}
-			if (work_buf[i] == quote)
-			{
-				quote = 0;
-				i++;
-				if (!work_buf[i])
-					break ;
-			}
+			if ((!quote && (work_buf[i] == '\"' || work_buf[i] == '\'')) &&
+				(quote = work_buf[i]) && !work_buf[++i])
+				break ;
+			if (work_buf[i] == quote && !(quote = 0) && !work_buf[++i])
+				break ;
 			if (work_buf[i] == '\\' && (!quote || work_buf[i + 1] == quote))
 			{
-				i++;
-				if (!work_buf[i])
+				if (!work_buf[++i])
 					break ;
 			}
 			else if (!quote && is_ws(work_buf[i], ws))
 				break ;
-			i++;
 		}
-		if (i > head)
-		{
-			word = ft_strnew(i - head);
-			ft_strncpy(word, work_buf + head, i - head);
-			ft_lst_add_last(list, ft_lst_new_ref(word, sizeof(char *)));
-		}
+		if (i <= head)
+			continue ;
+		word = ft_strnew(i - head);
+		ft_strncpy(word, work_buf + head, i - head);
+		ft_lst_add_last(list, ft_lst_new_ref(word, sizeof(char *)));
 	}
 	free(work_buf);
 }
@@ -117,8 +105,8 @@ char		**split_argv(char const *s, char *ws)
 		return (NULL);
 	size = ft_lst_size(list);
 	result = list_to_array(list);
-/*
 	ft_lstdel(&list, (void (*)(void *, size_t))free);
+/*
 //	getcwd(NULL, 0);
 	list = get_dir_contents_search(path, size, result);
 //	free(path);
