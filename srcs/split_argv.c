@@ -1,5 +1,8 @@
 #include "ft_42sh.h"
 
+int			matchparse(char *s1, char *s2);
+int			list_size(t_list *list);
+
 static int is_ws(char c, char *ws)
 {
 	int i;
@@ -102,10 +105,10 @@ char			**split_argv(char const *s, char *ws)
 	size = ft_lst_size(list);
 	result = list_to_array(list);
 	ft_lstdel(&list, (void (*)(void *, size_t))free);
-	getcwd(NULL, 0);
+//	getcwd(NULL, 0);
 	list = get_dir_contents_search(path, size, result);
-	free(path);
+//	free(path);
 	result = list_to_array(list);
-	remove_backslashes(result);
+//	remove_backslashes(result);
 	return (result);
 }

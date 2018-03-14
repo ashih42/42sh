@@ -149,6 +149,42 @@ t_list	*ft_lstdup(t_list *list)
 	return (beginning);
 }
 
+char	*get_basename(char *str)
+{
+	char *pointer;
+
+	while (ft_strchr(str, '/'))
+		pointer = ft_strchr(str, '/');
+	*(++pointer) = '\0';
+	return (pointer);
+}
+
+bool				populate_nested_path(char *pathname, t_list **list, char *query)
+{
+	char			*pointer;
+	DIR				*d;
+	struct dirent	*dir;
+	char			*fullpath;
+
+	pointer = pathname;
+	*list = NULL;
+	while (*pointer)
+		pointer++;
+	while (*pointer != '/')
+		pointer--;
+	*(++pointer) = '\0';
+	if ((d = opendir(pathname)))
+	{
+		while ((dir = readdir(d)))
+		{
+			fullpath = ft_strjoin(pathname, dir->d_name);
+			if (!ft_strequ(".", dir->d_name) && !ft_strequ("..", dir->d_name) && matchparse(fullpath, query))
+				ft_lst_add_last(list, ft_lstnew(fullpath, ft_strlen(fullpath) + 1));
+		}
+	}
+	return (0);
+}
+
 t_list	*get_dir_contents_search(char *dir_path, int ac, char **av)
 {
 	t_list			*dir_contents;
@@ -156,7 +192,6 @@ t_list	*get_dir_contents_search(char *dir_path, int ac, char **av)
 	t_list			*result;
 	DIR				*d;
 	struct dirent	*dir;
-	char			*temp_path;
 	int				i;
 
 	i = 0;
@@ -174,7 +209,10 @@ t_list	*get_dir_contents_search(char *dir_path, int ac, char **av)
 	while (av[i] != '\0')
 	{
 		cache_list = ft_lstdup(dir_contents);
-		ft_lst_cond_remove(&cache_list, matchparse, av[i], (void (*)(void *, size_t))free);
+		if (!ft_strchr(av[i], '/'))
+			ft_lst_cond_remove(&cache_list, matchparse, av[i], (void (*)(void *, size_t))free);
+		else
+			populate_nested_path(av[i], &cache_list, av[i]);
 		pointer = cache_list;
 		if (!list_size(pointer))
 			ft_lst_add_last(&result, ft_lstnew(av[i], ft_strlen(av[i]) + 1));
