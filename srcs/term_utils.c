@@ -32,7 +32,6 @@ void	disable_raw_mode(struct termios *orig_termios)
 	tcsetattr(STDIN_FILENO, TCSAFLUSH, orig_termios);
 }
 
-
 /*
 **	clear_and_update_term()
 **
