@@ -90,9 +90,9 @@ while (s2[j] != '}')
 */
 int matchparse (char *s1, char *s2)
 {
-	int persist;
-	size_t i;
-	size_t j;
+	int		persist;
+	size_t	i;
+	size_t	j;
 
 	i = 0;
 	j = 0;
@@ -145,8 +145,8 @@ void	print_list2(t_list *list)
 
 int	list_size(t_list *list)
 {
-	int i;
-	t_list *pointer;
+	int		i;
+	t_list	*pointer;
 
 	if (!list)
 		return (0);
@@ -162,8 +162,8 @@ int	list_size(t_list *list)
 
 t_list	*ft_lstdup(t_list *list)
 {
-	t_list *beginning;
-	t_list *pointer;
+	t_list	*beginning;
+	t_list	*pointer;
 
 	pointer = list;
 	beginning = 0;
@@ -177,7 +177,7 @@ t_list	*ft_lstdup(t_list *list)
 
 char	*get_basename(char *str)
 {
-	char *pointer;
+	char	*pointer;
 
 	while (ft_strchr(str, '/'))
 		pointer = ft_strchr(str, '/');
@@ -220,6 +220,7 @@ t_list	*get_dir_contents_search(char *dir_path, int ac, char **av)
 	struct dirent	*dir;
 	int				i;
 
+	(void)ac;
 	i = 0;
 	dir_contents = NULL;
 	result = 0;

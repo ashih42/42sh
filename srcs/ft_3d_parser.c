@@ -14,8 +14,8 @@
 
 static int is_delim(char *s)
 {
-	static char *delim_table[] = {";", "||", "&&", "|", ">", ">>", "<", 0};
-	int i;
+	static char	*delim_table[] = {";", "||", "&&", "|", ">", ">>", "<", 0};
+	int			i;
 
 	i = 0;
 	while (delim_table[i])
@@ -30,11 +30,11 @@ static int is_delim(char *s)
 
 static void		add_terms(char *s, t_list **list)
 {
-	int head;
-	int i;
-	char *word;
-	int inc;
-	char quote;
+	int		head;
+	int		i;
+	char	*word;
+	int		inc;
+	char	quote;
 
 	i = 0;
 	quote = 0;

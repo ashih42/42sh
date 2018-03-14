@@ -24,8 +24,8 @@ static	void		get_cmd_history_deux(t_env *e, char *curr_term,
 
 void				get_cmd_history(t_env *e, int mode)
 {
-	static char			*orig_term = NULL;
-	char				*curr_term;
+	static char	*orig_term = NULL;
+	char		*curr_term;
 
 	if (!(e->history_pos))
 	{
@@ -61,7 +61,7 @@ void				get_cmd_history(t_env *e, int mode)
 
 int					add_cmd_history(t_env *e)
 {
-	t_dl_list		*node;
+	t_dl_list	*node;
 
 	if ((node = ft_dl_lstnew(e->buffer, ft_strlen(e->buffer) + 1)))
 	{

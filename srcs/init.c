@@ -15,7 +15,6 @@ void				sh_init(t_env *e, char **envp)
 	char			*tmp_val;
 	char			*eq_ptr;
 
-//	job_control(e);
 	while (*envp)
 		if ((eq_ptr = ft_strchr(*envp, '=')))
 		{

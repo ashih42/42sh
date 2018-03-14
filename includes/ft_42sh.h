@@ -34,6 +34,8 @@ typedef struct			s_env
 	bool				shell_terminal;
 	bool				shell_is_interactive;
 	int					reset_tab_auto;
+	bool				pipe;
+	int					fd;
 }						t_env;
 
 t_env					*g_e;

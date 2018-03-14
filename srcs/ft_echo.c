@@ -2,9 +2,9 @@
 
 #define INVALID_COLOR -1
 
-static int		insert_color_code(int color)
+static int	insert_color_code(int color)
 {
-	char *color_str;
+	char	*color_str;
 
 	if (color == INVALID_COLOR)
 		return (0);
@@ -16,10 +16,8 @@ static int		insert_color_code(int color)
 	return (0);
 }
 
-static int		check_flags(char *arg, int *newline, int *color)
+static int	check_flags(char *arg, int *newline, int *color)
 {
-	char *temp;
-
 	if (ft_strequ(arg, "-n"))
 	{
 		*newline = 0;
@@ -43,11 +41,12 @@ static int		check_flags(char *arg, int *newline, int *color)
 
 void		ft_echo(t_env *e, int argc, char **argv)
 {
-	int i;
-	int newline;
-	int need_space;
-	int color;
+	int	i;
+	int	newline;
+	int	need_space;
+	int	color;
 
+	(void)e;
 	newline = 1;
 	color = INVALID_COLOR;
 	i = 0;
@@ -68,4 +67,3 @@ void		ft_echo(t_env *e, int argc, char **argv)
 	}
 	ft_printf("\033[0m%s", (newline) ? "\n" : "");
 }
-

@@ -20,11 +20,8 @@ void			del_variable(t_env *e, char *key)
 	t_list		*prev;
 	char 		**entry;
 
-	// check if empty list
-	if (e->envp == 0)
+	if (!(e->envp))
 		return ;
-
-	// check first node;
 	entry = e->envp->content;
 	if (ft_strequ(entry[0], key))
 	{
@@ -33,10 +30,9 @@ void			del_variable(t_env *e, char *key)
 		ft_memdel((void **)&node);
 		return ;
 	}
-	// check second to last nodes
 	prev = e->envp;
 	node = e->envp->next;
-	while (node != 0)
+	while (node)
 	{
 		entry = node->content;
 		if (ft_strequ(entry[0], key))
@@ -49,7 +45,6 @@ void			del_variable(t_env *e, char *key)
 		prev = node;
 		node = node->next;
 	}
-	
 }
 
 
