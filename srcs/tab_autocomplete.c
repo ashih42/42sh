@@ -136,6 +136,7 @@ void print_list20(t_list *list)
 	ft_printf("\n");
 }
 
+// ft_printf("\x1b[F");
 
 /*
 **	TODO:
@@ -156,7 +157,7 @@ int		tab_autocomplete(t_env *e)
 		init_tab_auto(e);
 	if (e->reset_tab_auto && curr_auto_lst)
 	{
-//		ft_lstdel(&curr_auto_lst, 0);		// This causes segfaults for some raisins
+		ft_lstdel(&curr_auto_lst, 0);		// This causes segfaults for some raisins
 		curr_auto_lst = NULL;
 	}
 	if (!curr_auto_lst)
