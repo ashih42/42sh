@@ -27,8 +27,6 @@ static int	built_ins(t_env *e, int argc, char **argv)
 		ft_exit(e, argc, argv);
 	else if (ft_strequ(argv[0], "history"))
 		ft_history(e, argc, argv);
-	else if (ft_strequ(argv[0], "fg"))
-		ft_printf("%d, %d\n", e->shell_stopped, kill(e->shell_pgid, SIGCONT));
 	else
 		return (0);
 	return (1);

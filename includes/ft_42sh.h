@@ -199,6 +199,6 @@ void					print_expr_list(t_list *expr_list);
 void					print_char2d(char **array);
 void					print_char4d(char ****array);
 
-t_list					*get_dir_contents_search(char *dir_path, int e_mode, int ac, char **argv);
+t_list					*get_dir_contents_search(char *dir_path, int ac, char **argv);
 
 #endif

@@ -149,7 +149,7 @@ t_list	*ft_lstdup(t_list *list)
 	return (beginning);
 }
 
-t_list	*get_dir_contents_search(char *dir_path, int e_mode, int ac, char **av)
+t_list	*get_dir_contents_search(char *dir_path, int ac, char **av)
 {
 	t_list			*dir_contents;
 	t_list			*cache_list;
@@ -187,41 +187,3 @@ t_list	*get_dir_contents_search(char *dir_path, int e_mode, int ac, char **av)
 	}
 	return (result);
 }
-
-/*
-t_list	*get_dir_contents_search(char *dir_path, int e_mode, int ac, char **av)
-{
-	t_list			*dir_contents;
-	DIR				*d;
-	struct dirent	*dir;
-	char			*temp_path;
-	int				i;
-
-	i = 0;
-	dir_contents = NULL;
-	if ((d = opendir(dir_path)))
-	{
-		while ((dir = readdir(d)) && av[i] != '\0')
-		{
-			if (e_mode && (temp_path = build_filepath(dir_path, dir->d_name)))
-			{
-				if (!is_dir(temp_path) && access(temp_path, X_OK) == 0)
-						ft_lstadd(&dir_contents,
-							ft_lstnew(dir->d_name, ft_strlen(dir->d_name) + 1));
-				free(temp_path);
-			}
-			else if (!ft_strequ(".", dir->d_name) &&
-					!ft_strequ("..", dir->d_name))
-				ft_lstadd(&dir_contents,
-						ft_lstnew(dir->d_name, ft_strlen(dir->d_name) + 1));
-		}
-		closedir(d);
-	}
-	while (av[i] != '\0')
-	{
-		ft_lst_cond_remove(&dir_contents, matchparse, av[i], (void (*)(void *, size_t))free);
-		i++;
-	}
-	return (dir_contents);
-}
-*/

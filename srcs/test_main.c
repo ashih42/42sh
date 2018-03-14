@@ -36,7 +36,7 @@ int		main(int ac, char **av)
 	}
 	*/
 	// ft_printf("%d", matchparse(av[1], av[2]));
-	pointer = get_dir_contents_search("./libft", 0, ac, av);
+	pointer = get_dir_contents_search("./libft", ac, av);
 	beginning = pointer;
 	ft_printf("\n");
 	while (pointer)
