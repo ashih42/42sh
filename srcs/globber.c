@@ -159,7 +159,7 @@ t_list	*get_dir_contents_search(char *dir_path, int ac, char **av)
 	char			*temp_path;
 	int				i;
 
-	i = 1;
+	i = 0;
 	dir_contents = NULL;
 	result = 0;
 	if ((d = opendir(dir_path)))
