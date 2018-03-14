@@ -13,6 +13,31 @@
 # define WHITESPACE		" \t\n\v\r\f"
 # define DELIM 			"\"'|<>"
 
+typedef struct			s_process
+{
+	struct s_process	*next;/* next process in pipeline */
+	char				**argv;/* for exec */
+	pid_t				pid;/* process ID */
+	bool				completed;/* true if process has completed */
+	bool				stopped;/* true if process has stopped */
+	int					status;/* reported status value */
+}						t_process;
+
+typedef struct			s_job
+{
+	struct s_job		*next;/* next active job */
+	char				*command;/* command line, used for messages */
+	t_process			*first_process;/* list of processes in this job */
+	pid_t				pgid;/* process group ID */
+	bool				notified;/* true if user told about stopped job */
+	struct termios		tmodes;/* saved terminal modes */
+}						t_job;
+
+typedef struct			s_job_stack
+{
+	t_job				*top;
+}						t_stack;
+
 typedef struct			s_env
 {
 	t_list				*envp;
@@ -28,6 +53,7 @@ typedef struct			s_env
 	size_t				buffer_lock;
 	size_t				buffer_size;
 	pid_t				child_pid;
+	t_job				*job;
 	pid_t				shell_pgid;
 	pid_t				shell_stopped;
 	struct termios		shell_tmodes;
@@ -65,6 +91,20 @@ char					**serialize_envp(t_env *e);
 **	init.c
 */
 void					sh_init(t_env *e, char **envp);
+
+/*
+**	job_control_utils.c
+*/
+t_job					*job_new(void);
+t_job					*find_job(pid_t pgid);
+bool					job_is_stopped(t_job *j);
+bool					job_is_completed(t_job *j);
+
+/*
+** process_utils.c
+*/
+t_process				*process_new(t_env *e, char **argv);
+void					process_add(t_job *j, t_process *added_process);
 
 /*
 **	listen.c
@@ -167,5 +207,7 @@ void					print_list(t_list *list);
 void					print_expr_list(t_list *expr_list);
 void					print_char2d(char **array);
 void					print_char4d(char ****array);
+
+t_list					*get_dir_contents_search(char *dir_path, int ac, char **argv);
 
 #endif
