@@ -15,26 +15,26 @@
 */
 int		chk_glob_brckts(char c1, char *s2)
 {
-	int i; // increment for search
-	int j; // increment for s2
-	char *search; // where the string of characters are being stored after being parsed out of the brackets
+	int		i; 
+	int		j;
+	char	*search;
 
-	i = 0; // first character of search
-	j = 0; // first character of s2 
-	while (*(s2 + j) != '\0' && *(s2 + j) != ']') // as long as s2[j] is not null or end bracket
+	i = 0;
+	j = 0;
+	while (*(s2 + j) != '\0' && *(s2 + j) != ']')
 		j++;
-	if (*(s2 + j) == '\0') //if j gets to a null char before hitting an end bracket, end function by checking if character in question is in fact a '['. If not, return 0.
+	if (*(s2 + j) == '\0')
 	{
 		if (c1 == '[')
 			return (1);
 		return (0);
 	}
-	if (*(s2 + j) == ']') //if there is no dash, all letters are accounted for.
+	if (*(s2 + j) == ']')
 	{
-		search = malloc(sizeof(char) * j); //create an array the size of the number of characters we're looking for.
-		search[j] = '\0'; // the end of the array has a null character.
-		j = 0; //reset the postion of j to prep for string copying (ADD FUNCTION)
-		while (*(s2 + j) != ']') //as long as it isn't an end 
+		search = malloc(sizeof(char) * j + 1);
+		search[j] = '\0';
+		j = 0; 
+		while (*(s2 + j) != ']' && *(s2 + j) != '}') //as long as it isn't an end 
 		{	
 			*(search + i) = *(s2 + j); //copies the s2 string over to search
 			j++;
@@ -57,6 +57,32 @@ int		chk_glob_brckts(char c1, char *s2)
 		}
 	}
 	return (0);
+}
+
+while (s2[j] != '}')
+{
+	while (s2[j] != ',' && s2[j] != '}')
+	{
+		search = malloc(sizeof(char) * j + 1);
+		search[j] = '\0';
+		j = 0;
+		while (*(s2 + j) != '}')
+		{
+			*(search + i) = *(s2 + j);
+			j++;
+			i++;
+		}
+		i = 0;
+		while (*(search + i) != '}')
+		{
+			if (*(search + i) == c1)
+				return (1);
+			if (*(search + i) == ',')
+			{
+				if 
+		j++;
+	}
+	j++;
 }
 /*
 ** All functions are to go through match parse once they have a conclusion
@@ -84,7 +110,7 @@ int matchparse (char *s1, char *s2)
 			j++;
 		else if (s1[i] == '\0' || s2[j] == '\0')
 			return (1);
-		else if (s2[j] == '[') 
+		else if (s2[j] == '[' || s2[j] == '{') 
 		{
 			persist =  chk_glob_brckts(s1[i], &s2[j++]);
 				if (persist == 1)
@@ -97,7 +123,7 @@ int matchparse (char *s1, char *s2)
 				else 
 					return (1);
 		}
-		else if (s2[j] != '*' && s2[j] != '?' && s2[j] != '[')
+		else if (s2[j] != '*' && s2[j] != '?' && s2[j] != '[' && s2[j] != '{')
 			return (1);
 		else if (matchparse(&s1[i++], &s2[j + 1]))
 			return(0);
