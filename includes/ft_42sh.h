@@ -33,7 +33,7 @@ typedef struct			s_env
 	struct termios		shell_tmodes;
 	bool				shell_terminal;
 	bool				shell_is_interactive;
-	bool				reset_tab_auto;
+	int					reset_tab_auto;
 }						t_env;
 
 t_env					*g_e;
