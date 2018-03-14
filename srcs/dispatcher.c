@@ -11,16 +11,22 @@
 **	   provided as a literal path.
 */
 
-static int	built_ins(t_env *e, int argc, char **argv)
+static int	built_ins(t_env *e, int argc, char **argv, int *status)
 {
 	if (ft_strequ(argv[0], "cd"))
-		ft_cd(e, argc, argv);
+	{
+		*status = ft_cd(e, argc, argv);
+		return (1);
+	}
 	else if (ft_strequ(argv[0], "echo"))
 		ft_echo(e, argc, argv);
 	else if (ft_strequ(argv[0], "env"))
 		ft_env(e, argc, argv);
 	else if (ft_strequ(argv[0], "setenv"))
-		ft_setenv(e, argc, argv);
+	{
+		*status = ft_setenv(e, argc, argv);
+		return (1);
+	}
 	else if (ft_strequ(argv[0], "unsetenv"))
 		ft_unsetenv(e, argc, argv);
 	else if (ft_strequ(argv[0], "exit"))
@@ -29,6 +35,7 @@ static int	built_ins(t_env *e, int argc, char **argv)
 		ft_history(e, argc, argv);
 	else
 		return (0);
+	*status = 0;
 	return (1);
 }
 
@@ -52,18 +59,6 @@ int			fork_execve(t_env *e, char *path, char **argv, char **envp)
 	}
 	return (status);
 }
-
-// TO-DO NOTES:
-// should separately check:
-// 1. does the command/file exist?
-// 2. does it have permissions?
-// and print corresponding error message
-
-// Also, how does, e.g.
-// > ./foo
-// the dot expands to current directory? 
-// it seems the OS just knows what . and .. mean,
-// so the shell doesn't have to do anything special about them
 
 int		execute(t_env *e, char **argv, char **envp, int *status)
 {
@@ -116,24 +111,31 @@ void		sh_dispatcher(t_env *e, char ***cmds)
 
 	status = 0;
 	i = -1;
+	argv = NULL;
 	while (cmds[++i])
 	{
+		if (argv)
+			ft_char_array_del(argv);
 		argv = cmds[i];
-		if (argv[0][0] == ';')
-			continue ;
-		if (!ft_strcmp(argv[0], "||"))
+		if (i > 0)
 		{
-			if (!status)
-				break ;
-			continue ;
+			if (argv[0][0] == ';')
+				continue ;
+			if (!ft_strcmp(argv[0], "||"))
+			{
+				if (!status)
+					break ;
+				continue ;
+			}
+			if (!ft_strcmp(argv[0], "&&"))
+			{
+				if (status)
+					break ;
+				continue ;
+			}
 		}
-		if (!ft_strcmp(argv[0], "&&"))
-		{
-			if (status)
-				break ;
-			continue ;
-		}
-		if (!built_ins(e, ft_char_array_length(argv), argv))
+		//setup_pipes(cmds, &i);
+		if (!built_ins(e, ft_char_array_length(argv), argv, &status))
 		{
 			if ((envp = serialize_envp(e)))
 			{
@@ -151,5 +153,8 @@ void		sh_dispatcher(t_env *e, char ***cmds)
 			}
 		}
 		ft_char_array_del(argv);
+		argv = NULL;
 	}
+	if (argv)
+		ft_char_array_del(argv);
 }

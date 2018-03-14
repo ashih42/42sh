@@ -33,6 +33,7 @@ typedef struct			s_env
 	struct termios		shell_tmodes;
 	bool				shell_terminal;
 	bool				shell_is_interactive;
+	bool				reset_tab_auto;
 }						t_env;
 
 t_env					*g_e;
@@ -92,7 +93,7 @@ void					sh_dispatcher(t_env *e, char ***cmds);
 /*
 **	ft_cd.c
 */
-void					ft_cd(t_env *e, int argc, char **argv);
+int						ft_cd(t_env *e, int argc, char **argv);
 
 /*
 **	ft_echo.c

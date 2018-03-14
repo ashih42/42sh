@@ -99,9 +99,6 @@ void	init_tab_auto(t_env *e)
 **	Builds a new linked list that references the nodes in either e->tab_execs
 **	(mode = 1) or e->tab_pwd (mode = 0) that can autocomplete the content of
 **	e->buffer.
-**
-**	Returns a circularized (!!!) t_list and modifies the *auto_lst_size so
-**	that the circularized t_list can be safely traversed...
 */
 
 t_list	*build_auto_lst(t_env *e, int mode, size_t *auto_lst_size)
@@ -111,10 +108,12 @@ t_list	*build_auto_lst(t_env *e, int mode, size_t *auto_lst_size)
 	t_list	*end;
 
 	new_auto_lst = NULL;
+	if (!(*e->buffer))
+		return (NULL);
 	curr = (mode) ? e->tab_execs : e->tab_pwd;
 	while (curr)
 	{
-		if (*e->buffer && !ft_strncmp(e->buffer, curr->content, e->buffer_end))
+		if (!ft_strncmp(e->buffer, curr->content, e->buffer_end))
 		{
 			ft_lstadd(&new_auto_lst,
 				ft_lst_new_ref(curr->content, curr->content_size));
@@ -122,47 +121,61 @@ t_list	*build_auto_lst(t_env *e, int mode, size_t *auto_lst_size)
 		}
 		curr = curr->next;
 	}
-	end = new_auto_lst;
-	ft_lstrev(&new_auto_lst);
-	end->next = new_auto_lst;
+	if (new_auto_lst)
+		ft_lstrev(&new_auto_lst);
 	return (new_auto_lst);
 }
+
+void print_list20(t_list *list)
+{
+	ft_printf("print_list: ");
+	while (list)
+	{
+		ft_printf("%s -> ", list->content);
+		list = list->next;
+	}
+	ft_printf("\n");
+}
+
 
 /*
 **	TODO:
 **	Implement the rest of tab autocompletion.
 **
-**	If the previous copy of the e->buffer and the current e->buffer don't match
-**	that means the 
 */
 
 int		tab_autocomplete(t_env *e)
 {
 	static t_list	*curr_auto_lst = NULL;
-	size_t			auto_lst_size;
+	static size_t	auto_lst_size;
 	size_t			n_printed;
 
-	t_list	*curr;
-
+	//ft_printf("e->reset_tab_auto is %d", (e->reset_tab_auto == true));
 	if (!(e->tab_pos))
 		init_tab_auto(e);
+	if (e->reset_tab_auto && curr_auto_lst)
+	{
+		ft_printf("I'M KILLING THIS LIST\n");
+		ft_lstdel(&curr_auto_lst, 0);
+		curr_auto_lst = NULL;
+		e->reset_tab_auto = false;
+	}
 	if (!curr_auto_lst)
 	{
+		//ft_printf("I'M BUILDING A NEW LIST\n");
 		auto_lst_size = 0;
 		curr_auto_lst = build_auto_lst(e, 1, &auto_lst_size);
 		e->tab_pos = curr_auto_lst;
-		curr = curr_auto_lst;
+
 	}
-	e->tab_pos = e->tab_pos->next;
-	clear_and_update_term(e, e->tab_pos->content);
+	if (e->tab_pos)
+	{
+		clear_and_update_term(e, e->tab_pos->content);
+		e->tab_pos = (e->tab_pos->next) ? e->tab_pos->next : curr_auto_lst;
+		//ft_printf("next tab thingie: %s", e->tab_pos->content);
+	}
 	//ft_printf("\33[2K\r");
-	// if (curr)
-	// 	ft_printf("\n");
-	// while (curr)
-	// {
-	// 	if (curr->content)
-	// 		ft_printf("%s\t", curr->content);
-	// 	curr = curr->next;
-	// }
+//	print_list20(curr_auto_lst);
+
 	return (1);
 }

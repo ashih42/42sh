@@ -6,7 +6,7 @@
 
 
 
-static void	change_directory(t_env *e, char *directory)
+static int	change_directory(t_env *e, char *directory)
 {
 	char	*pwd;
 
@@ -18,33 +18,32 @@ static void	change_directory(t_env *e, char *directory)
 		pwd = getcwd(NULL, 0);
 		set_variable(e, "PWD", pwd);
 		free(pwd);
+		return (0);
 	}
+	return (1);
 }
 
-void		ft_cd(t_env *e, int argc, char **argv)
+int			ft_cd(t_env *e, int argc, char **argv)
 {
 	char		*homedir;
 	char		*oldpwd;
 	char		*path;
+	int			result;
 
 	homedir = get_variable(e, "HOME");
 	oldpwd = get_variable(e, "OLDPWD");
 	if (argc > 1)
 	{
 		if (ft_strequ(argv[1], "-"))
-			change_directory(e, oldpwd);
-		else
+			return (change_directory(e, oldpwd));
+		if (argv[1][0] == '~' && homedir &&
+			(path = ft_strjoin(homedir, &argv[1][1])))
 		{
-			if (argv[1][0] == '~' && homedir &&
-				(path = ft_strjoin(homedir, &argv[1][1])))
-			{
-				change_directory(e, path);
-				free(path);
-			}
-			else
-				change_directory(e, argv[1]);
+			result = change_directory(e, path);
+			free(path);
+			return (result);
 		}
+		return (change_directory(e, argv[1]));
 	}
-	else
-		change_directory(e, homedir);
+	return (change_directory(e, homedir));
 }
