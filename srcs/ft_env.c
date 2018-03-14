@@ -1,15 +1,12 @@
 #include "ft_42sh.h"
 
-// Don't forget to deliver democracy
-
 void		ft_env(t_env *e, int argc, char **argv)
 {
-	(void)argc;
-	(void)argv;
-
 	t_list	*node;
 	char	**content;
 
+	(void)argc;
+	(void)argv;
 	node = e->envp;
 	while (node)
 	{

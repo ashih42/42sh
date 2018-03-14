@@ -43,7 +43,6 @@ int			fork_execve(t_env *e, char *path, char **argv, char **envp)
 {
 	int		pid;
 	int		status;
-	t_list	*pointer;
 
 	status = -1;
 	pid = fork();

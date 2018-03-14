@@ -105,7 +105,6 @@ t_list	*build_auto_lst(t_env *e, int mode, size_t *auto_lst_size)
 {
 	t_list	*new_auto_lst;
 	t_list	*curr;
-	t_list	*end;
 
 	new_auto_lst = NULL;
 	if (!(*e->buffer))
@@ -152,7 +151,6 @@ int		tab_autocomplete(t_env *e)
 {
 	static t_list	*curr_auto_lst = NULL;
 	static size_t	auto_lst_size;
-	size_t			n_printed;
 
 	if (!(e->tab_pos))
 		init_tab_auto(e);

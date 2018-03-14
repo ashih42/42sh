@@ -4,7 +4,7 @@
 NAME = 42sh
 RM = /bin/rm -f
 MKDIR = /bin/mkdir
-CFLAGZ = -Wall -Wextra -Werror 
+CFLAGS = -Wall -Wextra -Werror 
 # ^ mispelled CFLAGS :>
 
 SRCS_DIR = ./srcs/
@@ -13,7 +13,7 @@ OBJS_DIR = ./objects/
 
 FILES = init.c listen.c parse.c dispatcher.c envp.c split_argv.c ft_cd.c \
 ft_echo.c ft_exit.c ft_setenv.c ft_unsetenv.c ft_env.c signal.c ft_history.c \
-str_explode.c ft_history_bang_exploder.c debug.c redir.c ft_3d_parser.c \
+ft_history_bang_exploder.c debug.c redir.c ft_3d_parser.c \
 tab_autocomplete.c path_utils.c globber.c term_utils.c
 
 ifeq ($(TESTING_ENV),)

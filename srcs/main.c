@@ -12,8 +12,8 @@
 
 char 	*get_money_key(char *expr)
 {
-	int i;
-	char *key;
+	int		i;
+	char	*key;
 	
 	if (expr[0] != '$')
 		return (NULL);
@@ -28,11 +28,9 @@ char 	*get_money_key(char *expr)
 
 void	replace_monies(t_env *e)
 {
-	int i;
-	char *var;
-	char *temp;
-	char *money_key;
-	char *money_value;
+	int		i;
+	char	*money_key;
+	char	*money_value;
 
 	i = 0;
 	while (e->buffer[i])
@@ -53,9 +51,7 @@ void	replace_monies(t_env *e)
 			i += ft_strlen(money_value);
 		}
 		else
-		{
 			i++;
-		}
 	}
 }
 
@@ -64,9 +60,10 @@ int		main(int argc, char **argv, char **envp)
 	t_env	e;
 	char	***cmds;
 
+	(void)argc;
+	(void)argv;
 	g_e = &e;
 	signal(SIGINT, ft_ctrl_c);
-//	signal(SIGTSTP, ft_ctrl_z);
 	ft_bzero(&e, sizeof(t_env));
 	if ((e.buffer = malloc(BUFFER_SIZE + 1)))
 	{

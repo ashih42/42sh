@@ -1,8 +1,5 @@
 #include "ft_42sh.h"
 
-int			matchparse(char *s1, char *s2);
-int			list_size(t_list *list);
-
 static int is_ws(char c, char *ws)
 {
 	int i;
@@ -17,7 +14,7 @@ static int is_ws(char c, char *ws)
 	return (0);
 }
 
-static void		add_terms(char const *s, t_list **list, char *ws)
+static void	add_terms(char const *s, t_list **list, char *ws)
 {
 	int		head;
 	int		i;
@@ -38,20 +35,19 @@ static void		add_terms(char const *s, t_list **list, char *ws)
 			if (!quote && (work_buf[i] == '\"' || work_buf[i] == '\''))
 			{
 				quote = work_buf[i];
-				ft_memmove(work_buf + i, work_buf + i + 1, ft_strlen(work_buf + i + 1) + 1);
+				i++;
 				if (!work_buf[i])
 					break ;
 			}
 			if (work_buf[i] == quote)
 			{
 				quote = 0;
-				ft_memmove(work_buf + i, work_buf + i + 1, ft_strlen(work_buf + i + 1) + 1);
+				i++;
 				if (!work_buf[i])
 					break ;
 			}
-			if (work_buf[i] == '\\')
+			if (work_buf[i] == '\\' && (!quote || work_buf[i + 1] == quote))
 			{
-				//ft_memmove(work_buf + i, work_buf + i + 1, ft_strlen(work_buf + i + 1) + 1);
 				i++;
 				if (!work_buf[i])
 					break ;
@@ -70,31 +66,48 @@ static void		add_terms(char const *s, t_list **list, char *ws)
 	free(work_buf);
 }
 
-static void		remove_backslashes(char **argv)
+static void	strip_argv(char **argv)
 {
 	size_t	i;
 	size_t	j;
+	int		quote;
 
 	i = -1;
 	while (argv[++i])
 	{
+		quote = 0;
 		j = -1;
 		while (argv[i][++j])
-			if (argv[i][j] == '\\')
+		{
+			if (!quote && (argv[i][j] == '\"' || argv[i][j] == '\''))
 			{
-				ft_memmove(argv[i] + j, argv[i] + j + 1, ft_strlen(argv[i] + 1) + 1);
+				quote = argv[i][j];
+				ft_memmove(argv[i] + j, argv[i] + j + 1, ft_strlen(argv[i] + j + 1) + 1);
 				if (!argv[i][j])
 					break ;
 			}
+			if (argv[i][j] == quote)
+			{
+				quote = 0;
+				ft_memmove(argv[i] + j, argv[i] + j + 1, ft_strlen(argv[i] + j + 1) + 1);
+				if (!argv[i][j])
+					break ;
+			}
+			if (argv[i][j] == '\\' && (!quote || argv[i][j + 1] == quote))
+			{
+				ft_memmove(argv[i] + j, argv[i] + j + 1, ft_strlen(argv[i] + j + 1) + 1);
+				if (!argv[i][j])
+					break ;
+			}
+		}
 	}
 }
 
-char			**split_argv(char const *s, char *ws)
+char		**split_argv(char const *s, char *ws)
 {
 	char	**result;
 	t_list	*list;
 	size_t	size;
-	char	*path;
 
 	if (s == NULL || s[0] == '\0')
 		return (NULL);
@@ -110,7 +123,7 @@ char			**split_argv(char const *s, char *ws)
 	list = get_dir_contents_search(path, size, result);
 //	free(path);
 	result = list_to_array(list);
-//	remove_backslashes(result);
 */
+	strip_argv(result);
 	return (result);
 }
