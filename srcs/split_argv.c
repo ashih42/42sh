@@ -1,27 +1,5 @@
 #include "ft_42sh.h"
 
-int			matchparse(char *s1, char *s2);
-int			list_size(t_list *list);
-
-char		**linked_list_to_argv(t_list *list)
-{
-	t_list	*pointer;
-	char	**new;
-	int		size;
-
-	size = list_size(list);
-	new = malloc(sizeof(char **) * size + 1);
-	new[size] = NULL;
-	size = 0;
-	while (list)
-	{
-		new[size] = list->content;
-		size++;
-		list = list->next;
-	}
-	return (new);
-}
-
 static int is_ws(char c, char *ws)
 {
 	int i;
@@ -68,14 +46,14 @@ static void		add_terms(char const *s, t_list **list, char *ws)
 				if (!work_buf[i])
 					break ;
 			}
-			/*
 			if (work_buf[i] == '\\')
 			{
-				ft_memmove(work_buf + i, work_buf + i + 1, ft_strlen(work_buf + i + 1) + 1);
+				//ft_memmove(work_buf + i, work_buf + i + 1, ft_strlen(work_buf + i + 1) + 1);
+				i++;
 				if (!work_buf[i])
 					break ;
 			}
-			else */if (!quote && is_ws(work_buf[i], ws))
+			else if (!quote && is_ws(work_buf[i], ws))
 				break ;
 			i++;
 		}
@@ -89,24 +67,45 @@ static void		add_terms(char const *s, t_list **list, char *ws)
 	free(work_buf);
 }
 
+static void		remove_backslashes(char **argv)
+{
+	size_t	i;
+	size_t	j;
+
+	i = -1;
+	while (argv[++i])
+	{
+		j = -1;
+		while (argv[i][++j])
+			if (argv[i][j] == '\\')
+			{
+				ft_memmove(argv[i] + j, argv[i] + j + 1, ft_strlen(argv[i] + 1) + 1);
+				if (!argv[i][j])
+					break ;
+			}
+	}
+}
+
 char			**split_argv(char const *s, char *ws)
 {
 	char	**result;
-	t_list	*pointer;
+	t_list	*list;
 	size_t	size;
-	char	buf[10000];
+	char	*path;
 
 	if (s == NULL || s[0] == '\0')
 		return (NULL);
-	t_list *list = 0;
+	list = NULL;
 	add_terms(s, &list, ws);
 	if (list == NULL)
 		return (NULL);
-	size = list_size(list);
+	size = ft_lst_size(list);
 	result = list_to_array(list);
 	ft_lstdel(&list, (void (*)(void *, size_t))free);
-	pointer = get_dir_contents_search(getcwd(buf, 10000), size, result);
-	ft_printf("%s\n", buf);
-	result = linked_list_to_argv(pointer);
+	getcwd(NULL, 0);
+	list = get_dir_contents_search(path, size, result);
+	free(path);
+	result = list_to_array(list);
+	remove_backslashes(result);
 	return (result);
 }

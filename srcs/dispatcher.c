@@ -60,18 +60,6 @@ int			fork_execve(t_env *e, char *path, char **argv, char **envp)
 	return (status);
 }
 
-// TO-DO NOTES:
-// should separately check:
-// 1. does the command/file exist?
-// 2. does it have permissions?
-// and print corresponding error message
-
-// Also, how does, e.g.
-// > ./foo
-// the dot expands to current directory? 
-// it seems the OS just knows what . and .. mean,
-// so the shell doesn't have to do anything special about them
-
 int		execute(t_env *e, char **argv, char **envp, int *status)
 {
 	char	*temp_path;
@@ -123,8 +111,11 @@ void		sh_dispatcher(t_env *e, char ***cmds)
 
 	status = 0;
 	i = -1;
+	argv = NULL;
 	while (cmds[++i])
 	{
+		if (argv)
+			ft_char_array_del(argv);
 		argv = cmds[i];
 		if (i > 0)
 		{
@@ -143,6 +134,7 @@ void		sh_dispatcher(t_env *e, char ***cmds)
 				continue ;
 			}
 		}
+		//setup_pipes(cmds, &i);
 		if (!built_ins(e, ft_char_array_length(argv), argv, &status))
 		{
 			if ((envp = serialize_envp(e)))
@@ -161,5 +153,8 @@ void		sh_dispatcher(t_env *e, char ***cmds)
 			}
 		}
 		ft_char_array_del(argv);
+		argv = NULL;
 	}
+	if (argv)
+		ft_char_array_del(argv);
 }
