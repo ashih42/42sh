@@ -1,38 +1,6 @@
 #include "ft_42sh.h"
 
 /*
-**	We can accomplish reading 1 byte at a time with read() by modifying
-**	termios struct and applying the changes with tcsetattr.
-**
-**	https://viewsourcecode.org/snaptoken/kilo/02.enteringRawMode.html
-**
-**	Turning off ECHO causes the terminal to no longer display a typed character
-**	Our 42sh will have to take care of displaying stuff
-**
-**	Turning off ICANON causes read() to grab input byte-by-byte
-**
-**	Setting c_cc[VMIN] and c_cc[VTIME] to 1 and 0 respectively will keep
-**	read() snappy! See: http://unixwiz.net/techtips/termios-vmin-vtime.html
-*/
-
-void	enable_raw_mode(struct termios *orig_termios)
-{
-	struct termios	raw;
-
-	tcgetattr(STDIN_FILENO, orig_termios);
-	raw = *orig_termios;
-	raw.c_lflag &= ~(ECHO | ICANON);
-	raw.c_cc[VMIN] = 1;
-	raw.c_cc[VTIME] = 0;
-	tcsetattr(STDIN_FILENO, TCSAFLUSH, &raw);
-}
-
-void	disable_raw_mode(struct termios *orig_termios)
-{
-	tcsetattr(STDIN_FILENO, TCSAFLUSH, orig_termios);
-}
-
-/*
 **	Extends e->buffer when there's no more space.
 */
 
@@ -49,34 +17,6 @@ int		extend_buffer(t_env *e)
 		return (1);
 	}
 	return (0);
-}
-
-/*
-**	move_cursor()
-**
-**	Moves our terminal cursor:
-**	RIGHT (direction = 1)
-**	LEFT (direction = 0)
-**
-**	The cursor will be moved in 'direction' a total of 'n_times' except if
-**	the cursor hits the start or end position of the e->buffer.
-*/
-
-void	move_cursor(t_env *e, int direction, size_t n_times)
-{
-	while (n_times--)
-	{
-		if (direction && e->cursor < e->buffer_end)
-		{
-			e->cursor++;
-			ft_putstr("\x1B[C");
-		}
-		else if (!direction && e->cursor > e->buffer_lock)
-		{
-			e->cursor--;
-			ft_putstr("\x1B[D");
-		}
-	}
 }
 
 /*

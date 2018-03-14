@@ -1,35 +1,9 @@
 #include "ft_42sh.h"
 
-/*
-**	clear_and_update_term()
-**
-**	If the user pressed the up/down arrow then we need to clear the current
-**	text in the terminal.
-**
-**	1) If the user's cursor is not at the end of the curr text, move it there
-**	2) Erase text on screen (amount of text is specified by e->buff_end)
-**	3) Now we can bzero the buffer
-**	4) cpy the contents of the history cmd into the buffer
-**	5) set our cursor position and buffer_end to the size of the history cmd
-**	6) Print the updated e->buffer to show it on screen.
-*/
-
-static	void		clear_and_update_term(t_env *e, char *curr_term,
+static	void		get_cmd_history_deux(t_env *e, char *curr_term,
 								t_dl_list *curr_cmd, char **orig_term)
 {
-	size_t	i;
-
-	while (e->cursor++ < e->buffer_end)
-		ft_printf(" ");
-	i = 0;
-	while (i++ < e->buffer_end)
-		ft_printf("\b \b");
-	ft_bzero(e->buffer, e->buffer_end + 1);
-	i = ft_strlen(curr_term);
-	ft_memmove(e->buffer, curr_term, i);
-	e->cursor = i;
-	e->buffer_end = i;
-	ft_printf("%s", e->buffer);
+	clear_and_update_term(e, curr_term);
 	if (curr_cmd == NULL)
 	{
 		free(*orig_term);
@@ -73,7 +47,7 @@ void				get_cmd_history(t_env *e, int mode)
 		curr_term = orig_term;
 	else
 		curr_term = (char *)e->history_pos->content;
-	clear_and_update_term(e, curr_term, e->history_pos, &orig_term);
+	get_cmd_history_deux(e, curr_term, e->history_pos, &orig_term);
 }
 
 /*

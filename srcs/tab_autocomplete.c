@@ -108,7 +108,6 @@ t_list	*build_auto_lst(t_env *e, int mode, size_t *auto_lst_size)
 	t_list	*end;
 
 	new_auto_lst = NULL;
-	*auto_lst_size = 0;
 	curr = (mode) ? e->tab_execs : e->tab_pwd;
 	while (curr)
 	{
@@ -123,31 +122,38 @@ t_list	*build_auto_lst(t_env *e, int mode, size_t *auto_lst_size)
 	ft_lstrev(&new_auto_lst);
 	return (new_auto_lst);
 }
+
 /*
 **	TODO:
 **	Implement the rest of tab autocompletion.
+**
+**	If the previous copy of the e->buffer and the current e->buffer don't match
+**	that means the 
 */
 
 int		tab_autocomplete(t_env *e)
 {
-	static char *prev_ebuf = NULL;
-	t_list	*curr_auto_lst;
-	size_t	auto_lst_size;
-	size_t	n_printed;
+	static t_list	*curr_auto_lst = NULL;
+	size_t			auto_lst_size;
+	size_t			n_printed;
 
 	t_list	*curr;
 
 	if (!(e->tab_pos))
 		init_tab_auto(e);
+
+	auto_lst_size = 0;
 	curr_auto_lst = build_auto_lst(e, 1, &auto_lst_size);
+	e->tab_pos = curr_auto_lst;
 	curr = curr_auto_lst;
-	if (curr)
-		ft_printf("\n");
-	while (curr)
-	{
-		if (curr->content)
-			ft_printf("%s\t", curr->content);
-		curr = curr->next;
-	}
+	//ft_printf("\33[2K\r");
+	// if (curr)
+	// 	ft_printf("\n");
+	// while (curr)
+	// {
+	// 	if (curr->content)
+	// 		ft_printf("%s\t", curr->content);
+	// 	curr = curr->next;
+	// }
 	return (1);
 }

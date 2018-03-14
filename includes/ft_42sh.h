@@ -45,6 +45,15 @@ char					*build_filepath(char *path, char *file);
 int						is_dir(char *path);
 
 /*
+**	term_utils.c
+**	Used by listen.c, ft_history.c, and tab_autocomplete.c
+*/
+void					enable_raw_mode(struct termios *orig_termios);
+void					disable_raw_mode(struct termios *orig_termios);
+void					clear_and_update_term(t_env *e, char *new_str);
+void					move_cursor(t_env *e, int direction, size_t n_times);
+
+/*
 **	envp.c
 */
 void					del_variable(t_env *e, char *key);
