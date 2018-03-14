@@ -92,7 +92,7 @@ void					sh_dispatcher(t_env *e, char ***cmds);
 /*
 **	ft_cd.c
 */
-void					ft_cd(t_env *e, int argc, char **argv);
+int						ft_cd(t_env *e, int argc, char **argv);
 
 /*
 **	ft_echo.c

@@ -11,16 +11,22 @@
 **	   provided as a literal path.
 */
 
-static int	built_ins(t_env *e, int argc, char **argv)
+static int	built_ins(t_env *e, int argc, char **argv, int *status)
 {
 	if (ft_strequ(argv[0], "cd"))
-		ft_cd(e, argc, argv);
+	{
+		*status = ft_cd(e, argc, argv);
+		return (1);
+	}
 	else if (ft_strequ(argv[0], "echo"))
 		ft_echo(e, argc, argv);
 	else if (ft_strequ(argv[0], "env"))
 		ft_env(e, argc, argv);
 	else if (ft_strequ(argv[0], "setenv"))
-		ft_setenv(e, argc, argv);
+	{
+		*status = ft_setenv(e, argc, argv);
+		return (1);
+	}
 	else if (ft_strequ(argv[0], "unsetenv"))
 		ft_unsetenv(e, argc, argv);
 	else if (ft_strequ(argv[0], "exit"))
@@ -29,6 +35,7 @@ static int	built_ins(t_env *e, int argc, char **argv)
 		ft_history(e, argc, argv);
 	else
 		return (0);
+	*status = 0;
 	return (1);
 }
 
@@ -119,21 +126,24 @@ void		sh_dispatcher(t_env *e, char ***cmds)
 	while (cmds[++i])
 	{
 		argv = cmds[i];
-		if (argv[0][0] == ';')
-			continue ;
-		if (!ft_strcmp(argv[0], "||"))
+		if (i > 0)
 		{
-			if (!status)
-				break ;
-			continue ;
+			if (argv[0][0] == ';')
+				continue ;
+			if (!ft_strcmp(argv[0], "||"))
+			{
+				if (!status)
+					break ;
+				continue ;
+			}
+			if (!ft_strcmp(argv[0], "&&"))
+			{
+				if (status)
+					break ;
+				continue ;
+			}
 		}
-		if (!ft_strcmp(argv[0], "&&"))
-		{
-			if (status)
-				break ;
-			continue ;
-		}
-		if (!built_ins(e, ft_char_array_length(argv), argv))
+		if (!built_ins(e, ft_char_array_length(argv), argv, &status))
 		{
 			if ((envp = serialize_envp(e)))
 			{
