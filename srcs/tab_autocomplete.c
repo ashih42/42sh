@@ -126,6 +126,18 @@ t_list	*build_auto_lst(t_env *e, int mode, size_t *auto_lst_size)
 	return (new_auto_lst);
 }
 
+void print_list20(t_list *list)
+{
+	ft_printf("print_list: ");
+	while (list)
+	{
+		ft_printf("%s -> ", list->content);
+		list = list->next;
+	}
+	ft_printf("\n");
+}
+
+
 /*
 **	TODO:
 **	Implement the rest of tab autocompletion.
@@ -138,33 +150,32 @@ int		tab_autocomplete(t_env *e)
 	static size_t	auto_lst_size;
 	size_t			n_printed;
 
+	//ft_printf("e->reset_tab_auto is %d", (e->reset_tab_auto == true));
 	if (!(e->tab_pos))
 		init_tab_auto(e);
 	if (e->reset_tab_auto && curr_auto_lst)
 	{
+		ft_printf("I'M KILLING THIS LIST\n");
 		ft_lstdel(&curr_auto_lst, 0);
 		curr_auto_lst = NULL;
 		e->reset_tab_auto = false;
 	}
 	if (!curr_auto_lst)
 	{
+		//ft_printf("I'M BUILDING A NEW LIST\n");
 		auto_lst_size = 0;
 		curr_auto_lst = build_auto_lst(e, 1, &auto_lst_size);
 		e->tab_pos = curr_auto_lst;
+
 	}
 	if (e->tab_pos)
 	{
 		clear_and_update_term(e, e->tab_pos->content);
 		e->tab_pos = (e->tab_pos->next) ? e->tab_pos->next : curr_auto_lst;
+		//ft_printf("next tab thingie: %s", e->tab_pos->content);
 	}
 	//ft_printf("\33[2K\r");
-	// if (curr)
-	// 	ft_printf("\n");
-	// while (curr)
-	// {
-	// 	if (curr->content)
-	// 		ft_printf("%s\t", curr->content);
-	// 	curr = curr->next;
-	// }
+//	print_list20(curr_auto_lst);
+
 	return (1);
 }

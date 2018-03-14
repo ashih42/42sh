@@ -139,8 +139,7 @@ void	sh_listen(t_env *e)
 	enable_raw_mode(&orig_termios);
 	while (read(STDIN_FILENO, &c, 1) > 0)
 	{
-		if (c != '\t')
-			e->reset_tab_auto = true;
+		e->reset_tab_auto = (c != '\t') ? true : false;
 		if (c == '\n' && submit_attempt(e))
 			break ;
 		if (e->buffer_end == e->buffer_size && !extend_buffer(e))
