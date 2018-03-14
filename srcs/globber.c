@@ -79,7 +79,13 @@ while (s2[j] != '}')
 				return (1);
 			if (*(search + i) == ',')
 			{
-				if 
+				if (c1 == '\0')
+				   return (1);
+				else 
+					return (0);
+			}	
+			i++;
+		}
 		j++;
 	}
 	j++;
