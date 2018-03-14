@@ -124,9 +124,12 @@ t_list	*build_auto_lst(t_env *e, int mode, size_t *auto_lst_size)
 		}
 		curr = curr->next;
 	}
-	end = new_auto_lst;
-	ft_lstrev(&new_auto_lst);
-	end->next = new_auto_lst;
+	if (new_auto_lst)
+	{
+		end = new_auto_lst;
+		ft_lstrev(&new_auto_lst);
+		end->next = new_auto_lst;
+	}
 	return (new_auto_lst);
 }
 
