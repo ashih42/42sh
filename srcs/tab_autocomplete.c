@@ -99,9 +99,6 @@ void	init_tab_auto(t_env *e)
 **	Builds a new linked list that references the nodes in either e->tab_execs
 **	(mode = 1) or e->tab_pwd (mode = 0) that can autocomplete the content of
 **	e->buffer.
-**
-**	Returns a circularized (!!!) t_list and modifies the *auto_lst_size so
-**	that the circularized t_list can be safely traversed...
 */
 
 t_list	*build_auto_lst(t_env *e, int mode, size_t *auto_lst_size)
@@ -125,11 +122,7 @@ t_list	*build_auto_lst(t_env *e, int mode, size_t *auto_lst_size)
 		curr = curr->next;
 	}
 	if (new_auto_lst)
-	{
-		end = new_auto_lst;
 		ft_lstrev(&new_auto_lst);
-		end->next = new_auto_lst;
-	}
 	return (new_auto_lst);
 }
 
@@ -137,18 +130,22 @@ t_list	*build_auto_lst(t_env *e, int mode, size_t *auto_lst_size)
 **	TODO:
 **	Implement the rest of tab autocompletion.
 **
-**	If the previous copy of the e->buffer and the current e->buffer don't match
-**	that means the 
 */
 
 int		tab_autocomplete(t_env *e)
 {
 	static t_list	*curr_auto_lst = NULL;
-	size_t			auto_lst_size;
+	static size_t	auto_lst_size;
 	size_t			n_printed;
 
 	if (!(e->tab_pos))
 		init_tab_auto(e);
+	if (e->reset_tab_auto && curr_auto_lst)
+	{
+		ft_lstdel(&curr_auto_lst, 0);
+		curr_auto_lst = NULL;
+		e->reset_tab_auto = false;
+	}
 	if (!curr_auto_lst)
 	{
 		auto_lst_size = 0;
@@ -158,7 +155,7 @@ int		tab_autocomplete(t_env *e)
 	if (e->tab_pos)
 	{
 		clear_and_update_term(e, e->tab_pos->content);
-		e->tab_pos = e->tab_pos->next;
+		e->tab_pos = (e->tab_pos->next) ? e->tab_pos->next : curr_auto_lst;
 	}
 	//ft_printf("\33[2K\r");
 	// if (curr)
