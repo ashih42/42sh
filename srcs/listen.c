@@ -121,8 +121,7 @@ int		submit_attempt(t_env *e)
 **	one char at a time so that backspaces and tabs will be supported!!!
 **
 **	Because the input is of an unspecified length, we will either need to
-**	realloc when we are about to go over our allocation limit or use some
-**	sort of linked list implementation...
+**	realloc when we are about to go over our allocation limit.
 */
 
 void	sh_listen(t_env *e)

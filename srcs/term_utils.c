@@ -40,8 +40,8 @@ void	disable_raw_mode(struct termios *orig_termios)
 **
 **	1) If the user's cursor is not at the end of the curr text, move it there
 **	2) Erase text on screen (amount of text is specified by e->buff_end)
-**	3) Now we can bzero the buffer
-**	4) cpy the contents of new_str into the buffer
+**	3) Now we can bzero the e->buffer
+**	4) cpy the contents of new_str into the e->buffer
 **	5) set our cursor position and buffer_end to the size of the new_str
 **	6) Print the updated e->buffer to show it on screen.
 */
@@ -51,7 +51,7 @@ void	clear_and_update_term(t_env *e, char *new_str)
 	size_t	i;
 
 	while (e->cursor++ < e->buffer_end)
-		ft_printf(" ");
+		ft_printf("\x1B[C");
 	i = 0;
 	while (i++ < e->buffer_end)
 		ft_printf("\b \b");

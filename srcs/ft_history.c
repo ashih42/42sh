@@ -57,20 +57,31 @@ void				get_cmd_history(t_env *e, int mode)
 **
 **	It will initialize 'e->buffer' as the contents of lst node.
 **	The node then gets added to the end of the e->cmd_history linked list.
+**
+**	Function returns 1 if no new node was added.
+**	Function returns 0 if new node was added successfully.
 */
 
 int					add_cmd_history(t_env *e)
 {
 	t_dl_list	*node;
 
+	if (!*e->buffer)
+		return (1);
 	if ((node = ft_dl_lstnew(e->buffer, ft_strlen(e->buffer) + 1)))
 	{
 		ft_dl_lst_add_last(&(e->cmd_history), node);
 		e->history_end = node;
-		return (1);
+		return (0);
 	}
-	return (0);
+	return (1);
 }
+
+/*
+**	print_hidden()
+**
+**	prints hidden chars like '\n' '\t' '\r' '\v' '\f'
+*/
 
 static void			print_hidden(char *str)
 {
