@@ -3,25 +3,6 @@
 int			matchparse(char *s1, char *s2);
 int			list_size(t_list *list);
 
-char		**linked_list_to_argv(t_list *list)
-{
-	t_list	*pointer;
-	char	**new;
-	int		size;
-
-	size = list_size(list);
-	new = malloc(sizeof(char **) * size + 1);
-	new[size] = NULL;
-	size = 0;
-	while (list)
-	{
-		new[size] = list->content;
-		size++;
-		list = list->next;
-	}
-	return (new);
-}
-
 static int is_ws(char c, char *ws)
 {
 	int i;
@@ -106,7 +87,6 @@ char			**split_argv(char const *s, char *ws)
 	result = list_to_array(list);
 	ft_lstdel(&list, (void (*)(void *, size_t))free);
 	pointer = get_dir_contents_search(getcwd(buf, 10000), size, result);
-	ft_printf("%s\n", buf);
-	result = linked_list_to_argv(pointer);
+	result = list_to_array(pointer);
 	return (result);
 }
