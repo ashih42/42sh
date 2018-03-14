@@ -140,7 +140,11 @@ void print_list20(t_list *list)
 
 /*
 **	TODO:
-**	Implement the rest of tab autocompletion.
+**
+**	1. autocomplete a program with a specified path, e.g. ./a TAB TAB TAB
+**
+**  2. autocomplete on args, grab everything in current directory and
+**  add suffix character for folder, symlink, executable, etc.
 **
 */
 
@@ -154,7 +158,7 @@ int		tab_autocomplete(t_env *e)
 		init_tab_auto(e);
 	if (e->reset_tab_auto && curr_auto_lst)
 	{
-		ft_lstdel(&curr_auto_lst, 0);
+//		ft_lstdel(&curr_auto_lst, 0);		// This causes segfaults for some raeson
 		curr_auto_lst = NULL;
 	}
 	if (!curr_auto_lst)
