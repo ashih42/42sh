@@ -59,31 +59,32 @@ int		chk_glob_brckts(char c1, char *s2)
 	return (0);
 }
 
-while (s2[j] != '}')
-{
-	while (s2[j] != ',' && s2[j] != '}')
-	{
-		search = malloc(sizeof(char) * j + 1);
-		search[j] = '\0';
-		j = 0;
-		while (*(s2 + j) != '}')
-		{
-			*(search + i) = *(s2 + j);
-			j++;
-			i++;
-		}
-		i = 0;
-		while (*(search + i) != '}')
-		{
-			if (*(search + i) == c1)
-				return (1);
-			if (*(search + i) == ',')
-			{
-				if 
-		j++;
-	}
-	j++;
-}
+// while (s2[j] != '}')
+// {
+// 	while (s2[j] != ',' && s2[j] != '}')
+// 	{
+// 		search = malloc(sizeof(char) * j + 1);
+// 		search[j] = '\0';
+// 		j = 0;
+// 		while (*(s2 + j) != '}')
+// 		{
+// 			*(search + i) = *(s2 + j);
+// 			j++;
+// 			i++;
+// 		}
+// 		i = 0;
+// 		while (*(search + i) != '}')
+// 		{
+// 			if (*(search + i) == c1)
+// 				return (1);
+// 			if (*(search + i) == ',')
+// 			{
+// 				//if
+// 			} 
+// 		j++;
+// 	}
+// 	j++;
+// }
 /*
 ** All functions are to go through match parse once they have a conclusion
 ** this allows multiple wild cards to be used in a single search.
