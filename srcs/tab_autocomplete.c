@@ -111,10 +111,12 @@ t_list	*build_auto_lst(t_env *e, int mode, size_t *auto_lst_size)
 	t_list	*end;
 
 	new_auto_lst = NULL;
+	if (!(*e->buffer))
+		return (NULL);
 	curr = (mode) ? e->tab_execs : e->tab_pwd;
 	while (curr)
 	{
-		if (*e->buffer && !ft_strncmp(e->buffer, curr->content, e->buffer_end))
+		if (!ft_strncmp(e->buffer, curr->content, e->buffer_end))
 		{
 			ft_lstadd(&new_auto_lst,
 				ft_lst_new_ref(curr->content, curr->content_size));
@@ -142,8 +144,6 @@ int		tab_autocomplete(t_env *e)
 	size_t			auto_lst_size;
 	size_t			n_printed;
 
-	t_list	*curr;
-
 	if (!(e->tab_pos))
 		init_tab_auto(e);
 	if (!curr_auto_lst)
@@ -151,10 +151,12 @@ int		tab_autocomplete(t_env *e)
 		auto_lst_size = 0;
 		curr_auto_lst = build_auto_lst(e, 1, &auto_lst_size);
 		e->tab_pos = curr_auto_lst;
-		curr = curr_auto_lst;
 	}
-	e->tab_pos = e->tab_pos->next;
-	clear_and_update_term(e, e->tab_pos->content);
+	if (e->tab_pos)
+	{
+		clear_and_update_term(e, e->tab_pos->content);
+		e->tab_pos = e->tab_pos->next;
+	}
 	//ft_printf("\33[2K\r");
 	// if (curr)
 	// 	ft_printf("\n");
