@@ -104,11 +104,13 @@ char			**split_argv(char const *s, char *ws)
 		return (NULL);
 	size = ft_lst_size(list);
 	result = list_to_array(list);
+/*
 	ft_lstdel(&list, (void (*)(void *, size_t))free);
 //	getcwd(NULL, 0);
 	list = get_dir_contents_search(path, size, result);
 //	free(path);
 	result = list_to_array(list);
 //	remove_backslashes(result);
+*/
 	return (result);
 }

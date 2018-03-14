@@ -158,7 +158,7 @@ int		tab_autocomplete(t_env *e)
 		init_tab_auto(e);
 	if (e->reset_tab_auto && curr_auto_lst)
 	{
-//		ft_lstdel(&curr_auto_lst, 0);		// This causes segfaults for some raeson
+//		ft_lstdel(&curr_auto_lst, 0);		// This causes segfaults for some raisins
 		curr_auto_lst = NULL;
 	}
 	if (!curr_auto_lst)
@@ -166,7 +166,6 @@ int		tab_autocomplete(t_env *e)
 		auto_lst_size = 0;
 		curr_auto_lst = build_auto_lst(e, 1, &auto_lst_size);
 		e->tab_pos = curr_auto_lst;
-
 	}
 	if (e->tab_pos)
 	{
