@@ -32,10 +32,11 @@ static int	built_ins(t_env *e, int argc, char **argv)
 	return (1);
 }
 
-int		fork_execve(t_env *e, char *path, char **argv, char **envp)
+int			fork_execve(t_env *e, char *path, char **argv, char **envp)
 {
-	int	pid;
-	int	status;
+	int		pid;
+	int		status;
+	t_list	*pointer;
 
 	status = -1;
 	pid = fork();
@@ -43,9 +44,7 @@ int		fork_execve(t_env *e, char *path, char **argv, char **envp)
 	if (pid < 0)
 		ft_printf("42sh: failed to fork process\n");
 	else if (pid == 0)
-	{
-			exit(execve(path, argv, envp));
-	}
+		exit(execve(path, argv, envp));
 	else
 	{
 		waitpid(pid, &status, 0);

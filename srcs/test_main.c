@@ -1,26 +1,6 @@
 #include <ft_42sh.h>
 
-int matchparse(char *s1, char *s2);
-int list_size(t_list *list);
-
-char			**linked_list_to_argv(t_list *list)
-{
-	t_list		*pointer;
-	char		**new;
-	int			size;
-
-	size = list_size(list);
-	new = malloc(sizeof(char **) * size + 1);
-	new[size] = NULL;
-	size = 0;
-	while (list)
-	{
-		new[size] = list->content;
-		size++;
-		list = list->next;
-	}
-	return (new);
-}
+char			**linked_list_to_argv(t_list *list);
 
 int		main(int ac, char **av)
 {
