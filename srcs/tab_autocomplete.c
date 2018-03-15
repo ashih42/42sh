@@ -85,7 +85,7 @@ t_list	*get_path_executables(t_env *e)
 **	e->buffer.
 */
 
-t_list	*build_auto_lst(t_env *e, int mode, size_t *auto_lst_size)
+t_list	*build_auto_lst(t_env *e, int mode, char *cword, size_t *auto_lst_size)
 {
 	t_list	*new_auto_lst;
 	t_list	*curr;
@@ -96,7 +96,7 @@ t_list	*build_auto_lst(t_env *e, int mode, size_t *auto_lst_size)
 	curr = (mode) ? e->tab_dir : e->tab_execs;
 	while (curr)
 	{
-		if (mode || !ft_strncmp(e->buffer, curr->content, e->buffer_end))
+		if (mode || !ft_strncmp(cword, curr->content, ft_strlen(cword)))
 		{
 			ft_lstadd(&new_auto_lst,
 				ft_lst_new_ref(curr->content, curr->content_size));
@@ -130,6 +130,35 @@ void	init_tab_auto(t_env *e)
 // ft_printf("\x1b[F");
 
 /*
+**	get_curr_word()
+**
+**	This function will get the first non-space character sequence that occurs
+**	before the current terminal cursor position.
+**
+**	Spaces are defined as: ' ', '\t', '\n', '\r', '\f', or '\v'
+*/
+
+char	*get_curr_word(t_env *e)
+{
+	char	*curr_word;
+	size_t	wend_pos;
+	size_t	tmp_curs;
+	size_t	word_len;
+
+	curr_word = NULL;
+	tmp_curs = e->cursor;
+	while (tmp_curs > 0 && ft_is_space(e->buffer[tmp_curs - 1]))
+		tmp_curs--;
+	wend_pos = tmp_curs;
+	while (tmp_curs > 0 && !ft_is_space(e->buffer[tmp_curs - 1]))
+		tmp_curs--;
+	word_len = wend_pos - tmp_curs;
+	if (word_len && (curr_word = (char *)malloc((word_len + 1) * sizeof(char))))
+		ft_strncpy(curr_word, e->buffer + tmp_curs, word_len);
+	return (curr_word);
+}
+
+/*
 **	TODO:
 **
 **	1. autocomplete a program with a specified path, e.g. ./a TAB TAB TAB
@@ -143,7 +172,7 @@ int		tab_autocomplete(t_env *e)
 {
 	static t_list	*curr_auto_lst = NULL;
 	static size_t	auto_lst_size;
-	char			*dir_to_lookup;
+	char			*cword;
 
 	if (!(e->tab_pos))
 		init_tab_auto(e);
@@ -154,21 +183,20 @@ int		tab_autocomplete(t_env *e)
 	}
 	if (!curr_auto_lst)
 	{
-		if (e->buffer[e->cursor - 1] == '/')
+		cword = get_curr_word(e);
+		if (ft_strchr(cword, '/'))
 		{
-			dir_to_lookup = ft_strnew(e->cursor);
-			ft_strncpy(dir_to_lookup, e->buffer, e->cursor);
 			if (e->tab_dir)
 				ft_lstdel(&e->tab_dir, (void (*)(void *, size_t))free);
-			e->tab_dir = get_dir_contents(dir_to_lookup, 0);
-			free(dir_to_lookup);
+			e->tab_dir = get_dir_contents(cword, 0);
 			e->tab_mode = 1;
 			//ft_printf("\n|%s|\n", dir_to_lookup);
 		}
 		auto_lst_size = 0;
-		curr_auto_lst = build_auto_lst(e, e->tab_mode, &auto_lst_size);
+		curr_auto_lst = build_auto_lst(e, e->tab_mode, cword, &auto_lst_size);
 		//print_list20(curr_auto_lst);
 		e->tab_pos = curr_auto_lst;
+		free(cword);
 	}
 	if (e->tab_pos)
 	{

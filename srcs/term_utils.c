@@ -60,7 +60,6 @@ void	clear_and_update_term(t_env *e, char *new_str)
 
 	while (e->cursor++ < e->buffer_end)
 		ft_printf("\x1B[C");
-
 	i = 0;
 	while (i++ < e->buffer_end)
 		ft_printf("\b \b");
@@ -69,12 +68,33 @@ void	clear_and_update_term(t_env *e, char *new_str)
 	ft_memmove(e->buffer, new_str, i);
 	e->cursor = i;
 	e->buffer_end = i;
-
 	if (((int)(ft_strlen(get_variable(e, "PWD"))
 		 + ft_strlen(e->buffer) + 8)) >
 		get_term_width())
 		ft_printf("\x1B[C");
+	ft_printf("%s", e->buffer);
+}
 
+/*
+**
+*/
+
+//	UNFINISHED FUNCTION (but doesn't affect compilation so just leave it be)
+
+void	insert_and_update_term(t_env *e, char *new, size_t pos)
+{
+	size_t	new_s;
+	//size_t	i;
+
+	new_s = ft_strlen(new);
+	// while (e->cursor++ < e->buffer_end)
+	// 	ft_printf("\x1B[C");
+	// i = 0;
+	// while (i++ < e->buffer_end)
+	// 	ft_printf("\b \b");
+	ft_memmove(e->buffer + pos + new_s + 1,
+		e->buffer + pos, e->buffer_end - pos);
+	ft_memmove(e->buffer + pos - 1, new, new_s);
 	ft_printf("%s", e->buffer);
 }
 

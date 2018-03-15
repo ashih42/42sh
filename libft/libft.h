@@ -6,7 +6,7 @@
 /*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/27 10:07:15 by ashih             #+#    #+#             */
-/*   Updated: 2018/03/13 12:53:19 by msharpe          ###   ########.fr       */
+/*   Updated: 2018/03/15 16:46:16 by nmei             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -181,5 +181,6 @@ int						ft_dl_lst_size(t_dl_list *dl_lst);
 void					ft_lstrev(t_list **begin_list);
 t_list					*ft_sorted_lst_merge(t_list *lst1, t_list *lst2,
 											int (*cmp)());
+int						ft_is_space(int c);
 
 #endif

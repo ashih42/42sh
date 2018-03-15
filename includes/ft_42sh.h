@@ -182,5 +182,4 @@ t_list					*get_dir_contents_search(char *dir_path, int ac, char **argv);
 int						matchparse(char *s1, char *s2);
 size_t					init_parse(char *s1, char *s2);
 
-
 #endif
