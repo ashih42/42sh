@@ -14,7 +14,7 @@ OBJS_DIR = ./objects/
 FILES = init.c listen.c parse.c dispatcher.c envp.c split_argv.c ft_cd.c \
 ft_echo.c ft_exit.c ft_setenv.c ft_unsetenv.c ft_env.c signal.c ft_history.c \
 ft_history_bang_exploder.c debug.c redir.c ft_3d_parser.c \
-tab_autocomplete.c path_utils.c globber.c term_utils.c
+tab_autocomplete.c path_utils.c globber.c term_utils.c init_parse.c
 
 ifeq ($(TESTING_ENV),)
     FILES += main.c
