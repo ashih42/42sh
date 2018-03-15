@@ -2,6 +2,7 @@
 # define FT_42SH_H
 
 # include <signal.h>
+# include <sys/ioctl.h>
 # include <termios.h>
 # include <sys/types.h>
 # include <stdbool.h>
