@@ -37,6 +37,7 @@ typedef struct			s_env
 	bool				shell_is_interactive;
 	bool				pipe;
 	int					fd;
+	int					redir_out;
 }						t_env;
 
 t_env					*g_e;

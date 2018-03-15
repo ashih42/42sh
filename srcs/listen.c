@@ -96,9 +96,10 @@ int		submit_attempt(t_env *e)
 	i = 0;
 	while (e->buffer[i])
 	{
-		if (!quote && (e->buffer[i] == '\'' || e->buffer[i] == '\"'))
+		if (!quote && (e->buffer[i] == '\'' || e->buffer[i] == '\"') &&
+			(i == 0 || e->buffer[i - 1] != '\\'))
 			quote = e->buffer[i];
-		else if (e->buffer[i] == quote)
+		else if (e->buffer[i] == quote && e->buffer[i - 1] != '\\')
 			quote = 0;
 		i++;
 	}

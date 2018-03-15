@@ -62,6 +62,11 @@ int			fork_execve(t_env *e, char *path, char **argv, char **envp)
 			}
 			if (e->pipe)
 				dup2(fd[1], STDOUT_FILENO);
+			if (e->redir_out != -1)
+			{
+				dup2(e->redir_out, STDOUT_FILENO);
+				close(e->redir_out);
+			}
 			close(fd[0]);
 			close(fd[1]);
 			exit(execve(path, argv, envp));
@@ -76,6 +81,8 @@ int			fork_execve(t_env *e, char *path, char **argv, char **envp)
 				e->fd = fd[0];
 			else
 				close(fd[0]);
+			if (e->redir_out != -1)
+				close(e->redir_out);
 			close(fd[1]);
 			e->child_pid = 0;
 		}
@@ -127,6 +134,8 @@ int		execute(t_env *e, char **argv, char **envp, int *status)
 
 void		setup_pipes(t_env *e, char ***cmds, size_t *i)
 {
+	int	fd;
+
 	while (cmds[*i + 1] && (!ft_strcmp(cmds[*i + 1][0], ">") ||
 		!ft_strcmp(cmds[*i + 1][0], ">>") || !ft_strcmp(cmds[*i + 1][0], "<")))
 	{
@@ -134,12 +143,33 @@ void		setup_pipes(t_env *e, char ***cmds, size_t *i)
 			break ;
 		if (!ft_strcmp(cmds[*i + 1][0], ">"))
 		{
+			if (e->redir_out != -1)
+				close(e->redir_out);
+			if ((fd = open(cmds[*i + 2][0], O_WRONLY | O_CREAT | O_TRUNC, 0755)) < 0)
+				ft_printf("42sh: failed to create file: %s\n", cmds[*i + 2][0]);
+			else
+				e->redir_out = fd;
 		}
 		else if (!ft_strcmp(cmds[*i + 1][0], ">>"))
 		{
+			if (e->redir_out != -1)
+				close(e->redir_out);
+			if ((fd = open(cmds[*i + 2][0], O_WRONLY)) < 0)
+				ft_printf("42sh: failed to open file: %s\n", cmds[*i + 2][0]);
+			else
+			{
+				lseek(fd, 0, SEEK_END);
+				e->redir_out = fd;
+			}
 		}
 		else if (!ft_strcmp(cmds[*i + 1][0], "<"))
 		{
+			if (e->fd != -1)
+				close(e->fd);
+			if ((fd = open(cmds[*i + 2][0], O_RDONLY)) < 0)
+				ft_printf("42sh: failed to open file: %s\n", cmds[*i + 2][0]);
+			else
+				e->fd = fd;
 		}
 		ft_char_array_del(cmds[++(*i)]);
 		ft_char_array_del(cmds[++(*i)]);
@@ -162,6 +192,7 @@ void		sh_dispatcher(t_env *e, char ***cmds)
 	i = -1;
 	argv = NULL;
 	e->fd = -1;
+	e->redir_out = -1;
 	while (cmds[++i])
 	{
 		if (argv)
@@ -213,5 +244,10 @@ void		sh_dispatcher(t_env *e, char ***cmds)
 	{
 		close(e->fd);
 		e->fd = -1;
+	}
+	if (e->redir_out != -1)
+	{
+		close(e->redir_out);
+		e->redir_out = -1;
 	}
 }

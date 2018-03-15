@@ -14,7 +14,7 @@
 
 static int is_delim(char *s)
 {
-	static char	*delim_table[] = {";", "||", "&&", "|", ">", ">>", "<", 0};
+	static char	*delim_table[] = {";", "||", "&&", "|", ">>", ">", "<", 0};
 	int			i;
 
 	i = 0;
