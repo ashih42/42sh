@@ -32,6 +32,15 @@ void	disable_raw_mode(struct termios *orig_termios)
 	tcsetattr(STDIN_FILENO, TCSAFLUSH, orig_termios);
 }
 
+#include <sys/ioctl.h>
+int 	get_term_width(void)
+{
+	struct winsize w;
+
+	ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+	return (w.ws_col);
+}
+
 /*
 **	clear_and_update_term()
 **
@@ -52,6 +61,7 @@ void	clear_and_update_term(t_env *e, char *new_str)
 
 	while (e->cursor++ < e->buffer_end)
 		ft_printf("\x1B[C");
+
 	i = 0;
 	while (i++ < e->buffer_end)
 		ft_printf("\b \b");
@@ -60,6 +70,12 @@ void	clear_and_update_term(t_env *e, char *new_str)
 	ft_memmove(e->buffer, new_str, i);
 	e->cursor = i;
 	e->buffer_end = i;
+
+	if (((int)(ft_strlen(get_variable(e, "PWD"))
+		 + ft_strlen(e->buffer) + 8)) >
+		get_term_width())
+		ft_printf("\x1B[C");
+
 	ft_printf("%s", e->buffer);
 }
 
