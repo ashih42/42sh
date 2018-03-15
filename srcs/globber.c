@@ -34,20 +34,20 @@ int		chk_glob_brckts(char c1, char *s2)
 		search = malloc(sizeof(char) * j + 1);
 		search[j] = '\0';
 		j = 0; 
-		while (*(s2 + j) != ']' && *(s2 + j) != '}') //as long as it isn't an end 
+		while (*(s2 + j) != ']') 
 		{	
-			*(search + i) = *(s2 + j); //copies the s2 string over to search
+			*(search + i) = *(s2 + j);
 			j++;
 			i++;
 		}
-		i = 0; //reset search for the actual search
-		while (*(search + i) != '\0')//as long as search does not equal null, compare each character to c1. if it fails to find an equal value, return 0.
+		i = 0; 
+		while (*(search + i) != '\0')
 		{
-			if (*(search + i) == c1) // if search + i == c1 return 1
+			if (*(search + i) == c1)
 				return (1);
-			if (*(search + i) == '-') // if search + i == dash, check range between previous letter and next letter.
+			if (*(search + i) == '-')
 			{
-				if (c1 >= *(search + i - 1) && c1 <= *(search + i + 1) && *(search + i + 1) != '\0' && *(search + i + 1) != ']' ) //checks all characters between the previous and next letters.
+				if (c1 >= *(search + i - 1) && c1 <= *(search + i + 1) && *(search + i + 1) != '\0' && *(search + i + 1) != ']' )
 				{
 					return (1);
 					i = i + 2;
@@ -58,47 +58,65 @@ int		chk_glob_brckts(char c1, char *s2)
 	}
 	return (0);
 }
-
-// while (s2[j] != '}')
-// {
-// 	while (s2[j] != ',' && s2[j] != '}')
-// 	{
-// 		search = malloc(sizeof(char) * j + 1);
-// 		search[j] = '\0';
-// 		j = 0;
-// 		while (*(s2 + j) != '}')
-// 		{
-// 			*(search + i) = *(s2 + j);
-// 			j++;
-// 			i++;
-// 		}
-// 		i = 0;
-// 		while (*(search + i) != '}')
-// 		{
-// 			if (*(search + i) == c1)
-// 				return (1);
-// 			if (*(search + i) == ',')
-// 			{
-// 				if (c1 == '\0')
-// 					return (1);
-// 				else
-// 					return (0);
-// 			}
-// 			i++;
-// 		} 
-//		j++;
-// 	}
-// 	j++;
-// }
+size_t		init_parse(char *s1, char *s2)
+{
 /*
-** All functions are to go through match parse once they have a conclusion
-** this allows multiple wild cards to be used in a single search.
+** static int fuck_it ends the call as there is a recursive limit 
+** to what's going on. We won't have stack overflows here!
+** We don't appreciate you trying to do that either!
 */
+	size_t	j;
+	char	*str;
+	size_t	k;
+	static int fuck_it = 0;
+
+	j = 0;
+	k = 0;
+	
+	while (s2[j] != '\0')
+	{
+		if  (s2[j] == '{')
+		{
+			j++;
+			while (s2[j] != '}')
+			{
+				k++;
+				if (s2[j] == '{')
+					fuck_it++;
+				if (fuck_it == 5)
+					return (0);
+			}
+			str = ft_memalloc(k + 1);	
+			while (s2[j] != '}')
+			{
+				while (s2[j] <= ' ' && s2[j] >= '~')
+					j++;
+				while (s2[j] != ',' && s2[j] != '}')
+				{
+					str[i] = s2[j];
+					i++;
+					j++;
+				}
+				matchparse(s1, str);
+				ft_bzero(str, k);
+				i = 0;
+				j = j + 2;
+			}
+			
+		}
+	}
+	free(str);
+	fuck_it = 0;
+	return (k);
+}
+
 int matchparse (char *s1, char *s2)
 {
 	int		persist;
 	size_t	i;
 	size_t	j;
+	char	**curly;
+	size_t	k;
 
 	i = 0;
 	j = 0;
@@ -118,6 +136,11 @@ int matchparse (char *s1, char *s2)
 			return (1);
 		else if (s2[j] == '[' || s2[j] == '{') 
 		{
+			if (s2[j] == '{')
+			{
+				k = init_parse(s1, s2);
+				j = j + k;
+							
 			persist =  chk_glob_brckts(s1[i], &s2[j++]);
 				if (persist == 1)
 				{
