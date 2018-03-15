@@ -17,8 +17,10 @@ typedef struct			s_env
 {
 	t_list				*envp;
 	t_list				*tab_execs;
-	t_list				*tab_pwd;
+	t_list				*tab_dir;
 	t_list				*tab_pos;
+	int					tab_mode;
+	int					reset_tab_auto;
 	t_dl_list			*cmd_history;
 	t_dl_list			*history_end;
 	t_dl_list			*history_pos;
@@ -33,7 +35,6 @@ typedef struct			s_env
 	struct termios		shell_tmodes;
 	bool				shell_terminal;
 	bool				shell_is_interactive;
-	int					reset_tab_auto;
 	bool				pipe;
 	int					fd;
 }						t_env;

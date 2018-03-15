@@ -77,27 +77,11 @@ t_list	*get_path_executables(t_env *e)
 	return (path_execs);
 }
 
-void	init_tab_auto(t_env *e)
-{
-	char	*pwd;
-
-	if (e->tab_execs)
-		ft_lstdel(&e->tab_execs, (void (*)(void *, size_t))free);
-	e->tab_execs = get_path_executables(e);
-	if (e->tab_pwd)
-		ft_lstdel(&e->tab_pwd, (void (*)(void *, size_t))free);
-	if ((pwd = getcwd(NULL, 0)))
-	{
-		e->tab_pwd = get_dir_contents(pwd, 0);
-		free(pwd);
-	}
-}
-
 /*
 **	build_auto_lst()
 **
 **	Builds a new linked list that references the nodes in either e->tab_execs
-**	(mode = 1) or e->tab_pwd (mode = 0) that can autocomplete the content of
+**	(mode = 0) or e->tab_dir (mode = 1) that can autocomplete the content of
 **	e->buffer.
 */
 
@@ -109,10 +93,10 @@ t_list	*build_auto_lst(t_env *e, int mode, size_t *auto_lst_size)
 	new_auto_lst = NULL;
 	if (!(*e->buffer))
 		return (NULL);
-	curr = (mode) ? e->tab_execs : e->tab_pwd;
+	curr = (mode) ? e->tab_dir : e->tab_execs;
 	while (curr)
 	{
-		if (!ft_strncmp(e->buffer, curr->content, e->buffer_end))
+		if (mode || !ft_strncmp(e->buffer, curr->content, e->buffer_end))
 		{
 			ft_lstadd(&new_auto_lst,
 				ft_lst_new_ref(curr->content, curr->content_size));
@@ -136,6 +120,13 @@ void print_list20(t_list *list)
 	ft_printf("\n");
 }
 
+void	init_tab_auto(t_env *e)
+{
+	if (e->tab_execs)
+		ft_lstdel(&e->tab_execs, (void (*)(void *, size_t))free);
+	e->tab_execs = get_path_executables(e);
+}
+
 // ft_printf("\x1b[F");
 
 /*
@@ -152,18 +143,31 @@ int		tab_autocomplete(t_env *e)
 {
 	static t_list	*curr_auto_lst = NULL;
 	static size_t	auto_lst_size;
+	char			*dir_to_lookup;
 
 	if (!(e->tab_pos))
 		init_tab_auto(e);
 	if (e->reset_tab_auto && curr_auto_lst)
 	{
-		ft_lstdel(&curr_auto_lst, 0);		// This causes segfaults for some raisins
+		ft_lstdel(&curr_auto_lst, 0);
 		curr_auto_lst = NULL;
 	}
 	if (!curr_auto_lst)
 	{
+		if (e->buffer[e->cursor - 1] == '/')
+		{
+			dir_to_lookup = ft_strnew(e->cursor);
+			ft_strncpy(dir_to_lookup, e->buffer, e->cursor);
+			if (e->tab_dir)
+				ft_lstdel(&e->tab_dir, (void (*)(void *, size_t))free);
+			e->tab_dir = get_dir_contents(dir_to_lookup, 0);
+			free(dir_to_lookup);
+			e->tab_mode = 1;
+			//ft_printf("\n|%s|\n", dir_to_lookup);
+		}
 		auto_lst_size = 0;
-		curr_auto_lst = build_auto_lst(e, 1, &auto_lst_size);
+		curr_auto_lst = build_auto_lst(e, e->tab_mode, &auto_lst_size);
+		//print_list20(curr_auto_lst);
 		e->tab_pos = curr_auto_lst;
 	}
 	if (e->tab_pos)
