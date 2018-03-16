@@ -32,12 +32,12 @@ static void	add_terms(char const *s, t_list **list, char *ws)
 		head = i--;
 		while (work_buf[++i])
 		{
-			if ((!quote && (work_buf[i] == '\"' || work_buf[i] == '\'')) &&
-				(quote = work_buf[i]) && !work_buf[++i])
-				break ;
-			if (work_buf[i] == quote && !(quote = 0) && !work_buf[++i])
-				break ;
-			if (work_buf[i] == '\\' && (!quote || work_buf[i + 1] == quote))
+			if ((!quote && (work_buf[i] == '\"' || work_buf[i] == '\'')))
+				quote = work_buf[i];
+			else if (work_buf[i] == quote)
+				quote = 0;
+			else if (work_buf[i] == '\\' && (!quote ||
+				work_buf[i + 1] == '\'' || work_buf[i + 1] == '\"'))
 			{
 				if (!work_buf[++i])
 					break ;
@@ -64,29 +64,27 @@ static void	strip_argv(char **argv)
 	while (argv[++i])
 	{
 		quote = 0;
-		j = -1;
-		while (argv[i][++j])
+		j = 0;
+		while (argv[i][j])
 		{
 			if (!quote && (argv[i][j] == '\"' || argv[i][j] == '\''))
 			{
 				quote = argv[i][j];
 				ft_memmove(argv[i] + j, argv[i] + j + 1, ft_strlen(argv[i] + j + 1) + 1);
-				if (!argv[i][j])
-					break ;
 			}
-			if (argv[i][j] == quote)
+			else if (argv[i][j] == quote)
 			{
 				quote = 0;
 				ft_memmove(argv[i] + j, argv[i] + j + 1, ft_strlen(argv[i] + j + 1) + 1);
-				if (!argv[i][j])
-					break ;
 			}
-			if (argv[i][j] == '\\' && (!quote || argv[i][j + 1] == quote))
+			else if (argv[i][j] == '\\' && (!quote || argv[i][j + 1] == quote))
 			{
 				ft_memmove(argv[i] + j, argv[i] + j + 1, ft_strlen(argv[i] + j + 1) + 1);
-				if (!argv[i][j])
+				if (!argv[i][++j])
 					break ;
 			}
+			else
+				j++;
 		}
 	}
 }
