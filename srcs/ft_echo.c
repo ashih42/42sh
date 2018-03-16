@@ -69,6 +69,7 @@ int			ft_echo(t_env *e, int argc, char **argv)
 	}
 	insert_color_code(color);
 	print_args(i, argc, argv);
-	ft_printf("\033[0m%s", (newline) ? "\n" : "");
+	ft_printf("%s", (color == INVALID_COLOR) ? "" : "\033[0m");
+	ft_printf("%s", (newline) ? "\n" : "");
 	return (0);
 }

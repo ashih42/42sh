@@ -226,12 +226,11 @@ void		setup_pipes(t_env *e, char ***cmds, size_t *i)
 			else
 				e->fd = fd;
 		}
-		ft_char_array_del(cmds[++(*i)]);
-		ft_char_array_del(cmds[++(*i)]);
+		*i += 2;
 	}
 	if (cmds[*i + 1] && !ft_strcmp(cmds[*i + 1][0], "|"))
 	{
-		ft_char_array_del(cmds[++(*i)]);
+		(*i)++;
 		e->pipe = 1;
 	}
 }
