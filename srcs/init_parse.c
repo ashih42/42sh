@@ -7,48 +7,61 @@ size_t        init_parse(char *s1, char *s2)
 ** to what's going on. We won't have stack overflows here!
 ** We don't appreciate you trying to do that either!
 */
-    size_t    j;
-    char    *str;
-    size_t    k;
-	int		 i;
-    static int fuck_it = 0;
+    size_t	j;
+    char	*str;
+    size_t	k;
+	int		i;
+    static int fuck_it = 1;
+	int x;
 
     j = 0;
-    k = 0;
-    
+    k = 1;
+    x = 0;
     while (s2[j] != '\0')
     {
         if  (s2[j] == '{')
         {
-            j++;
-            while (s2[j] != '}')
+			x++;
+			while (s2[k] != '\0')
             {
                 k++;
-                if (s2[j] == '{')
+                if (s2[k] == '{')
+				{
+					ft_printf("We've hit fuck it all.9");
                     fuck_it++;
+				}
                 if (fuck_it == 5)
                     return (0);
-            }
-            str = ft_memalloc(k + 1);    
-            while (s2[j] != '}')
+			}
+		}
+        str = ft_memalloc(k + 1);
+		if (!str)
+			return (0);	
+        while (s2[j] != '}')
+        {
+            while (s2[j] <= ' ' && s2[j] >= '~')
+			{
+				ft_printf("The cycle continues.10");
+				j++;
+			}
+            while (s2[j] != ',' && s2[j] != '}' && s2[j] != '\0' && x < 3)
             {
-                while (s2[j] <= ' ' && s2[j] >= '~')
+				ft_printf("copycat11");
+                str[i] = s2[j];
+                i++;
                     j++;
-                while (s2[j] != ',' && s2[j] != '}')
-                {
-                    str[i] = s2[j];
-                    i++;
-                    j++;
-                }
-                matchparse(s1, str);
-                ft_bzero(str, k);
-                i = 0;
-                j = j + 2;
+					x++;
             }
-            
+            matchparse(s1, str);
+            ft_bzero(str, k);
+            i = 0;
+            j++;
         }
-    }
+        ft_printf("get ready to burn it all.12");
+       // }
+	}
     free(str);
     fuck_it = 0;
+	ft_printf("Done!14");
     return (k);
 }

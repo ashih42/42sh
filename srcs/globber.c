@@ -26,12 +26,12 @@ int		chk_glob_brckts(char c1, char *s2)
 	if (*(s2 + j) == '\0')
 	{
 		if (c1 == '[')
-			return (1);
-		return (0);
+			return (0);
+		return (1);
 	}
 	if (*(s2 + j) == ']')
 	{
-		search = malloc(sizeof(char) * j + 1);
+		search = malloc(sizeof(char) * j + 1);//turn into ft_memalloc
 		search[j] = '\0';
 		j = 0; 
 		while (*(s2 + j) != ']') 
@@ -47,16 +47,15 @@ int		chk_glob_brckts(char c1, char *s2)
 				return (1);
 			if (*(search + i) == '-')
 			{
-				if (c1 >= *(search + i - 1) && c1 <= *(search + i + 1) && *(search + i + 1) != '\0' && *(search + i + 1) != ']' )
-				{
-					return (1);
+				if (c1 >= *(search + i - 1) && c1 <= *(search + i + 1) && *(search + i + 1) != '\0' && *(search + i + 1) != ']' && *(search + i - 1) != '[')
+					return (0);
+				else
 					i = i + 2;
-				}
 			}
 			i++;
 		}
 	}
-	return (0);
+	return (1);
 }
 
 int matchparse (char *s1, char *s2)
@@ -72,39 +71,56 @@ int matchparse (char *s1, char *s2)
 	while (1)
 	{
 		if (s1[i] == '\0' && s2[j] == '\0')
+		{
+			ft_printf("Stop here 1\n");
 			return (0);
+		}
 		if ((s1[i] == s2[j] && s1[i] != '*' && s1[i] != '\\' && s1[i] != '[') || (s2[j] == '\?'))
 		{
+			ft_printf("found a matching letter!2\n");
 			i++;
 			j++;
 		}
 		else if (s1[i] == '\0' && s2[j] == '*')
+		{
+			ft_printf("get past the star! We're at the end!3\n");
 			j++;
+		}
 		else if (s1[i] == '\0' || s2[j] == '\0')
+		{
+			ft_printf("we made it to the end! and it failed.4\n");
 			return (1);
+		}
 		else if (s2[j] == '[' || s2[j] == '{') 
 		{
 			if (s2[j] == '{')
 			{
 				k = init_parse(s1, s2);
 				j = j + k;
+				ft_printf("went through parser for curls5\n");
 			}
-			else 
+			else if (s2[j] == '[') 
+			{
 				persist =  chk_glob_brckts(s1[i], &s2[j++]);
+				ft_printf("went through brackets parser6\n");	
+			}
 			if (persist == 1)
 			{
 				while (s2[j] != ']')
-				{
 					j++;
-					j++;
-					i++;
-				}
+				i++;
+				j++;
+				ft_printf("%c", s2[j]);
+				ft_printf("got past the end of the brackets because something was found.7\n");
 			}
 			else 
 				return (1);
 		}
 		else if (s2[j] != '*' && s2[j] != '?' && s2[j] != '[' && s2[j] != '{')
+		{
+			ft_printf("I don't remember why this section is here. but it is.8\n");
 			return (1);
+		}
 		else if (matchparse(&s1[i++], &s2[j + 1]))
 			return(0);
 	}
