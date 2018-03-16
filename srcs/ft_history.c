@@ -110,7 +110,7 @@ static void			print_hidden(char *str)
 **	Display the command history of our shell.
 */
 
-void				ft_history(t_env *e, int argc, char **argv)
+int					ft_history(t_env *e, int argc, char **argv)
 {
 	t_dl_list	*node;
 	char		*content;
@@ -135,4 +135,5 @@ void				ft_history(t_env *e, int argc, char **argv)
 		i++;
 		node = node->next;
 	}
+	return (0);
 }

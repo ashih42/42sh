@@ -30,6 +30,7 @@ typedef struct			s_env
 	size_t				buffer_end;
 	size_t				buffer_lock;
 	size_t				buffer_size;
+	t_list				*children_pids;
 	pid_t				child_pid;
 	pid_t				shell_pgid;
 	pid_t				shell_stopped;
@@ -104,12 +105,12 @@ int						ft_cd(t_env *e, int argc, char **argv);
 /*
 **	ft_echo.c
 */
-void					ft_echo(t_env *e, int argc, char **argv);
+int						ft_echo(t_env *e, int argc, char **argv);
 
 /*
 **	ft_env.c
 */
-void					ft_env(t_env *e, int argc, char **argv);
+int						ft_env(t_env *e, int argc, char **argv);
 
 /*
 **	ft_setenv.c
@@ -119,12 +120,12 @@ int						ft_setenv(t_env *e, int argc, char **argv);
 /*
 **	ft_unsetenv.c
 */
-void					ft_unsetenv(t_env *e, int argc, char **argv);
+int						ft_unsetenv(t_env *e, int argc, char **argv);
 
 /*
 **	ft_exit.c
 */
-void					ft_exit(t_env *e, int argc, char **argv);
+int						ft_exit(t_env *e, int argc, char **argv);
 
 /*
 **	signal.c
@@ -136,7 +137,7 @@ void					ft_ctrl_z(int signo);
 **	ft_history.c
 */
 int						add_cmd_history(t_env *e);
-void					ft_history(t_env *e, int argc, char **argv);
+int						ft_history(t_env *e, int argc, char **argv);
 void					get_cmd_history(t_env *e, int mode);
 
 /*

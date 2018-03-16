@@ -39,7 +39,7 @@ static int	check_flags(char *arg, int *newline, int *color)
 ** See 256 color cheatsheet here: https://jonasjacek.github.io/colors/
 */
 
-void		ft_echo(t_env *e, int argc, char **argv)
+int			ft_echo(t_env *e, int argc, char **argv)
 {
 	int	i;
 	int	newline;
@@ -66,4 +66,5 @@ void		ft_echo(t_env *e, int argc, char **argv)
 		need_space = 1;
 	}
 	ft_printf("\033[0m%s", (newline) ? "\n" : "");
+	return (0);
 }

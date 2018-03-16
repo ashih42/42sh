@@ -11,31 +11,62 @@
 **	   provided as a literal path.
 */
 
+static int	built_in(t_env *e, int (*f)(t_env *, int, char **), int argc, char **argv)
+{
+	int		status;
+	int		fd[2];
+	int		stdin_fd;
+	int		stdout_fd;
+
+	status = -1;
+	if (pipe(fd) < 0)
+		ft_printf("42sh: failed to create pipe\n");
+	else
+	{
+		stdin_fd = dup(STDIN_FILENO);
+		stdout_fd = dup(STDOUT_FILENO);
+		if (e->fd != -1)
+			dup2(e->fd, STDIN_FILENO);
+		if (e->pipe)
+			dup2(fd[1], STDOUT_FILENO);
+		if (e->redir_out != -1)
+			dup2(e->redir_out, STDOUT_FILENO);
+		status = f(e, argc, argv);
+		dup2(stdin_fd, STDIN_FILENO);
+		close(stdin_fd);
+		dup2(stdout_fd, STDOUT_FILENO);
+		close(stdout_fd);
+		if (e->pipe)
+			e->fd = fd[0];
+		else
+			close(fd[0]);
+		close(fd[1]);
+	}
+	if (e->fd != -1)
+		close(e->fd);
+	if (e->redir_out != -1)
+		close(e->redir_out);
+	return (status);
+}
+
 static int	built_ins(t_env *e, int argc, char **argv, int *status)
 {
 	if (ft_strequ(argv[0], "cd"))
-	{
-		*status = ft_cd(e, argc, argv);
-		return (1);
-	}
+		*status = built_in(e, ft_cd, argc, argv);
 	else if (ft_strequ(argv[0], "echo"))
-		ft_echo(e, argc, argv);
+		*status = built_in(e, ft_echo, argc, argv);
 	else if (ft_strequ(argv[0], "env"))
-		ft_env(e, argc, argv);
+		*status = built_in(e, ft_env, argc, argv);
 	else if (ft_strequ(argv[0], "setenv"))
-	{
-		*status = ft_setenv(e, argc, argv);
-		return (1);
-	}
+		*status = built_in(e, ft_setenv, argc, argv);
 	else if (ft_strequ(argv[0], "unsetenv"))
-		ft_unsetenv(e, argc, argv);
+		*status = built_in(e, ft_unsetenv, argc, argv);
 	else if (ft_strequ(argv[0], "exit"))
-		ft_exit(e, argc, argv);
+		*status = built_in(e, ft_exit, argc, argv);
 	else if (ft_strequ(argv[0], "history"))
-		ft_history(e, argc, argv);
+		*status = built_in(e, ft_history, argc, argv);
 	else
 		return (0);
-	*status = 0;
 	return (1);
 }
 
@@ -73,20 +104,21 @@ int			fork_execve(t_env *e, char *path, char **argv, char **envp)
 		}
 		else
 		{
-			e->child_pid = pid;
-			waitpid(pid, &status, 0);
-			if (e->fd != -1)
-				close(e->fd);
-			if (e->pipe)
-				e->fd = fd[0];
-			else
-				close(fd[0]);
-			if (e->redir_out != -1)
-				close(e->redir_out);
-			close(fd[1]);
-			e->child_pid = 0;
+			ft_lst_add_last(&(e->children_pids), ft_lst_new_ref((void *)1, pid));
+			status = 0;
 		}
+		if (e->fd != -1)
+			close(e->fd);
+		if (e->pipe)
+			e->fd = fd[0];
+		else
+			close(fd[0]);
+		close(fd[1]);
 	}
+	if (e->fd != -1)
+		close(e->fd);
+	if (e->redir_out != -1)
+		close(e->redir_out);
 	return (status);
 }
 
@@ -187,6 +219,7 @@ void		sh_dispatcher(t_env *e, char ***cmds)
 	char	**argv;
 	size_t	i;
 	int		status;
+	t_list	*pids;
 
 	status = 0;
 	i = -1;
@@ -220,11 +253,8 @@ void		sh_dispatcher(t_env *e, char ***cmds)
 		{
 			if ((envp = serialize_envp(e)))
 			{
-				if (execute(e, argv, envp, &status) < 0 ||
-					status < 0 || !WIFEXITED(status))
+				if (execute(e, argv, envp, &status) < 0)
 					status = -1;
-				else
-					status = WEXITSTATUS(status);
 				ft_char_array_del(envp);
 			}
 			else
@@ -232,6 +262,20 @@ void		sh_dispatcher(t_env *e, char ***cmds)
 				ft_printf("42sh: failed to allocate memory for envp\n");
 				status = -1;
 			}
+		}
+		if (!(e->pipe))
+		{
+			pids = e->children_pids;
+			while (pids)
+			{
+				waitpid(pids->content_size, &status, 0);
+				pids = pids->next;
+			}
+			ft_lstdel(&(e->children_pids), NULL);
+			if (WIFEXITED(status))
+				status = WEXITSTATUS(status);
+			else
+				status = -1;
 		}
 		ft_char_array_del(argv);
 		argv = NULL;
@@ -241,13 +285,14 @@ void		sh_dispatcher(t_env *e, char ***cmds)
 		ft_char_array_del(argv);
 	e->pipe = 0;
 	if (e->fd != -1)
-	{
 		close(e->fd);
-		e->fd = -1;
-	}
 	if (e->redir_out != -1)
-	{
 		close(e->redir_out);
-		e->redir_out = -1;
+	pids = e->children_pids;
+	while (pids)
+	{
+		waitpid(pids->content_size, &status, 0);
+		pids = pids->next;
 	}
+	ft_lstdel(&(e->children_pids), NULL);
 }

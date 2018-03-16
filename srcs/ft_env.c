@@ -1,6 +1,6 @@
 #include "ft_42sh.h"
 
-void		ft_env(t_env *e, int argc, char **argv)
+int			ft_env(t_env *e, int argc, char **argv)
 {
 	t_list	*node;
 	char	**content;
@@ -14,4 +14,5 @@ void		ft_env(t_env *e, int argc, char **argv)
 		ft_printf("%s=%s\n", content[0], content[1]);
 		node = node->next;
 	}
+	return (0);
 }
