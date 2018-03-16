@@ -43,6 +43,16 @@ typedef struct			s_env
 	int					redir_out;
 }						t_env;
 
+typedef struct 			s_add_term
+{
+	int		head;
+	int		i;
+	char	*work_buf;
+	char	*word;
+	char	quote;
+
+}						t_add_term;
+
 t_env					*g_e;
 
 /*

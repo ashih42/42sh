@@ -14,45 +14,75 @@ static int	is_ws(char c, char *ws)
 	return (0);
 }
 
-static void	add_terms(char const *s, t_list **list, char *ws)
+static void	add_terms_helper(char *ws, t_add_term *at)
 {
-	int		head;
-	int		i;
-	char	*work_buf;
-	char	*word;
-	char	quote;
-
-	i = 0;
-	quote = 0;
-	work_buf = ft_strdup(s);
-	while (work_buf[i])
+	while (at->work_buf[++(at->i)])
 	{
-		while (is_ws(work_buf[i], ws))
-			i++;
-		head = i--;
-		while (work_buf[++i])
+		if ((!at->quote && (at->work_buf[at->i] == '\"' ||
+			at->work_buf[at->i] == '\'')))
+			at->quote = at->work_buf[at->i];
+		else if (at->work_buf[at->i] == at->quote)
+			at->quote = 0;
+		else if (at->work_buf[at->i] == '\\' && (!at->quote ||
+			at->work_buf[at->i + 1] == '\'' || at->work_buf[at->i + 1] == '\"'
+			|| at->work_buf[at->i + 1] == '$'))
 		{
-			if ((!quote && (work_buf[i] == '\"' || work_buf[i] == '\'')))
-				quote = work_buf[i];
-			else if (work_buf[i] == quote)
-				quote = 0;
-			else if (work_buf[i] == '\\' && (!quote ||
-				work_buf[i + 1] == '\'' || work_buf[i + 1] == '\"' ||
-				work_buf[i + 1] == '$'))
-			{
-				if (!work_buf[++i])
-					break ;
-			}
-			else if (!quote && is_ws(work_buf[i], ws))
+			if (!at->work_buf[++(at->i)])
 				break ;
 		}
-		if (i <= head)
-			continue ;
-		word = ft_strnew(i - head);
-		ft_strncpy(word, work_buf + head, i - head);
-		ft_lst_add_last(list, ft_lst_new_ref(word, sizeof(char *)));
+		else if (!at->quote && is_ws(at->work_buf[at->i], ws))
+			break ;
 	}
-	free(work_buf);
+}
+
+static void	add_terms(char const *s, t_list **list, char *ws)
+{
+	t_add_term	at;
+
+	ft_bzero(&at, sizeof(t_add_term));
+	at.work_buf = ft_strdup(s);
+	while (at.work_buf[at.i])
+	{
+		while (is_ws(at.work_buf[at.i], ws))
+			at.i++;
+		at.head = at.i--;
+		add_terms_helper(ws, &at);
+		if (at.i <= at.head)
+			continue ;
+		at.word = ft_strnew(at.i - at.head);
+		ft_strncpy(at.word, at.work_buf + at.head, at.i - at.head);
+		ft_lst_add_last(list, ft_lst_new_ref(at.word, sizeof(char *)));
+	}
+	free(at.work_buf);
+}
+
+static void	strip_helper(size_t *i, size_t *j, int *quote, char **argv)
+{
+	while (argv[*i][*j])
+	{
+		if (!*quote && (argv[*i][*j] == '\"' || argv[*i][*j] == '\''))
+		{
+			*quote = argv[*i][*j];
+			ft_memmove(argv[*i] + *j, argv[*i] + *j + 1,
+				ft_strlen(argv[*i] + *j + 1) + 1);
+		}
+		else if (argv[*i][*j] == *quote)
+		{
+			*quote = 0;
+			ft_memmove(argv[*i] + *j, argv[*i] + *j + 1,
+				ft_strlen(argv[*i] + *j + 1) + 1);
+		}
+		else if (argv[*i][*j] == '\\' && (!*quote || argv[*i][*j + 1] == '\"'
+			|| argv[*i][*j + 1] == '\'' || argv[*i][*j + 1] == '$'))
+		{
+			ft_memmove(argv[*i] + *j, argv[*i] + *j + 1,
+				ft_strlen(argv[*i] + *j + 1) + 1);
+			if (!argv[*i][++(*j)])
+				break ;
+		}
+		else
+			(*j)++;
+	}
 }
 
 static void	strip_argv(char **argv)
@@ -66,27 +96,7 @@ static void	strip_argv(char **argv)
 	{
 		quote = 0;
 		j = 0;
-		while (argv[i][j])
-		{
-			if (!quote && (argv[i][j] == '\"' || argv[i][j] == '\''))
-			{
-				quote = argv[i][j];
-				ft_memmove(argv[i] + j, argv[i] + j + 1, ft_strlen(argv[i] + j + 1) + 1);
-			}
-			else if (argv[i][j] == quote)
-			{
-				quote = 0;
-				ft_memmove(argv[i] + j, argv[i] + j + 1, ft_strlen(argv[i] + j + 1) + 1);
-			}
-			else if (argv[i][j] == '\\' && (!quote || argv[i][j + 1] == '\"' || argv[i][j + 1] == '\'' || argv[i][j + 1] == '$'))
-			{
-				ft_memmove(argv[i] + j, argv[i] + j + 1, ft_strlen(argv[i] + j + 1) + 1);
-				if (!argv[i][++j])
-					break ;
-			}
-			else
-				j++;
-		}
+		strip_helper(&i, &j, &quote, argv);
 	}
 }
 
