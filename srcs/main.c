@@ -1,11 +1,11 @@
 #include "ft_42sh.h"
 
-char 	*get_money_key(char *expr)
+char 	*get_money_key(char *expr, int tst)
 {
 	int		i;
 	char	*key;
-	
-	if (expr[0] != '$' || expr[-1] == '\\')
+
+	if (expr[0] != '$' || (tst != 0 && expr[-1] == '\\'))
 		return (NULL);
 	i = 1;
 	while (ft_isalpha(expr[i]) || ft_isdigit(expr[i]) || expr[i] == '_')
@@ -25,7 +25,7 @@ void	replace_monies(t_env *e)
 	i = 0;
 	while (e->buffer[i])
 	{
-		money_key = (i == 0) ? NULL : get_money_key(e->buffer + i);
+		money_key = get_money_key(e->buffer + i, i);
 		if (money_key)
 		{
 			money_value = get_variable(e, money_key);
