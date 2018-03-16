@@ -246,13 +246,10 @@ void		sh_dispatcher(t_env *e, char ***cmds)
 
 	status = 0;
 	i = -1;
-	argv = NULL;
 	e->fd = -1;
 	e->redir_out = -1;
 	while (cmds[++i])
 	{
-		if (argv)
-			ft_char_array_del(argv);
 		argv = cmds[i];
 		if (i > 0)
 		{
@@ -286,9 +283,8 @@ void		sh_dispatcher(t_env *e, char ***cmds)
 				status = -1;
 			}
 		}
-		if (!(e->pipe))
+		if (!(e->pipe) && (pids = e->children_pids))
 		{
-			pids = e->children_pids;
 			while (pids)
 			{
 				waitpid(pids->content_size, &status, 0);
@@ -300,12 +296,8 @@ void		sh_dispatcher(t_env *e, char ***cmds)
 			else
 				status = -1;
 		}
-		ft_char_array_del(argv);
-		argv = NULL;
 		e->pipe = 0;
 	}
-	if (argv)
-		ft_char_array_del(argv);
 	e->pipe = 0;
 	if (e->fd != -1)
 		close(e->fd);
