@@ -10,12 +10,32 @@ SRCS_DIR = ./srcs/
 INCLUDES = ./includes/
 OBJS_DIR = ./objects/
 
-FILES = init.c listen.c parse.c dispatcher.c envp.c split_argv.c ft_cd.c \
-ft_echo.c ft_exit.c ft_setenv.c ft_unsetenv.c ft_env.c signal.c ft_history.c \
-ft_history_bang_exploder.c debug.c \
-tab_autocomplete.c path_utils.c globber.c term_utils.c init_parse.c \
-strip_argv.c 
-#built_ins.c execute.c pipes.c 
+FILES = built_ins.c \
+		debug.c \
+		dispatcher.c \
+		envp.c \
+		execute.c \
+		ft_cd.c \
+		ft_echo.c \
+		ft_env.c \
+		ft_exit.c \
+		ft_history.c \
+		ft_history_bang_exploder.c \
+		ft_setenv.c \
+		ft_unsetenv.c \
+		globber.c \
+		init.c \
+		init_parse.c \
+		listen.c \
+		parse.c \
+		path_utils.c \
+		pipes.c \
+		signal.c \
+		split_argv.c \
+		strip_argv.c \
+		tab_autocomplete.c \
+		term_utils.c
+## Add main.c ^here^ when done testing
 
 ifeq ($(TESTING_ENV),)
     FILES += main.c

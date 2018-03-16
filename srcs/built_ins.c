@@ -1,6 +1,6 @@
 #include "ft_42sh.h"
 
-static void  built_in_else(t_env *e, t_built_in *bi)
+static void		built_in_else(t_env *e, t_built_in *bi)
 {
 	if (e->fd != -1)
 		bi->stdin_fd = dup(STDIN_FILENO);
@@ -22,7 +22,7 @@ static void  built_in_else(t_env *e, t_built_in *bi)
 	close(bi->fd[1]);
 }
 
-static int	built_in(t_env *e, int (*f)(t_env *, int, char **),
+static int		built_in(t_env *e, int (*f)(t_env *, int, char **),
 	int argc, char **argv)
 {
 	t_built_in bi;
@@ -48,7 +48,7 @@ static int	built_in(t_env *e, int (*f)(t_env *, int, char **),
 	return (bi.status);
 }
 
-int	built_ins(t_env *e, int argc, char **argv, int *status)
+int				built_ins(t_env *e, int argc, char **argv, int *status)
 {
 	if (ft_strequ(argv[0], "cd"))
 		*status = built_in(e, ft_cd, argc, argv);

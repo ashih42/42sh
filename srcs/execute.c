@@ -41,7 +41,7 @@ static void		do_pipe_and_fork(t_env *e, t_fork_execve *fe)
 	}
 }
 
-int			fork_execve(t_env *e, char *path, char **argv, char **envp)
+static int		fork_execve(t_env *e, char *path, char **argv, char **envp)
 {
 	t_fork_execve fe;
 
@@ -56,31 +56,27 @@ int			fork_execve(t_env *e, char *path, char **argv, char **envp)
 	return (fe.status);
 }
 
-static int		path_execute(t_env *e, char **argv, char **envp, int *status)
+static int		path_execute(t_env *e, char **argv, char **envp, t_exec *ex)
 {
-	char	*temp_path;
-	char	**path;
-	size_t	i;
-
-	temp_path = get_variable(e, "PATH");
+	ex->temp_path = get_variable(e, "PATH");
 	if (!ft_strchr(argv[0], '/'))
 	{
-		if (temp_path && (path = ft_strsplit(temp_path, ':')))
+		if (ex->temp_path && (ex->path = ft_strsplit(ex->temp_path, ':')))
 		{
-			i = -1;
-			while (path[++i])
+			ex->i = -1;
+			while (ex->path[++(ex->i)])
 			{
-				temp_path = build_filepath(path[i], argv[0]);
-				if (temp_path && access(temp_path, X_OK) == 0)
+				ex->temp_path = build_filepath(ex->path[ex->i], argv[0]);
+				if (ex->temp_path && access(ex->temp_path, X_OK) == 0)
 				{
-					*status = fork_execve(e, temp_path, argv, envp);
-					free(temp_path);
-					ft_char_array_del(path);
+					*(ex->status) = fork_execve(e, ex->temp_path, argv, envp);
+					free(ex->temp_path);
+					ft_char_array_del(ex->path);
 					return (0);
 				}
-				free(temp_path);
+				free(ex->temp_path);
 			}
-			ft_char_array_del(path);
+			ft_char_array_del(ex->path);
 		}
 		ft_printf("42sh: command not found: %s\n", argv[0]);
 		return (-1);
@@ -88,13 +84,13 @@ static int		path_execute(t_env *e, char **argv, char **envp, int *status)
 	return (42);
 }
 
-int		execute(t_env *e, char **argv, char **envp, int *status)
+int				execute(t_env *e, char **argv, char **envp, int *status)
 {
-	int ret;
+	t_exec		ex;
 
-	ret = path_execute(e, argv, envp, status);
-	if ((ret = path_execute(e, argv, envp, status)) <= 0)
-		return (ret);
+	ex.status = status;
+	if ((ex.ret = path_execute(e, argv, envp, &ex)) <= 0)
+		return (ex.ret);
 	if (access(argv[0], X_OK) == 0)
 		*status = fork_execve(e, argv[0], argv, envp);
 	else

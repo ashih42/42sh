@@ -43,44 +43,53 @@ typedef struct			s_env
 	int					redir_out;
 }						t_env;
 
-typedef struct 			s_add_terms
+typedef struct			s_add_terms
 {
-	int		head;
-	int		i;
-	int		inc;
-	char	*work_buf;
-	char	*word;
-	char	quote;
+	int					head;
+	int					i;
+	int					inc;
+	char				*work_buf;
+	char				*word;
+	char				quote;
 }						t_add_terms;
 
-typedef struct 			s_built_in
+typedef struct			s_built_in
 {
-	int		status;
-	int		fd[2];
-	int		stdin_fd;
-	int		stdout_fd;
-	int 	(*f)(t_env *, int, char **);
-	int 	argc;
-	char 	**argv;
+	int					status;
+	int					fd[2];
+	int					stdin_fd;
+	int					stdout_fd;
+	int					(*f)(t_env *, int, char **);
+	int					argc;
+	char				**argv;
 }						t_built_in;
 
-typedef struct 			s_fork_execve
+typedef struct			s_fork_execve
 {
-	int     pid;
-    int     status;
-    int     fd[2];
-	char	*path;
-	char	**argv;
-	char	**envp;
+	int					pid;
+	int					status;
+	int					fd[2];
+	char				*path;
+	char				**argv;
+	char				**envp;
 }						t_fork_execve;
 
-typedef struct 			s_dsp
+typedef struct			s_exec
 {
-	char	**envp;
-	char	**argv;
-	size_t	i;
-	int		status;
-	t_list	*pids;	
+	char				*temp_path;
+	char				**path;
+	size_t				i;
+	int					*status;
+	int					ret;
+}						t_exec;
+
+typedef struct			s_dsp
+{
+	char				**envp;
+	char				**argv;
+	size_t				i;
+	int					status;
+	t_list				*pids;
 }						t_dsp;
 
 t_env					*g_e;
@@ -215,7 +224,8 @@ void					strip_argv(char **argv);
 */
 int						matchparse(char *s1, char *s2);
 size_t					init_parse(char *s1, char *s2);
-t_list					*get_dir_contents_search(char *dir_path, int ac, char **argv);
+t_list					*get_dir_contents_search(char *dir_path, int ac,
+							char **argv);
 
 /*
 **	debug.c
