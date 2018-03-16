@@ -135,6 +135,9 @@ void	init_tab_auto(t_env *e)
 **	This function will get the first non-space character sequence that occurs
 **	before the current terminal cursor position.
 **
+**	If the cursor is in the middle of a word, then the function will return
+**	the entire word.
+**
 **	Spaces are defined as: ' ', '\t', '\n', '\r', '\f', or '\v'
 */
 
@@ -147,6 +150,8 @@ char	*get_curr_word(t_env *e)
 
 	curr_word = NULL;
 	tmp_curs = e->cursor;
+	while (e->buffer[tmp_curs] && !ft_is_space(e->buffer[tmp_curs]))
+		tmp_curs++;
 	while (tmp_curs > 0 && ft_is_space(e->buffer[tmp_curs - 1]))
 		tmp_curs--;
 	wend_pos = tmp_curs;
@@ -184,19 +189,22 @@ int		tab_autocomplete(t_env *e)
 	if (!curr_auto_lst)
 	{
 		cword = get_curr_word(e);
-		if (ft_strchr(cword, '/'))
+		if (cword)
 		{
-			if (e->tab_dir)
-				ft_lstdel(&e->tab_dir, (void (*)(void *, size_t))free);
-			e->tab_dir = get_dir_contents(cword, 0);
-			e->tab_mode = 1;
-			//ft_printf("\n|%s|\n", dir_to_lookup);
+			if (ft_strchr(cword, '/'))
+			{
+				if (e->tab_dir)
+					ft_lstdel(&e->tab_dir, (void (*)(void *, size_t))free);
+				e->tab_dir = get_dir_contents(cword, 0);
+				e->tab_mode = 1;
+				//ft_printf("\n|%s|\n", dir_to_lookup);
+			}
+			auto_lst_size = 0;
+			curr_auto_lst = build_auto_lst(e, e->tab_mode, cword, &auto_lst_size);
+			//print_list20(curr_auto_lst);
+			e->tab_pos = curr_auto_lst;
+			free(cword);
 		}
-		auto_lst_size = 0;
-		curr_auto_lst = build_auto_lst(e, e->tab_mode, cword, &auto_lst_size);
-		//print_list20(curr_auto_lst);
-		e->tab_pos = curr_auto_lst;
-		free(cword);
 	}
 	if (e->tab_pos)
 	{
