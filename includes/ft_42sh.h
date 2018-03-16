@@ -57,6 +57,7 @@ int						is_dir(char *path);
 void					enable_raw_mode(struct termios *orig_termios);
 void					disable_raw_mode(struct termios *orig_termios);
 void					clear_and_update_term(t_env *e, char *new_str);
+void					insert_and_update_term(t_env *e, char *new, size_t pos);
 void					move_cursor(t_env *e, int direction, size_t n_times);
 
 /*
@@ -146,6 +147,7 @@ int						history_bang_exploder(t_env *e);
 /*
 **	tab_autocomplete.c
 */
+char					*get_curr_word(t_env *e, size_t cursor_pos);
 int						tab_autocomplete(t_env *e);
 
 /*

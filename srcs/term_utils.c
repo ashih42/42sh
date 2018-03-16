@@ -79,23 +79,23 @@ void	clear_and_update_term(t_env *e, char *new_str)
 **
 */
 
-//	UNFINISHED FUNCTION (but doesn't affect compilation so just leave it be)
-
 void	insert_and_update_term(t_env *e, char *new, size_t pos)
 {
 	size_t	new_s;
-	//size_t	i;
+	size_t	old_s;
+	char	*old;
 
+	old = get_curr_word(e, pos);
+	old_s = ft_strlen(old);
+	free(old);
 	new_s = ft_strlen(new);
-	// while (e->cursor++ < e->buffer_end)
-	// 	ft_printf("\x1B[C");
-	// i = 0;
-	// while (i++ < e->buffer_end)
-	// 	ft_printf("\b \b");
-	ft_memmove(e->buffer + pos + new_s + 1,
-		e->buffer + pos, e->buffer_end - pos);
-	ft_memmove(e->buffer + pos - 1, new, new_s);
-	ft_printf("%s", e->buffer);
+	while (ft_strlen(e->buffer) + new_s > e->buffer_size)
+		extend_buffer(e);
+	ft_memmove(e->buffer + pos + new_s,
+		e->buffer + pos + old_s, e->buffer_end - (pos + old_s));
+	ft_memmove(e->buffer + pos, new, new_s);
+//	ft_printf("\nfinal: |%s|\n", e->buffer);
+	//clear_and_update_term(e, new);
 }
 
 /*

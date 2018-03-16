@@ -133,33 +133,31 @@ void	init_tab_auto(t_env *e)
 **	get_curr_word()
 **
 **	This function will get the first non-space character sequence that occurs
-**	before the current terminal cursor position.
+**	before the specified cursor_pos.
 **
-**	If the cursor is in the middle of a word, then the function will return
+**	If the cursor_pos is in the middle of a word, then the function will return
 **	the entire word.
 **
 **	Spaces are defined as: ' ', '\t', '\n', '\r', '\f', or '\v'
 */
 
-char	*get_curr_word(t_env *e)
+char	*get_curr_word(t_env *e, size_t cursor_pos)
 {
 	char	*curr_word;
 	size_t	wend_pos;
-	size_t	tmp_curs;
 	size_t	word_len;
 
 	curr_word = NULL;
-	tmp_curs = e->cursor;
-	while (e->buffer[tmp_curs] && !ft_is_space(e->buffer[tmp_curs]))
-		tmp_curs++;
-	while (tmp_curs > 0 && ft_is_space(e->buffer[tmp_curs - 1]))
-		tmp_curs--;
-	wend_pos = tmp_curs;
-	while (tmp_curs > 0 && !ft_is_space(e->buffer[tmp_curs - 1]))
-		tmp_curs--;
-	word_len = wend_pos - tmp_curs;
+	while (e->buffer[cursor_pos] && !ft_is_space(e->buffer[cursor_pos]))
+		cursor_pos++;
+	while (cursor_pos > 0 && ft_is_space(e->buffer[cursor_pos - 1]))
+		cursor_pos--;
+	wend_pos = cursor_pos;
+	while (cursor_pos > 0 && !ft_is_space(e->buffer[cursor_pos - 1]))
+		cursor_pos--;
+	word_len = wend_pos - cursor_pos;
 	if (word_len && (curr_word = (char *)malloc((word_len + 1) * sizeof(char))))
-		ft_strncpy(curr_word, e->buffer + tmp_curs, word_len);
+		ft_strncpy(curr_word, e->buffer + cursor_pos, word_len);
 	return (curr_word);
 }
 
@@ -188,7 +186,7 @@ int		tab_autocomplete(t_env *e)
 	}
 	if (!curr_auto_lst)
 	{
-		cword = get_curr_word(e);
+		cword = get_curr_word(e, e->cursor);
 		if (cword)
 		{
 			if (ft_strchr(cword, '/'))
@@ -208,6 +206,7 @@ int		tab_autocomplete(t_env *e)
 	}
 	if (e->tab_pos)
 	{
+		//insert_and_update_term(e, e->tab_pos->content, 4);
 		clear_and_update_term(e, e->tab_pos->content);
 		e->tab_pos = (e->tab_pos->next) ? e->tab_pos->next : curr_auto_lst;
 		e->reset_tab_auto = 0;
