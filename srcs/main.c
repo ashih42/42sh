@@ -1,6 +1,6 @@
 #include "ft_42sh.h"
 
-char 	*get_money_key(char *expr, int tst)
+char		*get_money_key(char *expr, int tst)
 {
 	int		i;
 	char	*key;
@@ -15,8 +15,7 @@ char 	*get_money_key(char *expr, int tst)
 	return (key);
 }
 
-
-void	replace_monies(t_env *e)
+void		replace_monies(t_env *e)
 {
 	int		i;
 	char	*money_key;
@@ -30,8 +29,8 @@ void	replace_monies(t_env *e)
 		{
 			money_value = get_variable(e, money_key);
 			money_value = (money_value) ? money_value : "";
-			while ((ft_strlen(e->buffer) +
-				ft_strlen(money_value) - ft_strlen(money_key) - 1) > e->buffer_size)
+			while ((ft_strlen(e->buffer) + ft_strlen(money_value) -
+				ft_strlen(money_key) - 1) > e->buffer_size)
 				extend_buffer(e);
 			ft_memmove(e->buffer + i + ft_strlen(money_value),
 				e->buffer + i + ft_strlen(money_key) + 1,
@@ -45,7 +44,7 @@ void	replace_monies(t_env *e)
 	}
 }
 
-void	sh_loop(t_env *e)
+void		sh_loop(t_env *e)
 {
 	char	***cmds;
 	size_t	i;
@@ -73,7 +72,7 @@ void	sh_loop(t_env *e)
 	}
 }
 
-int		main(int argc, char **argv, char **envp)
+int			main(int argc, char **argv, char **envp)
 {
 	t_env	e;
 

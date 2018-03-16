@@ -6,5 +6,3 @@ int			ft_unsetenv(t_env *e, int argc, char **argv)
 		del_variable(e, argv[1]);
 	return (0);
 }
-
-

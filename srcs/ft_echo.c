@@ -1,7 +1,5 @@
 #include "ft_42sh.h"
 
-#define INVALID_COLOR -1
-
 static int	insert_color_code(int color)
 {
 	char	*color_str;
@@ -32,8 +30,22 @@ static int	check_flags(char *arg, int *newline, int *color)
 	return (0);
 }
 
+static void	print_args(int i, int argc, char **argv)
+{
+	int		need_space;
+
+	need_space = 0;
+	while (++i < argc)
+	{
+		if (need_space)
+			ft_printf(" ");
+		ft_printf(argv[i]);
+		need_space = 1;
+	}
+}
+
 /*
-** ft_echo checks for flags in argv[1], and then argv[2] iff argv[1] is a valid flag
+** ft_echo checks for flags in argv[1], then argv[2] iff argv[1] is a valid flag
 ** flag: -n specifies no \n at the end (by default, echo prints \n at the end)
 ** flag: -cNUM, where NUM indicates text color, valid iff 0 <= NUM <= 255
 ** See 256 color cheatsheet here: https://jonasjacek.github.io/colors/
@@ -41,10 +53,9 @@ static int	check_flags(char *arg, int *newline, int *color)
 
 int			ft_echo(t_env *e, int argc, char **argv)
 {
-	int	i;
-	int	newline;
-	int	need_space;
-	int	color;
+	int		i;
+	int		newline;
+	int		color;
 
 	(void)e;
 	newline = 1;
@@ -57,14 +68,7 @@ int			ft_echo(t_env *e, int argc, char **argv)
 			i++;
 	}
 	insert_color_code(color);
-	need_space = 0;
-	while (++i < argc)
-	{
-		if (need_space)
-			ft_printf(" ");
-		ft_printf(argv[i]);
-		need_space = 1;
-	}
+	print_args(i, argc, argv);
 	ft_printf("\033[0m%s", (newline) ? "\n" : "");
 	return (0);
 }

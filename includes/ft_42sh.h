@@ -13,6 +13,7 @@
 # define BUFFER_SIZE	4096
 # define WHITESPACE		" \t\n\v\r\f"
 # define DELIM 			"\"'|<>"
+# define INVALID_COLOR	-1
 
 typedef struct			s_env
 {
