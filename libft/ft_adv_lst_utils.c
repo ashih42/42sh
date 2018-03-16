@@ -20,7 +20,7 @@
 **
 **	Permute so:
 **
-**	*begin_list -> D -> C -> B -> A 
+**	*begin_list -> D -> C -> B -> A
 */
 
 void	ft_lstrev(t_list **begin_list)

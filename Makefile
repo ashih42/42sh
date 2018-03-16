@@ -5,7 +5,6 @@ NAME = 42sh
 RM = /bin/rm -f
 MKDIR = /bin/mkdir
 CFLAGS = -Wall -Wextra -Werror 
-# ^ mispelled CFLAGS :>
 
 SRCS_DIR = ./srcs/
 INCLUDES = ./includes/
@@ -13,8 +12,10 @@ OBJS_DIR = ./objects/
 
 FILES = init.c listen.c parse.c dispatcher.c envp.c split_argv.c ft_cd.c \
 ft_echo.c ft_exit.c ft_setenv.c ft_unsetenv.c ft_env.c signal.c ft_history.c \
-ft_history_bang_exploder.c debug.c redir.c ft_3d_parser.c \
-tab_autocomplete.c path_utils.c globber.c term_utils.c init_parse.c
+ft_history_bang_exploder.c debug.c \
+tab_autocomplete.c path_utils.c globber.c term_utils.c init_parse.c \
+strip_argv.c 
+#built_ins.c execute.c pipes.c 
 
 ifeq ($(TESTING_ENV),)
     FILES += main.c

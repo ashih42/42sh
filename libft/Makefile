@@ -6,7 +6,7 @@
 #    By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/27 10:22:08 by ashih             #+#    #+#              #
-#    Updated: 2018/03/15 16:45:22 by nmei             ###   ########.fr        #
+#    Updated: 2018/03/16 05:30:12 by ashih            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,7 @@ NAME = libft.a
 CFLAGS = -Wall -Werror -Wextra
 
 SRC = del_and_gnl.c\
+	  dup3.c\
 	  ft_abs.c\
 	  ft_atodbl.c\
 	  ft_atoi.c\
@@ -132,7 +133,8 @@ SRC = del_and_gnl.c\
 	  skip_next_line.c\
 	  ft_dl_lst_utils.c\
 	  ft_adv_lst_utils.c\
-	  ft_is_space.c
+	  ft_is_space.c\
+	  list_to_array.c
 
 all: $(NAME)
 

@@ -12,8 +12,8 @@
 
 #include "libft.h"
 
-void		ft_lst_cond_remove(t_list **list, int (*cond)(char *, char*), char *key,
-	void (*del)(void *, size_t))
+void		ft_lst_cond_remove(t_list **list, int (*cond)(char *, char*),
+	char *key, void (*del)(void *, size_t))
 {
 	t_list	*temp;
 	t_list	*prev;

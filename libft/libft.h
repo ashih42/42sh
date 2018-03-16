@@ -6,7 +6,7 @@
 /*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/27 10:07:15 by ashih             #+#    #+#             */
-/*   Updated: 2018/03/15 16:46:16 by nmei             ###   ########.fr       */
+/*   Updated: 2018/03/16 05:30:00 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -136,7 +136,7 @@ double					ft_exp_dbl(int base, unsigned int power);
 double					ft_atodbl(const char *str);
 void					del_and_gnl(int fd, char **line);
 void					ft_lst_cond_remove(t_list **list,
-					int (*cond)(char *, char *), char *key, void (*del)(void *, size_t));
+	int (*cond)(char *, char *), char *key, void (*del)(void *, size_t));
 unsigned int			ft_rand(void);
 void					ft_srand(unsigned long seed);
 
@@ -182,5 +182,7 @@ void					ft_lstrev(t_list **begin_list);
 t_list					*ft_sorted_lst_merge(t_list *lst1, t_list *lst2,
 											int (*cmp)());
 int						ft_is_space(int c);
+char					**list_to_array(t_list *list);
+void					dup3(int fd1, int fd2);
 
 #endif

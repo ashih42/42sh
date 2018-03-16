@@ -43,15 +43,45 @@ typedef struct			s_env
 	int					redir_out;
 }						t_env;
 
-typedef struct 			s_add_term
+typedef struct 			s_add_terms
 {
 	int		head;
 	int		i;
+	int		inc;
 	char	*work_buf;
 	char	*word;
 	char	quote;
+}						t_add_terms;
 
-}						t_add_term;
+typedef struct 			s_built_in
+{
+	int		status;
+	int		fd[2];
+	int		stdin_fd;
+	int		stdout_fd;
+	int 	(*f)(t_env *, int, char **);
+	int 	argc;
+	char 	**argv;
+}						t_built_in;
+
+typedef struct 			s_fork_execve
+{
+	int     pid;
+    int     status;
+    int     fd[2];
+	char	*path;
+	char	**argv;
+	char	**envp;
+}						t_fork_execve;
+
+typedef struct 			s_dsp
+{
+	char	**envp;
+	char	**argv;
+	size_t	i;
+	int		status;
+	t_list	*pids;	
+}						t_dsp;
 
 t_env					*g_e;
 
@@ -92,21 +122,30 @@ int						extend_buffer(t_env *e);
 void					sh_listen(t_env *e);
 
 /*
-**	ft_3d_parser.c
-*/
-char					***ft_3d_parser(char *input);
-
-
-/*
 **	parse.c
 */
 char					***sh_parse(t_env *e);
-char 					**list_to_array(t_list *list);
 
 /*
 **	dispatcher.c
 */
 void					sh_dispatcher(t_env *e, char ***cmds);
+
+/*
+**	pipes.c
+*/
+void					setup_pipes(t_env *e, char ***cmds, size_t *i);
+
+/*
+**	execute.c
+*/
+int						execute(t_env *e, char **argv, char **envp,
+							int *status);
+
+/*
+**	built_ins.c
+*/
+int						built_ins(t_env *e, int argc, char **argv, int *status);
 
 /*
 **	ft_cd.c
@@ -142,7 +181,6 @@ int						ft_exit(t_env *e, int argc, char **argv);
 **	signal.c
 */
 void					ft_ctrl_c(int signo);
-void					ft_ctrl_z(int signo);
 
 /*
 **	ft_history.c
@@ -168,17 +206,16 @@ int						tab_autocomplete(t_env *e);
 char					**split_argv(char const *s, char *ws);
 
 /*
-**	str_explode.c
+**	strip_argv.c
 */
-void					str_explode(char *s, t_list **list);
+void					strip_argv(char **argv);
 
 /*
-**	redir.c
+** globber system
 */
-int 					redir_input(char **expr, char *filename);
-int 					redir_output(char **expr, char *filename);
-int 					redir_append(char **expr, char *filename);
-int						pipe_exprs(char **expr1, char **expr2);
+int						matchparse(char *s1, char *s2);
+size_t					init_parse(char *s1, char *s2);
+t_list					*get_dir_contents_search(char *dir_path, int ac, char **argv);
 
 /*
 **	debug.c
@@ -187,13 +224,5 @@ void					print_list(t_list *list);
 void					print_expr_list(t_list *expr_list);
 void					print_char2d(char **array);
 void					print_char4d(char ****array);
-
-t_list					*get_dir_contents_search(char *dir_path, int ac, char **argv);
-
-/*
-** globber system
-*/
-int						matchparse(char *s1, char *s2);
-size_t					init_parse(char *s1, char *s2);
 
 #endif

@@ -17,12 +17,12 @@ int			ft_setenv(t_env *e, int argc, char **argv)
 {
 	if (argc != 3)
 	{
-		ft_printf("usage: setenv var value\n");
+		ft_printf("usage: %s var value\n", argv[0]);
 		return (1);
 	}
 	if (ft_isdigit(argv[1][0]) || !is_valid(argv[1]))
 	{
-		ft_printf("setenv: Lexical error\n");
+		ft_printf("%s: Lexical error\n", argv[0]);
 		return (1);
 	}
 	set_variable(e, argv[1], argv[2]);

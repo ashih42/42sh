@@ -14,8 +14,8 @@ void	print_list(t_list *list)
 
 void	print_expr_list(t_list *expr_list)
 {
-	int i;
-	char **array;
+	int		i;
+	char	**array;
 
 	ft_printf("expr_list size = %d\n", ft_lst_size(expr_list));
 	while (expr_list != 0)
@@ -44,9 +44,9 @@ void	print_char2d(char **array)
 
 void	print_char4d(char ****array)
 {
-	int i;
-	int j;
-	char ***array_3d;
+	int		i;
+	int		j;
+	char	***array_3d;
 
 	i = -1;
 	while (array[++i])
