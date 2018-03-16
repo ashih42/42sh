@@ -18,17 +18,14 @@ void			del_variable(t_env *e, char *key)
 {
 	t_list		*node;
 	t_list		*prev;
-	char 		**entry;
+	char		**entry;
 
-	if (!(e->envp))
-		return ;
 	entry = e->envp->content;
 	if (ft_strequ(entry[0], key))
 	{
 		e->envp = e->envp->next;
 		ft_char_array_del(entry);
-		ft_memdel((void **)&node);
-		return ;
+		return (ft_memdel((void **)&node));
 	}
 	prev = e->envp;
 	node = e->envp->next;
@@ -39,14 +36,12 @@ void			del_variable(t_env *e, char *key)
 		{
 			prev->next = node->next;
 			ft_char_array_del(entry);
-			ft_memdel((void **)&node);
-			return ;
+			return (ft_memdel((void **)&node));
 		}
 		prev = node;
 		node = node->next;
 	}
 }
-
 
 char			*get_variable(t_env *e, char *key)
 {
@@ -103,7 +98,8 @@ char			**serialize_envp(t_env *e)
 		while (node)
 		{
 			entry = node->content;
-			if (!(map = ft_strnew(ft_strlen(entry[0]) + 1 + ft_strlen(entry[1]))))
+			if (!(map = ft_strnew(ft_strlen(entry[0]) + 1 +
+				ft_strlen(entry[1]))))
 			{
 				ft_char_array_del(table);
 				return (NULL);
