@@ -19,23 +19,34 @@ static int	built_in(t_env *e, int (*f)(t_env *, int, char **), int argc, char **
 	int		stdout_fd;
 
 	status = -1;
+	stdin_fd = -1;
+	stdout_fd = -1;
 	if (pipe(fd) < 0)
 		ft_printf("42sh: failed to create pipe\n");
 	else
 	{
-		stdin_fd = dup(STDIN_FILENO);
-		stdout_fd = dup(STDOUT_FILENO);
 		if (e->fd != -1)
+		{
 			dup2(e->fd, STDIN_FILENO);
+			stdin_fd = dup(STDIN_FILENO);
+		}
+		if (e->pipe || e->redir_out != -1)
+			stdout_fd = dup(STDOUT_FILENO);
 		if (e->pipe)
 			dup2(fd[1], STDOUT_FILENO);
 		if (e->redir_out != -1)
 			dup2(e->redir_out, STDOUT_FILENO);
 		status = f(e, argc, argv);
-		dup2(stdin_fd, STDIN_FILENO);
-		close(stdin_fd);
-		dup2(stdout_fd, STDOUT_FILENO);
-		close(stdout_fd);
+		if (stdin_fd != -1)
+		{
+			dup2(stdin_fd, STDIN_FILENO);
+			close(stdin_fd);
+		}
+		if (stdout_fd != -1)
+		{
+			dup2(stdout_fd, STDOUT_FILENO);
+			close(stdout_fd);
+		}
 		if (e->pipe)
 			e->fd = fd[0];
 		else
