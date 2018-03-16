@@ -22,13 +22,18 @@ static int	built_in(t_env *e, int (*f)(t_env *, int, char **), int argc, char **
 	stdin_fd = -1;
 	stdout_fd = -1;
 	if (pipe(fd) < 0)
+	{
 		ft_printf("42sh: failed to create pipe\n");
+		if (e->fd != -1)
+			close(e->fd);
+		e->fd = -1;
+	}
 	else
 	{
 		if (e->fd != -1)
 		{
-			dup2(e->fd, STDIN_FILENO);
 			stdin_fd = dup(STDIN_FILENO);
+			dup2(e->fd, STDIN_FILENO);
 		}
 		if (e->pipe || e->redir_out != -1)
 			stdout_fd = dup(STDOUT_FILENO);
@@ -47,16 +52,18 @@ static int	built_in(t_env *e, int (*f)(t_env *, int, char **), int argc, char **
 			dup2(stdout_fd, STDOUT_FILENO);
 			close(stdout_fd);
 		}
+		if (e->fd != -1)
+			close(e->fd);
+		e->fd = -1;
 		if (e->pipe)
 			e->fd = fd[0];
 		else
 			close(fd[0]);
 		close(fd[1]);
 	}
-	if (e->fd != -1)
-		close(e->fd);
 	if (e->redir_out != -1)
 		close(e->redir_out);
+	e->redir_out = -1;
 	return (status);
 }
 
@@ -89,7 +96,12 @@ int			fork_execve(t_env *e, char *path, char **argv, char **envp)
 
 	status = -1;
 	if (pipe(fd) < 0)
+	{
 		ft_printf("42sh: failed to create pipe\n");
+		if (e->fd != -1)
+			close(e->fd);
+		e->fd = -1;
+	}
 	else
 	{
 		pid = fork();
@@ -120,16 +132,16 @@ int			fork_execve(t_env *e, char *path, char **argv, char **envp)
 		}
 		if (e->fd != -1)
 			close(e->fd);
+		e->fd = -1;
 		if (e->pipe)
 			e->fd = fd[0];
 		else
 			close(fd[0]);
 		close(fd[1]);
 	}
-	if (e->fd != -1)
-		close(e->fd);
 	if (e->redir_out != -1)
 		close(e->redir_out);
+	e->redir_out = -1;
 	return (status);
 }
 

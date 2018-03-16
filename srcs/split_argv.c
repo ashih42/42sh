@@ -37,7 +37,8 @@ static void	add_terms(char const *s, t_list **list, char *ws)
 			else if (work_buf[i] == quote)
 				quote = 0;
 			else if (work_buf[i] == '\\' && (!quote ||
-				work_buf[i + 1] == '\'' || work_buf[i + 1] == '\"'))
+				work_buf[i + 1] == '\'' || work_buf[i + 1] == '\"' ||
+				work_buf[i + 1] == '$'))
 			{
 				if (!work_buf[++i])
 					break ;
@@ -77,7 +78,7 @@ static void	strip_argv(char **argv)
 				quote = 0;
 				ft_memmove(argv[i] + j, argv[i] + j + 1, ft_strlen(argv[i] + j + 1) + 1);
 			}
-			else if (argv[i][j] == '\\' && (!quote || argv[i][j + 1] == quote))
+			else if (argv[i][j] == '\\' && (!quote || argv[i][j + 1] == '\"' || argv[i][j + 1] == '\'' || argv[i][j + 1] == '$'))
 			{
 				ft_memmove(argv[i] + j, argv[i] + j + 1, ft_strlen(argv[i] + j + 1) + 1);
 				if (!argv[i][++j])
