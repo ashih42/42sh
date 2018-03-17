@@ -32,14 +32,6 @@ void	disable_raw_mode(struct termios *orig_termios)
 	tcsetattr(STDIN_FILENO, TCSAFLUSH, orig_termios);
 }
 
-int 	get_term_width(void)
-{
-	struct winsize w;
-
-	ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-	return (w.ws_col);
-}
-
 /*
 **	clear_and_update_term()
 **
@@ -56,8 +48,10 @@ int 	get_term_width(void)
 
 void	clear_and_update_term(t_env *e, char *new_str)
 {
-	size_t	i;
+	size_t			i;
+	struct winsize	w;
 
+	ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
 	while (e->cursor++ < e->buffer_end)
 		ft_printf("\x1B[C");
 	i = 0;
@@ -68,9 +62,8 @@ void	clear_and_update_term(t_env *e, char *new_str)
 	ft_memmove(e->buffer, new_str, i);
 	e->cursor = i;
 	e->buffer_end = i;
-	if (((int)(ft_strlen(get_variable(e, "PWD"))
-		 + ft_strlen(e->buffer) + 8)) >
-		get_term_width())
+	if (((int)(ft_strlen(get_variable(e, "PWD")) +
+			ft_strlen(e->buffer) + 8)) > w.ws_col)
 		ft_printf("\x1B[C");
 	ft_printf("%s", e->buffer);
 }
@@ -99,14 +92,13 @@ void	insert_and_update_term(t_env *e, char *new, size_t pos)
 		extend_buffer(e);
 	ft_memmove(e->buffer + pos + new_s,
 		e->buffer + pos + old_s, e->buffer_end - (pos + old_s));
-	//e->buffer_end += new_s - 1;
 	ft_memmove(e->buffer + pos, new, new_s);
 	e->buffer_end = ft_strlen(e->buffer);
 	e->cursor = pos + new_s;
 	ft_printf("\n%s\n", e->buffer);
 }
 
-size_t chars_until_newline(t_env *e, size_t cur_pos, int direction)
+size_t	chars_until_newline(t_env *e, size_t cur_pos, int direction)
 {
 	size_t	start;
 
@@ -114,75 +106,4 @@ size_t chars_until_newline(t_env *e, size_t cur_pos, int direction)
 	while (cur_pos > 0 && cur_pos < e->buffer_end && e->buffer[cur_pos] != '\n')
 		cur_pos = (direction) ? cur_pos + 1 : cur_pos - 1;
 	return ((start > cur_pos) ? start - cur_pos : cur_pos - start);
-}
-
-/*
-**	move_cursor()
-**
-**	Moves our terminal cursor:
-**	LEFT	(direction = 0)
-**	RIGHT	(direction = 1)
-**
-**	The cursor will be moved in 'direction' a total of 'n_times' except if
-**	the cursor hits the start or end position of the e->buffer.
-*/
-
-void	move_cursor(t_env *e, int direction, size_t n_times)
-{
-	size_t	n_chars;
-	size_t	n_fl_chars;
-	//size_t	n_ll_chars;
-	int		i;
-
-	n_fl_chars = ft_strchr(e->buffer, '\n') - e->buffer + 1;
-	i = -1;
-	while (n_times--)
-	{
-		// Pressing left arrow, works perfectly
-		if (direction == 0 && e->cursor > e->buffer_lock)
-		{
-			if (e->buffer[--e->cursor] == '\n')
-			{
-				//going UP
-				ft_putstr("\x1B[F");
-				n_chars = chars_until_newline(e, e->cursor - 1, 0) + 1;
-				while (n_chars--)
-				{
-					//going right
-					ft_putstr("\x1B[C");
-				}
-				if (e->cursor <= n_fl_chars)
-				{
-					while (++i < e->promt_len + 3)
-						ft_putstr("\x1B[C");
-				}
-			}
-			//going left
-			ft_putstr("\x1B[D");
-		}
-		// Pressing right arrow, off by one
-		else if (direction == 1 && e->cursor < e->buffer_end)
-		{
-			if (e->buffer[e->cursor] == '\n')
-			{
-				if (e->cursor > n_fl_chars + 3)
-				{
-					while (++i < e->promt_len)
-						ft_putstr("\x1B[D");
-				}
-				//going down
-				ft_putstr("\x1B[E");
-				n_chars = chars_until_newline(e, e->cursor + 1, 1) + 2;
-				while (n_chars--)
-				{
-					//going left
-					ft_putstr("\x1B[D");
-				}
-			}
-			else
-				ft_putstr("\x1B[C");
-			e->cursor++;
-			//going right
-		}
-	}
 }

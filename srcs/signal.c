@@ -18,7 +18,7 @@ void	ft_ctrl_c(int signo)
 	}
 	else
 	{
-		ft_printf("\n{robot} %s > ", get_variable(g_e, "PWD"));
+		g_e->promt_len = ft_printf("\n{robot} %s > ", get_variable(g_e, "PWD"));
 		ft_bzero(g_e->buffer, g_e->buffer_size + 1);
 		g_e->cursor = 0;
 		g_e->buffer_end = 0;

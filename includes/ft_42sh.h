@@ -110,7 +110,8 @@ void					enable_raw_mode(struct termios *orig_termios);
 void					disable_raw_mode(struct termios *orig_termios);
 void					clear_and_update_term(t_env *e, char *new_str);
 void					insert_and_update_term(t_env *e, char *new, size_t pos);
-void					move_cursor(t_env *e, int direction, size_t n_times);
+size_t 					chars_until_newline(t_env *e, size_t cur_pos,
+											int direction);
 
 /*
 **	envp.c
@@ -126,10 +127,22 @@ char					**serialize_envp(t_env *e);
 void					sh_init(t_env *e, char **envp);
 
 /*
+**	move_cursor.c
+*/
+void					move_cursor(t_env *e, int direction, size_t n_times);
+
+/*
 **	listen.c
 */
-int						extend_buffer(t_env *e);
 void					sh_listen(t_env *e);
+
+/*
+**	listen_utils.c
+*/
+int						extend_buffer(t_env *e);
+int						handle_esc_seq(t_env *e, char c);
+int						char_specs(t_env *e, char c);
+int						submit_attempt(t_env *e);
 
 /*
 **	parse.c
