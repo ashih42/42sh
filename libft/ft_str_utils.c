@@ -6,7 +6,7 @@
 /*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/17 01:24:38 by nmei              #+#    #+#             */
-/*   Updated: 2018/03/17 01:37:34 by nmei             ###   ########.fr       */
+/*   Updated: 2018/03/17 01:50:56 by nmei             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@ size_t	ft_count_occurrences(char *s, int c)
 **	returns -1 if 'c' never occurs in 's'
 */
 
-ssize_t	ft_first_occ_idx(char *s, int c)
+ssize_t	ft_fst_occ_idx(char *s, int c)
 {
 	ssize_t	idx;
 
@@ -54,7 +54,7 @@ ssize_t	ft_first_occ_idx(char *s, int c)
 **	returns -1 if 'c' never occurs in 's'
 */
 
-ssize_t	ft_last_occ_idx(char *s, int c)
+ssize_t	ft_lst_occ_idx(char *s, int c)
 {
 	ssize_t	idx;
 
