@@ -38,30 +38,36 @@ void	disable_raw_mode(struct termios *orig_termios)
 **	Used if we need to update the current line of the terminal.
 **	(i.e. with ft_history up/down arrows or with tab_autocomplete)
 **
-**	1) If the user's cursor is not at the end of the curr text, move it there
-**	2) Erase text on screen (amount of text is specified by e->buff_end)
-**	3) Now we can bzero the e->buffer
-**	4) cpy the contents of new_str into the e->buffer
-**	5) set our cursor position and buffer_end to the size of the new_str
+**	1) Erase text on current line ('\r' + "\x1B[K")
+**	2) Now we can bzero the e->buffer
+**	3) cpy the contents of new_str into the e->buffer
+**	4) set our cursor position and buffer_end to the size of the new_str
+**	5) Reprint our terminal prompt since we erased it in step 1)
 **	6) Print the updated e->buffer to show it on screen.
 */
 
 void	clear_and_update_term(t_env *e, char *new_str)
 {
 	size_t			i;
-	// struct winsize	w;
+	size_t			num_lines;
+	struct winsize	w;
 
-	// ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-	// if (((int)(ft_strlen(get_variable(e, "PWD")) +
-	// 		ft_strlen(e->buffer) + 8)) > w.ws_col)
-	// 	ft_printf("\x1B[C");
+	ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+	num_lines = ((ft_strlen(e->buffer) + (e->promt_len + 2)) / w.ws_col);
+	while (num_lines--)
+	{
+		ft_putstr("\r\x1B[K");
+		ft_putstr("\x1B[F");
+	}
 	ft_putstr("\r\x1B[K");
 	ft_bzero(e->buffer, e->buffer_end + 1);
 	i = ft_strlen(new_str);
+	while (i > e->buffer_size)
+		extend_buffer(e);
 	ft_memmove(e->buffer, new_str, i);
 	e->cursor = i;
 	e->buffer_end = i;
-	ft_printf("{robot} %s > ", get_variable(e, "PWD"));
+	e->promt_len = ft_printf("{robot} %s > ", get_variable(e, "PWD"));
 	ft_printf("%s", e->buffer);
 }
 
