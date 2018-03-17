@@ -5,6 +5,9 @@
 **
 **	Function to move our cursor left. Can also handle 'leftward' traversal of
 **	multiline content.
+**
+**	'\027[F'	Cursor Prev Line
+**	'\027[E'	Cursor Next Line
 */
 
 static void	move_left(t_env *e, size_t n_fl_chars)
@@ -33,6 +36,9 @@ static void	move_left(t_env *e, size_t n_fl_chars)
 **
 **	Function to move our cursor right. Can also handle 'rightward' traversal of
 **	multiline content.
+**
+**	'\027[F'	Cursor Prev Line
+**	'\027[E'	Cursor Next Line
 */
 
 static void	move_right(t_env *e, size_t n_fl_chars)
@@ -58,19 +64,36 @@ static void	move_right(t_env *e, size_t n_fl_chars)
 	e->cursor++;
 }
 
-static void	move_up(t_env *e, size_t n_fl_chars)
+/*
+**	
+*/
+
+static void	move_up(t_env *e, size_t n_fl_chars, size_t num_nl)
 {
 	if (e->cursor < n_fl_chars || n_fl_chars == 0)
 	{
-		move_cursor(e, 0, e->cursor);
+		move_cursor(e, 1, e->buffer_end);
+		while (num_nl--)
+		{
+			ft_putstr("\r\x1B[K");
+			ft_putstr("\x1B[F");
+		}
+
 		get_cmd_history(e, 0);
 	}
 }
 
-static void	move_down(t_env *e, size_t n_lnl_pos)
+static void	move_down(t_env *e, size_t n_lnl_pos, size_t num_nl)
 {
 	if (e->cursor > n_lnl_pos || n_lnl_pos == 0)
 	{
+		move_cursor(e, 1, e->buffer_end);
+		while (num_nl--)
+		{
+			ft_putstr("\r\x1B[K");
+			ft_putstr("\x1B[F");
+		}
+
 		get_cmd_history(e, 1);
 	}
 }
@@ -107,8 +130,8 @@ void	move_cursor(t_env *e, int direction, size_t n_times)
 		else if (direction == 1 && e->cursor < e->buffer_end)
 			move_right(e, n_flcs);
 		else if (direction == 2)
-			move_up(e, n_flcs);
+			move_up(e, n_flcs, num_nl);
 		else if (direction == 3)
-			move_down(e, n_lnl_pos);
+			move_down(e, n_lnl_pos, num_nl);
 	}
 }
