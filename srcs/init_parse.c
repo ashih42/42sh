@@ -49,7 +49,24 @@ size_t        init_parse(char *s1, char *s2)
               	i++;
                 j++;
             }
-            matchparse(s1, (str + 1));
+			if (s2[j] == ',')
+			{
+				j++;
+				ft_printf("Commas brah.13");
+				if (str[0] == '{')
+					matchparse(s1, str + 1);
+				else
+					matchparse(s1, str);
+				
+			}
+			else
+			{
+				ft_printf("No Commas brah.14");
+				if (str[0] == '{')
+					matchparse(s1, str + 1);
+				else 
+					matchparse(s1, str);
+			}
 			ft_bzero(str, k);
             i = 0;
         }

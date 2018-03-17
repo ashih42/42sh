@@ -1,6 +1,6 @@
 #include "ft_42sh.h"
 
-static void	lstn_loop(t_env *e, char *c, size_t *i)
+static void	lstn_loop(t_env *e, char *c, size_t i)
 {
 	while (read(STDIN_FILENO, c, 1) > 0)
 	{
@@ -14,13 +14,14 @@ static void	lstn_loop(t_env *e, char *c, size_t *i)
 			continue ;
 		ft_memmove(e->buffer + e->cursor + 1,
 					e->buffer + e->cursor, e->buffer_end++ - e->cursor);
-		*i = e->cursor++;
-		e->buffer[*i] = *c;
+		i = e->cursor++;
+		e->buffer[i] = *c;
 		if (*c == '\n')
 			continue ;
 		ft_printf("%s", e->buffer + (e->cursor - 1));
-		while (++(*i) < e->buffer_end)
-			ft_putchar('\b');
+		e->cursor = e->buffer_end;
+		while (++i < e->buffer_end)
+			move_cursor(e, 0, 1);
 	}
 	ft_putchar('\n');
 }
@@ -39,7 +40,6 @@ void		sh_listen(t_env *e)
 {
 	struct termios	orig_termios;
 	char			c;
-	size_t			i;
 
 	ft_bzero(e->buffer, e->buffer_size + 1);
 	e->cursor = 0;
@@ -47,6 +47,6 @@ void		sh_listen(t_env *e)
 	e->buffer_end = 0;
 	e->promt_len = ft_printf("{robot} %s > ", get_variable(e, "PWD"));
 	enable_raw_mode(&orig_termios);
-	lstn_loop(e, &c, &i);
+	lstn_loop(e, &c, 0);
 	disable_raw_mode(&orig_termios);
 }
