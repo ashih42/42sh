@@ -43,7 +43,6 @@ t_list	*split_commas(char *s)
 	int		brackets;
 	char	*str;
 
-
 	brackets = 0;
 	list = 0;
 	head = s;
@@ -68,15 +67,11 @@ t_list	*split_commas(char *s)
 	return (list);
 }
 
-
-
-// no error checking.  assume there are valid matching {}
-void	str_factory(char *s, t_list **list)
+void	ft_str_factory(char *s, t_list **list)
 {
 	char	*head;
 	char	*mid;
 	char	*tail;
-//	char	**mid_array;
 	t_list	*mid_list;
 	t_list	*mid_list_head;
 	char	*temp;;
@@ -84,7 +79,6 @@ void	str_factory(char *s, t_list **list)
 	int		i;
 
 	ft_strtrisect(s, &head, &tail, &mid);
-//	mid_array = ft_strsplit(mid, ',');		// THIS WON'T WORK. WRITE A NEW FUNCTION
 	mid_list = split_commas(mid);
 	mid_list_head = mid_list;
 	while (mid_list)
@@ -96,40 +90,13 @@ void	str_factory(char *s, t_list **list)
 		ft_strdel(&del);
 		mid_list = mid_list->next;
 	}
-/*	
-	i = -1;
-	while (mid_array[++i])
-	{
-		temp = ft_strjoin(head, mid_array[i]);
-		del = temp;
-		temp = ft_strjoin(temp, tail);
-		ft_lst_add_last(list, ft_lst_new_ref(temp, sizeof(char *)));
-		ft_strdel(&del);
-	}
-*/
 	ft_strdel(&head);
 	ft_strdel(&mid);
 	ft_strdel(&tail);
-//	ft_char_array_del(mid_array);
 	ft_lstdel(&mid_list_head, (void (*)(void *, size_t))free);
 }
 
-// return 1 if every str in list does not contain {}
-// return 0 if there are still terms to be factory'd
-int		list_is_ready(t_list *list)
-{
-	char	*str;
-	while (list)
-	{
-		str = list->content;
-		if (ft_strchr(str, '{'))
-			return (0);
-		list = list->next;
-	}
-	return (1);
-}
-
-t_list *super_factory(char *s)
+t_list *ft_super_factory(char *s)
 {
 	t_list *list = 0;
 	t_list *head;
@@ -139,11 +106,11 @@ t_list *super_factory(char *s)
 	head = list;
 	while (list)
 	{
-		ft_printf("list->content = %s\n", list->content);
+//		ft_printf("list->content = %s\n", list->content);
 		str = list->content;
 		if (ft_strchr(str, '{'))
 		{
-			str_factory(str, &list);
+			ft_str_factory(str, &list);
 			ft_strdel(&str);
 			list->content = 0;
 		}
@@ -190,7 +157,7 @@ int		main(int argc, char **argv)
 	char test_str[] = "{{a,b}.txt,{c,d}.c}";
 
 //	t_list *list = split_commas(test_str);
-	t_list *list = super_factory(test_str);
+	t_list *list = ft_super_factory(test_str);
 	ft_printf("list size = %d\n", ft_lst_size(list));
 	print_list(list);
 
