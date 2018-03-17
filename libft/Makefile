@@ -6,7 +6,7 @@
 #    By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/27 10:22:08 by ashih             #+#    #+#              #
-#    Updated: 2018/03/17 01:39:26 by nmei             ###   ########.fr        #
+#    Updated: 2018/03/17 03:31:37 by ashih            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -127,6 +127,7 @@ SRC = del_and_gnl.c\
 	  ft_strstr.c\
 	  ft_strsub.c\
 	  ft_strtrim.c\
+	  ft_substr.c\
 	  ft_tolower.c\
 	  ft_toupper.c\
 	  get_next_line.c\

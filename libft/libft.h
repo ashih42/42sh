@@ -6,7 +6,7 @@
 /*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/27 10:07:15 by ashih             #+#    #+#             */
-/*   Updated: 2018/03/17 01:51:08 by nmei             ###   ########.fr       */
+/*   Updated: 2018/03/17 03:31:01 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -184,6 +184,7 @@ t_list					*ft_sorted_lst_merge(t_list *lst1, t_list *lst2,
 int						ft_is_space(int c);
 char					**list_to_array(t_list *list);
 void					dup3(int fd1, int fd2);
+char					*ft_substr(char *s, int start, int len);
 
 /*
 **	ft_str_utils.c
@@ -192,5 +193,7 @@ void					dup3(int fd1, int fd2);
 size_t					ft_count_occurrences(char *s, int c);
 ssize_t					ft_fst_occ_idx(char *s, int c);
 ssize_t					ft_lst_occ_idx(char *s, int c);
+
+
 
 #endif

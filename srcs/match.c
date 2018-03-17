@@ -63,6 +63,8 @@ int				valid_brackets(char *s)
 			break ;
 		i++;
 	}
+	if (stack)
+		ret = -1;
 	ft_lstdel(&stack, NULL);
 	return (ret);
 }
@@ -91,8 +93,7 @@ int				match(char *s1, char *s2)
 
 	while (1)
 	{
-		cnt = 0;
-		if (*s2 == '\\')
+		if (!(cnt = 0) && *s2 == '\\')
 		{
 			if (*s1 != *(++s2))
 				return (0);
