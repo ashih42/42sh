@@ -220,6 +220,7 @@ int						history_bang_exploder(t_env *e);
 /*
 **	tab_autocomplete.c
 */
+t_list					*get_dir_contents(char *dir_path, int e_mode);
 char					*get_curr_word(t_env *e, size_t cursor_pos);
 int						tab_autocomplete(t_env *e);
 
@@ -232,6 +233,28 @@ char					**split_argv(char const *s, char *ws);
 **	strip_argv.c
 */
 void					strip_argv(char **argv);
+
+/*
+**	ft_super_factory.c
+*/
+t_list					*ft_super_factory(char *s);
+
+/*
+**	match.c
+*/
+int						valid_brackets(char *s);
+int						should_glob(char *s2);
+int						match(char *s1, char *s2);
+
+/*
+**	split_dirs.c
+*/
+char					**split_dirs(char const *s);
+
+/*
+**	ft_glob.c
+*/
+t_list					*ft_glob(char *s2);
 
 /*
 ** globber system

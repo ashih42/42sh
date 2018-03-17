@@ -38,6 +38,7 @@ static void	add_terms_helper(char *ws, t_add_terms *at)
 static void	add_terms(char const *s, t_list **list, char *ws)
 {
 	t_add_terms	at;
+	t_list		*glob;
 
 	ft_bzero(&at, sizeof(t_add_terms));
 	at.work_buf = ft_strdup(s);
@@ -51,7 +52,16 @@ static void	add_terms(char const *s, t_list **list, char *ws)
 			continue ;
 		at.word = ft_strnew(at.i - at.head);
 		ft_strncpy(at.word, at.work_buf + at.head, at.i - at.head);
-		ft_lst_add_last(list, ft_lst_new_ref(at.word, sizeof(char *)));
+		if (should_glob(at.word))
+		{
+			if ((glob = ft_glob(at.word)))
+				ft_lst_add_last(list, glob);
+			else
+				ft_printf("42sh: no matches found: %s\n", at.word);
+			free(at.word);
+		}
+		else
+			ft_lst_add_last(list, ft_lst_new_ref(at.word, sizeof(char *)));
 	}
 	free(at.work_buf);
 }
@@ -61,7 +71,7 @@ char		**split_argv(char const *s, char *ws)
 	char	**result;
 	t_list	*list;
 	size_t	size;
-	char	*path;
+//	char	*path;
 
 	if (s == NULL || s[0] == '\0')
 		return (NULL);
@@ -72,14 +82,13 @@ char		**split_argv(char const *s, char *ws)
 	size = ft_lst_size(list);
 	result = list_to_array(list);
 	ft_lstdel(&list, (void (*)(void *, size_t))free);
-
+/*
 	path = getcwd(NULL, 0);
 	list = get_dir_contents_search(path, size, result);
 	free(path);
 	result = list_to_array(list);
 	ft_lstdel(&list, (void (*)(void *, size_t))free);
-
+*/
 	strip_argv(result);
-//	print_char2d(result);
 	return (result);
 }

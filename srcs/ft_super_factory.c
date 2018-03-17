@@ -1,4 +1,4 @@
-#include "libft/libft.h"
+#include "ft_42sh.h"
 
 int		find_closing(char *s)
 {
@@ -76,7 +76,7 @@ void	ft_str_factory(char *s, t_list **list)
 	t_list	*mid_list_head;
 	char	*temp;;
 	char	*del;
-	int		i;
+//	int		i;
 
 	ft_strtrisect(s, &head, &tail, &mid);
 	mid_list = split_commas(mid);
@@ -99,6 +99,8 @@ void	ft_str_factory(char *s, t_list **list)
 t_list *ft_super_factory(char *s)
 {
 	t_list *list = 0;
+	t_list *prev = 0;
+	t_list *next;
 	t_list *head;
 	char	*str;
 
@@ -108,17 +110,24 @@ t_list *ft_super_factory(char *s)
 	{
 //		ft_printf("list->content = %s\n", list->content);
 		str = list->content;
+		next = list->next;
 		if (ft_strchr(str, '{'))
 		{
 			ft_str_factory(str, &list);
 			ft_strdel(&str);
-			list->content = 0;
+			if (prev)
+				prev->next = next;
+			else
+				head = next;
+			free(list);
 		}
-		list = list->next;
+		else
+			prev = list;
+		list = next;
 	}
 	return (head);
 }
-
+/*
 void	print_list(t_list *list)
 {
 	ft_printf("list: ");
@@ -129,40 +138,40 @@ void	print_list(t_list *list)
 	}
 	ft_printf("\n");
 }
-
-int		main(int argc, char **argv)
-{
-	
-	char *head;
-	char *tail;
-	char *mid;
-//	char str[] = "ft_{a,b}{1,2,3}.c";
-//	char str[] = "ft_{a,{1,2}.doop}.c";
-
-//	char str[] = "a{bc{d}e}";
-//	ft_printf("find_closing() = %d\n", find_closing(str));
-/*
-	ft_strtrisect(str, &head, &tail, &mid);
-	ft_printf("head = |%s|\n", head);
-	ft_printf("mid = |%s|\n", mid);
-	ft_printf("tail = |%s|\n", tail);
 */
-
-
-	
-
-//	char test_str[] = "ft_{a,b}.c";
-//	char test_str[] = "ft_{a,b}{1,2,3}.c";
-//	char test_str[] = "ft_{a,{1,2}XYZ}.c";
-	char test_str[] = "{{a,b}.txt,{c,d}.c}";
-
-//	t_list *list = split_commas(test_str);
-	t_list *list = ft_super_factory(test_str);
-	ft_printf("list size = %d\n", ft_lst_size(list));
-	print_list(list);
-
-
-
-
-	return (0);
-}
+//	int		main(int argc, char **argv)
+//	{
+//		
+//	//	char *head;
+//	//	char *tail;
+//	//	char *mid;
+//	//	char str[] = "ft_{a,b}{1,2,3}.c";
+//	//	char str[] = "ft_{a,{1,2}.doop}.c";
+//	
+//	//	char str[] = "a{bc{d}e}";
+//	//	ft_printf("find_closing() = %d\n", find_closing(str));
+//	/*
+//		ft_strtrisect(str, &head, &tail, &mid);
+//		ft_printf("head = |%s|\n", head);
+//		ft_printf("mid = |%s|\n", mid);
+//		ft_printf("tail = |%s|\n", tail);
+//	*/
+//	
+//	
+//		
+//	
+//	//	char test_str[] = "ft_{a,b}.c";
+//	//	char test_str[] = "ft_{a,b}{1,2,3}.c";
+//	//	char test_str[] = "ft_{a,{1,2}XYZ}.c";
+//		char test_str[] = "{{a,b}.txt,{c,d}.c}";
+//	
+//	//	t_list *list = split_commas(test_str);
+//		t_list *list = ft_super_factory(test_str);
+//		ft_printf("list size = %d\n", ft_lst_size(list));
+//		print_list(list);
+//	
+//	
+//	
+//	
+//		return (0);
+//	}

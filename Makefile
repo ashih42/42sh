@@ -36,7 +36,11 @@ FILES = built_ins.c \
 		strip_argv.c \
 		tab_autocomplete.c \
 		term_utils.c \
-		move_cursor.c
+		move_cursor.c \
+		ft_super_factory.c \
+		match.c \
+		split_dirs.c \
+		ft_glob.c
 ## Add main.c ^here^ when done testing
 
 ifeq ($(TESTING_ENV),)
