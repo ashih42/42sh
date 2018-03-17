@@ -7,7 +7,7 @@ static int	export_helper(t_env *e, char *str)
 
 	if (!ft_strchr(str, '='))
 	{
-		ft_printf("export: Lexical error: %s\n", str);
+		ft_printf("export: lexical error: %s\n", str);
 		return (1);
 	}
 	name = ft_strnew(ft_strchr(str, '=') - str);
@@ -15,7 +15,7 @@ static int	export_helper(t_env *e, char *str)
 	value = ft_strchr(str, '=') + 1;
 	if (ft_isdigit(name[0]) || !is_valid(name))
 	{
-		ft_printf("export: Lexical error: %s\n", str);
+		ft_printf("export: not an identifier: %s\n", name);
 		ft_strdel(&name);
 		return (1);
 	}
