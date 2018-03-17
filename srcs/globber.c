@@ -120,6 +120,7 @@ int matchparse (char *s1, char *s2)
 		else if (s2[j] != '*' && s2[j] != '?' && s2[j] != '[' && s2[j] != '{')
 		{
 			ft_printf("I don't remember why this section is here. but it is.8\n");
+			ft_printf("%c", s2[j]);
 			return (1);
 		}
 		else if (matchparse(&s1[i++], &s2[j + 1]))
@@ -127,7 +128,7 @@ int matchparse (char *s1, char *s2)
 	}
 }
 
-/*void	print_list2(t_list *list)
+void	print_list2(t_list *list)
 {
 	t_list *pointer;
 
@@ -248,4 +249,4 @@ t_list	*get_dir_contents_search(char *dir_path, int ac, char **av)
 		i++;
 	}
 	return (result);
-}*/
+}
