@@ -16,6 +16,9 @@ static int	is_ws(char c, char *ws)
 
 static void	add_terms_helper(char *ws, t_add_terms *at)
 {
+	while (is_ws(at->work_buf[at->i], ws))
+		at->i++;
+	at->head = at->i--;
 	while (at->work_buf[++(at->i)])
 	{
 		if ((!at->quote && (at->work_buf[at->i] == '\"' ||
@@ -44,9 +47,6 @@ static void	add_terms(char const *s, t_list **list, char *ws)
 	at.work_buf = ft_strdup(s);
 	while (at.work_buf[at.i])
 	{
-		while (is_ws(at.work_buf[at.i], ws))
-			at.i++;
-		at.head = at.i--;
 		add_terms_helper(ws, &at);
 		if (at.i <= at.head)
 			continue ;
@@ -71,7 +71,6 @@ char		**split_argv(char const *s, char *ws)
 	char	**result;
 	t_list	*list;
 	size_t	size;
-//	char	*path;
 
 	if (s == NULL || s[0] == '\0')
 		return (NULL);
@@ -82,13 +81,6 @@ char		**split_argv(char const *s, char *ws)
 	size = ft_lst_size(list);
 	result = list_to_array(list);
 	ft_lstdel(&list, (void (*)(void *, size_t))free);
-/*
-	path = getcwd(NULL, 0);
-	list = get_dir_contents_search(path, size, result);
-	free(path);
-	result = list_to_array(list);
-	ft_lstdel(&list, (void (*)(void *, size_t))free);
-*/
 	strip_argv(result);
 	return (result);
 }

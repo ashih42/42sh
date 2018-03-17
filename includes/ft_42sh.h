@@ -93,6 +93,26 @@ typedef struct			s_dsp
 	t_list				*pids;
 }						t_dsp;
 
+typedef struct 			s_sprf
+{
+	t_list 				*list;
+	t_list 				*prev;
+	t_list 				*next;
+	t_list 				*head;
+	char				*str;
+}						t_sprf;
+
+typedef struct 			s_strf
+{
+	char				*head;
+	char				*mid;
+	char				*tail;
+	t_list				*mid_list;
+	t_list				*mid_list_head;
+	char				*temp;
+	char				*del;
+}						t_strf;
+
 t_env					*g_e;
 
 /*
