@@ -288,14 +288,6 @@ char					**split_dirs(char const *s);
 t_list					*ft_glob(char *s2);
 
 /*
-** globber system
-*/
-int						matchparse(char *s1, char *s2);
-size_t					init_parse(char *s1, char *s2);
-t_list					*get_dir_contents_search(char *dir_path, int ac,
-							char **argv);
-
-/*
 **	debug.c
 */
 void					print_list(t_list *list);
