@@ -56,7 +56,7 @@ static void	prepend_dirs(char *prepend, t_list *files)
 	while (temp)
 	{
 		orig = temp->content;
-		temp->content = ft_strjoin(prepend, (char *)temp->content);
+		temp->content = build_filepath(prepend, (char *)temp->content);
 		if (temp->content)
 			free(orig);
 		else
@@ -93,25 +93,24 @@ t_list		*ft_glob(char *s2)
 	t_list	*matchlist;
 	size_t	i;
 
-	if (!should_glob(s2) || valid_brackets(s2) < 0 ||
-		!(dirs = split_dirs(s2)))
+	if (!should_glob(s2) || valid_brackets(s2) < 0 || !(dirs = split_dirs(s2)))
 		return (NULL);
 	if (*s2 != '/')
 		files = get_dir_contents(".", 0);
 	else
 	{
 		files = get_dir_contents("/", 0);
-		prepend_dirs("/", files);
+		prepend_dirs("", files);
 	}
 	i = -1;
 	while (files && dirs[++i])
 	{
-		if (i > 0)
-			update_files(&files);
+		(i > 0) ? update_files(&files) : (void)0;
 		matchlist = ft_super_factory(dirs[i]);
 		if (files)
 			match_files(&files, matchlist, (dirs[i + 1]) ? 1 : 0);
 		ft_lstdel(&matchlist, (void (*)(void *, size_t))free);
 	}
+	ft_char_array_del(dirs);
 	return (files);
 }
