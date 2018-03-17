@@ -5,13 +5,19 @@ static int	match_file(char *filename, t_list *matchlist)
 	t_list	*temp;
 	t_list	*prev;
 	t_list	*next;
+	size_t	i;
 
+	i = ft_strlen(filename);
+	while (i--)
+		if (filename[i] == '/' && (i == 0 || filename[i - 1] != '\\'))
+			break ;
+	i++;
 	temp = matchlist;
 	prev = NULL;
 	while (temp)
 	{
 		next = temp->next;
-		if (match(filename, (char *)temp->content))
+		if (match(filename + i, (char *)temp->content))
 			return (1);
 		else
 			prev = temp;
