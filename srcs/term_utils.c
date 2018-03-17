@@ -49,22 +49,19 @@ void	disable_raw_mode(struct termios *orig_termios)
 void	clear_and_update_term(t_env *e, char *new_str)
 {
 	size_t			i;
-	struct winsize	w;
+	// struct winsize	w;
 
-	ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-	while (e->cursor++ < e->buffer_end)
-		ft_printf("\x1B[C");
-	i = 0;
-	while (i++ < e->buffer_end)
-		ft_printf("\b \b");
+	// ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+	// if (((int)(ft_strlen(get_variable(e, "PWD")) +
+	// 		ft_strlen(e->buffer) + 8)) > w.ws_col)
+	// 	ft_printf("\x1B[C");
+	ft_putstr("\r\x1B[K");
 	ft_bzero(e->buffer, e->buffer_end + 1);
 	i = ft_strlen(new_str);
 	ft_memmove(e->buffer, new_str, i);
 	e->cursor = i;
 	e->buffer_end = i;
-	if (((int)(ft_strlen(get_variable(e, "PWD")) +
-			ft_strlen(e->buffer) + 8)) > w.ws_col)
-		ft_printf("\x1B[C");
+	ft_printf("{robot} %s > ", get_variable(e, "PWD"));
 	ft_printf("%s", e->buffer);
 }
 

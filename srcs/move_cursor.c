@@ -78,7 +78,6 @@ static void	move_up(t_env *e, size_t n_fl_chars, size_t num_nl)
 			ft_putstr("\r\x1B[K");
 			ft_putstr("\x1B[F");
 		}
-
 		get_cmd_history(e, 0);
 	}
 }
@@ -93,7 +92,6 @@ static void	move_down(t_env *e, size_t n_lnl_pos, size_t num_nl)
 			ft_putstr("\r\x1B[K");
 			ft_putstr("\x1B[F");
 		}
-
 		get_cmd_history(e, 1);
 	}
 }
