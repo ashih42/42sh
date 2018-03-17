@@ -109,15 +109,9 @@ t_list		*ft_glob(char *s2)
 		if (i > 0)
 			update_files(&files);
 		matchlist = ft_super_factory(dirs[i]);
-		ft_printf("dirs[i] = %s\n", dirs[i]);
-		print_list(matchlist);
-
 		if (files)
 			match_files(&files, matchlist, (dirs[i + 1]) ? 1 : 0);
 		ft_lstdel(&matchlist, (void (*)(void *, size_t))free);
 	}
-
-//	print_list(files);
-
 	return (files);
 }
