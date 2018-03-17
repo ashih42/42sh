@@ -1,19 +1,27 @@
 #include "ft_42sh.h"
 
-static int		find_closing(char *s)
+static int		find_closing(char *s, int *open)
 {
-	int level;
-	int i;
+	int	level;
+	int	i;
+	int	dummy;
 	
-	level = 1;
-	i = ft_strchr(s, '{') - s + 1;
+	level = 0;
+	i = 0;
+	if (!open)
+		open = &dummy;
+	*open = -1;
 	while (s[i])
 	{
-		if (s[i] == '{')
+		if (s[i] == '{' && (i == 0 || s[i - 1] != '\\'))
+		{
+			if (*open < 0)
+				*open = i;
 			level++;
-		else if (s[i] == '}')
+		}
+		else if (s[i] == '}' && (i == 0 || s[i - 1] != '\\'))
 			level--;
-		if (level == 0)
+		if (*open >= 0 && level == 0)
 			return (i);
 		i++;
 	}
@@ -32,11 +40,12 @@ char	*ft_substr(char *s, int start, int len)
 static void		ft_strtrisect(char *s, char **head, char **tail, char **mid)
 {
 	int	close;
+	int	open;
 
-	close = find_closing(s);
-	*head = ft_substr(s, 0, ft_strchr(s, '{') - s);
+	close = find_closing(s, &open);
+	*head = ft_substr(s, 0, open);
 	*tail = ft_substr(s + close + 1, 0, ft_strlen(s + close + 1));
-	*mid = ft_substr(ft_strchr(s, '{') + 1, 0, s + close - ft_strchr(s, '{') - 1);
+	*mid = ft_substr(s + open + 1, 0, close - open - 1);
 }
 
 static t_list	*split_commas(char *s)
@@ -51,11 +60,11 @@ static t_list	*split_commas(char *s)
 	head = s;
 	while (*s)
 	{
-		if (*s == '{')
+		if (*s == '{' && (s == head || *(s - 1) != '\\'))
 			brackets++;
-		else if (*s == '}')
+		else if (*s == '}' && (s == head || *(s - 1) != '\\'))
 			brackets--;
-		else if (*s == ',' && brackets == 0)
+		else if (*s == ',' && brackets == 0 && (s == head || *(s - 1) != '\\'))
 		{
 			str = ft_strnew(s - head);
 			ft_strncpy(str, head, s - head);
@@ -113,7 +122,7 @@ t_list 			*ft_super_factory(char *s)
 	{
 		str = list->content;
 		next = list->next;
-		if (ft_strchr(str, '{'))
+		if (find_closing(str, NULL) >= 0)
 		{
 			ft_str_factory(str, &list);
 			ft_strdel(&str);
