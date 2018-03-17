@@ -50,10 +50,9 @@ void	clear_and_update_term(t_env *e, char *new_str)
 {
 	size_t			i;
 	size_t			num_lines;
-	struct winsize	w;
 
-	ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
-	num_lines = ((ft_strlen(e->buffer) + (e->promt_len + 2)) / w.ws_col);
+	ioctl(STDOUT_FILENO, TIOCGWINSZ, &e->w);
+	num_lines = ((ft_strlen(e->buffer) + (e->promt_len + 2)) / e->w.ws_col);
 	while (num_lines--)
 	{
 		ft_putstr("\r\x1B[K");

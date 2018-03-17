@@ -43,22 +43,16 @@ static void	move_left(t_env *e, size_t n_fl_chars)
 
 static void	move_right(t_env *e, size_t n_fl_chars)
 {
-	size_t	n_chars;
+	//size_t	n_chars;
 	int		i;
 
+	(void)n_fl_chars;
 	i = -1;
+	// ioctl(STDOUT_FILENO, TIOCGWINSZ, &e->w);
+	// if (e->cursor && e->cursor % (e->w.ws_col + 1) == 0)
+	// 	ft_putstr("\r\x1B[E");
 	if (e->buffer[e->cursor] == '\n')
-	{
-		if (e->cursor > n_fl_chars + 3)
-		{
-			while (++i < e->promt_len)
-				ft_putstr("\x1B[D");
-		}
-		ft_putstr("\x1B[E");
-		n_chars = chars_until_newline(e, e->cursor + 1, 1) + 2;
-		while (n_chars--)
-			ft_putstr("\x1B[D");
-	}
+		ft_putstr("\x1B[E\r");
 	else
 		ft_putstr("\x1B[C");
 	e->cursor++;

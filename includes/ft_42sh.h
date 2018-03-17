@@ -42,6 +42,7 @@ typedef struct			s_env
 	bool				pipe;
 	int					fd;
 	int					redir_out;
+	struct winsize		w;
 }						t_env;
 
 typedef struct			s_add_terms
