@@ -6,7 +6,7 @@
 #    By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/27 10:22:08 by ashih             #+#    #+#              #
-#    Updated: 2018/03/16 05:30:12 by ashih            ###   ########.fr        #
+#    Updated: 2018/03/17 01:39:26 by nmei             ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -134,7 +134,8 @@ SRC = del_and_gnl.c\
 	  ft_dl_lst_utils.c\
 	  ft_adv_lst_utils.c\
 	  ft_is_space.c\
-	  list_to_array.c
+	  list_to_array.c\
+	  ft_str_utils.c
 
 all: $(NAME)
 
