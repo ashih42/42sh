@@ -76,15 +76,21 @@ void	clear_and_update_term(t_env *e, char *new_str)
 }
 
 /*
-**
+** Super broken function yo...
 */
 
 void	insert_and_update_term(t_env *e, char *new, size_t pos)
 {
 	size_t	new_s;
 	size_t	old_s;
+	size_t	i;
 	char	*old;
 
+	while (e->cursor++ < e->buffer_end)
+		ft_printf("\x1B[C");
+	i = 0;
+	while (i++ < e->buffer_end)
+		ft_printf("\b \b");
 	old = get_curr_word(e, pos);
 	old_s = ft_strlen(old);
 	free(old);
@@ -93,35 +99,93 @@ void	insert_and_update_term(t_env *e, char *new, size_t pos)
 		extend_buffer(e);
 	ft_memmove(e->buffer + pos + new_s,
 		e->buffer + pos + old_s, e->buffer_end - (pos + old_s));
+	//e->buffer_end += new_s - 1;
 	ft_memmove(e->buffer + pos, new, new_s);
-//	ft_printf("\nfinal: |%s|\n", e->buffer);
-	//clear_and_update_term(e, new);
+	e->buffer_end = ft_strlen(e->buffer);
+	e->cursor = pos + new_s;
+	ft_printf("\n%s\n", e->buffer);
+}
+
+size_t chars_until_newline(t_env *e, size_t cur_pos, int direction)
+{
+	size_t	start;
+
+	start = cur_pos;
+	while (cur_pos > 0 && cur_pos < e->buffer_end && e->buffer[cur_pos] != '\n')
+		cur_pos = (direction) ? cur_pos + 1 : cur_pos - 1;
+	return ((start > cur_pos) ? start - cur_pos : cur_pos - start);
 }
 
 /*
 **	move_cursor()
 **
 **	Moves our terminal cursor:
-**	RIGHT (direction = 1)
-**	LEFT (direction = 0)
+**	LEFT	(direction = 0)
+**	RIGHT	(direction = 1)
 **
 **	The cursor will be moved in 'direction' a total of 'n_times' except if
 **	the cursor hits the start or end position of the e->buffer.
 */
 
+// void	ft_go_down(t_env *e)
+// {
+// 	size_t	test;
+
+// 	// go down twice
+// 	ft_putstr("\x1B[E");
+// 	ft_putstr("\x1B[E");
+
+// 	ft_putstr("\x1B[F");	// go up once
+// 	test = chars_until_newline(e, e->cursor - 1, 0) + 1;
+// 	while (test--)
+// 	{
+// 		//going right
+// 		ft_putstr("\x1B[C");
+// 	}
+
+// }
+
 void	move_cursor(t_env *e, int direction, size_t n_times)
 {
+	size_t test;
+
 	while (n_times--)
 	{
-		if (direction && e->cursor < e->buffer_end)
+		// Pressing left arrow
+		if (direction == 0 && e->cursor > e->buffer_lock)
 		{
-			e->cursor++;
-			ft_putstr("\x1B[C");
-		}
-		else if (!direction && e->cursor > e->buffer_lock)
-		{
-			e->cursor--;
+			if (e->buffer[--e->cursor] == '\n')
+			{
+				//going UP
+				ft_putstr("\x1B[F");
+				test = chars_until_newline(e, e->cursor - 1, 0) + 1;
+				while (test--)
+				{
+					//going right
+					ft_putstr("\x1B[C");
+				}
+			}
+			//going left
 			ft_putstr("\x1B[D");
+		}
+		// Pressing right arrow
+		else if (direction == 1 && e->cursor < e->buffer_end)
+		{
+			if (e->buffer[e->cursor] == '\n')
+			{
+				//ft_go_down(e);
+				//going down
+				ft_putstr("\x1B[E");
+				test = chars_until_newline(e, e->cursor + 1, 1) + 1;
+				while (test--)
+				{
+					//going left
+					ft_putstr("\x1B[D");
+				}
+			}
+			e->cursor++;
+			//going right
+			ft_putstr("\x1B[C");
 		}
 	}
 }
