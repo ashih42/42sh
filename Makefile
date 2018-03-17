@@ -27,6 +27,7 @@ FILES = built_ins.c \
 		init.c \
 		init_parse.c \
 		listen.c \
+		listen_utils.c \
 		parse.c \
 		path_utils.c \
 		pipes.c \

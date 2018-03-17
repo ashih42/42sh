@@ -80,5 +80,6 @@ char		**split_argv(char const *s, char *ws)
 	ft_lstdel(&list, (void (*)(void *, size_t))free);
 */
 	strip_argv(result);
+//	print_char2d(result);
 	return (result);
 }

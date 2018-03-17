@@ -48,8 +48,8 @@ void	disable_raw_mode(struct termios *orig_termios)
 
 void	clear_and_update_term(t_env *e, char *new_str)
 {
-	size_t	i;
-	struct winsize w;
+	size_t			i;
+	struct winsize	w;
 
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
 	while (e->cursor++ < e->buffer_end)
@@ -62,11 +62,9 @@ void	clear_and_update_term(t_env *e, char *new_str)
 	ft_memmove(e->buffer, new_str, i);
 	e->cursor = i;
 	e->buffer_end = i;
-	if (((int)(ft_strlen(get_variable(e, "PWD"))
-		 + ft_strlen(e->buffer) + 8)) > w.ws_col)
-	{
+	if (((int)(ft_strlen(get_variable(e, "PWD")) +
+			ft_strlen(e->buffer) + 8)) > w.ws_col)
 		ft_printf("\x1B[C");
-	}
 	ft_printf("%s", e->buffer);
 }
 
@@ -94,14 +92,13 @@ void	insert_and_update_term(t_env *e, char *new, size_t pos)
 		extend_buffer(e);
 	ft_memmove(e->buffer + pos + new_s,
 		e->buffer + pos + old_s, e->buffer_end - (pos + old_s));
-	//e->buffer_end += new_s - 1;
 	ft_memmove(e->buffer + pos, new, new_s);
 	e->buffer_end = ft_strlen(e->buffer);
 	e->cursor = pos + new_s;
 	ft_printf("\n%s\n", e->buffer);
 }
 
-size_t chars_until_newline(t_env *e, size_t cur_pos, int direction)
+size_t	chars_until_newline(t_env *e, size_t cur_pos, int direction)
 {
 	size_t	start;
 
