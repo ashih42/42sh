@@ -116,6 +116,59 @@ size_t chars_until_newline(t_env *e, size_t cur_pos, int direction)
 	return ((start > cur_pos) ? start - cur_pos : cur_pos - start);
 }
 
+static void	move_left(t_env *e, size_t n_fl_chars)
+{
+	size_t	n_chars;
+	int		i;
+
+	i = -1;
+	if (e->buffer[--e->cursor] == '\n')
+	{
+		//going UP
+		ft_putstr("\x1B[F");
+		n_chars = chars_until_newline(e, e->cursor - 1, 0) + 1;
+		while (n_chars--)
+		{
+			//going right
+			ft_putstr("\x1B[C");
+		}
+		if (e->cursor <= n_fl_chars)
+		{
+			while (++i < e->promt_len + 3)
+				ft_putstr("\x1B[C");
+		}
+	}
+	//going left
+	ft_putstr("\x1B[D");
+}
+
+static void	move_right(t_env *e, size_t n_fl_chars)
+{
+	size_t	n_chars;
+	int		i;
+
+	i = -1;
+	if (e->buffer[e->cursor] == '\n')
+	{
+		if (e->cursor > n_fl_chars + 3)
+		{
+			while (++i < e->promt_len)
+				ft_putstr("\x1B[D");
+		}
+		//going down
+		ft_putstr("\x1B[E");
+		n_chars = chars_until_newline(e, e->cursor + 1, 1) + 2;
+		while (n_chars--)
+		{
+			//going left
+			ft_putstr("\x1B[D");
+		}
+	}
+	else
+		ft_putstr("\x1B[C");
+	e->cursor++;
+}
+
 /*
 **	move_cursor()
 **
@@ -129,60 +182,14 @@ size_t chars_until_newline(t_env *e, size_t cur_pos, int direction)
 
 void	move_cursor(t_env *e, int direction, size_t n_times)
 {
-	size_t	n_chars;
 	size_t	n_fl_chars;
-	//size_t	n_ll_chars;
-	int		i;
 
 	n_fl_chars = ft_strchr(e->buffer, '\n') - e->buffer + 1;
-	i = -1;
 	while (n_times--)
 	{
-		// Pressing left arrow, works perfectly
 		if (direction == 0 && e->cursor > e->buffer_lock)
-		{
-			if (e->buffer[--e->cursor] == '\n')
-			{
-				//going UP
-				ft_putstr("\x1B[F");
-				n_chars = chars_until_newline(e, e->cursor - 1, 0) + 1;
-				while (n_chars--)
-				{
-					//going right
-					ft_putstr("\x1B[C");
-				}
-				if (e->cursor <= n_fl_chars)
-				{
-					while (++i < e->promt_len + 3)
-						ft_putstr("\x1B[C");
-				}
-			}
-			//going left
-			ft_putstr("\x1B[D");
-		}
-		// Pressing right arrow, off by one
+			move_left(e, n_fl_chars);
 		else if (direction == 1 && e->cursor < e->buffer_end)
-		{
-			if (e->buffer[e->cursor] == '\n')
-			{
-				if (e->cursor > n_fl_chars + 3)
-				{
-					while (++i < e->promt_len)
-						ft_putstr("\x1B[D");
-				}
-				//going down
-				ft_putstr("\x1B[E");
-				n_chars = chars_until_newline(e, e->cursor + 1, 1) + 2;
-				while (n_chars--)
-				{
-					//going left
-					ft_putstr("\x1B[D");
-				}
-			}
-			else
-				ft_putstr("\x1B[C");
-			e->cursor++;
-			//going right
-		}
+			move_right(e, n_fl_chars);
 	}
 }
