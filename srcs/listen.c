@@ -44,9 +44,9 @@ int		handle_esc_seq(t_env *e, char c)
 		else if (c == 'C')
 			move_cursor(e, 1, 1);
 		else if (c == 'A')
-			get_cmd_history(e, 0);
+			move_cursor(e, 2, 1);
 		else if (c == 'B')
-			get_cmd_history(e, 1);
+			move_cursor(e, 3, 1);
 		else if (c == 'H')
 			move_cursor(e, 0, e->cursor);
 		else if (c == 'F')

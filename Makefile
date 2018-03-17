@@ -34,7 +34,8 @@ FILES = built_ins.c \
 		split_argv.c \
 		strip_argv.c \
 		tab_autocomplete.c \
-		term_utils.c
+		term_utils.c \
+		move_cursor.c
 ## Add main.c ^here^ when done testing
 
 ifeq ($(TESTING_ENV),)
