@@ -25,9 +25,7 @@ FILES = built_ins.c \
 		ft_setenv.c \
 		ft_unset.c \
 		ft_unsetenv.c \
-		globber.c \
 		init.c \
-		init_parse.c \
 		listen.c \
 		listen_utils.c \
 		parse.c \
