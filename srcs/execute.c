@@ -67,7 +67,8 @@ static int		path_execute(t_env *e, char **argv, char **envp, t_exec *ex)
 			while (ex->path[++(ex->i)])
 			{
 				ex->temp_path = build_filepath(ex->path[ex->i], argv[0]);
-				if (ex->temp_path && access(ex->temp_path, X_OK) == 0)
+				if (ex->temp_path && !is_dir(ex->temp_path) &&
+					access(ex->temp_path, X_OK) == 0)
 				{
 					*(ex->status) = fork_execve(e, ex->temp_path, argv, envp);
 					free(ex->temp_path);
@@ -91,13 +92,18 @@ int				execute(t_env *e, char **argv, char **envp, int *status)
 	ex.status = status;
 	if ((ex.ret = path_execute(e, argv, envp, &ex)) <= 0)
 		return (ex.ret);
-	if (access(argv[0], X_OK) == 0)
+	if (is_dir(argv[0]))
+	{
+		ft_printf("42sh: permission denied: %s\n", argv[0]);
+		return (-1);
+	}
+	else if (access(argv[0], X_OK) == 0)
 		*status = fork_execve(e, argv[0], argv, envp);
 	else
 	{
-		if (errno & ENOENT)
+		if (errno == ENOENT)
 			ft_printf("42sh: no such file or directory: %s\n", argv[0]);
-		if (errno & EACCES)
+		if (errno == EACCES)
 			ft_printf("42sh: permission denied: %s\n", argv[0]);
 		return (-1);
 	}
