@@ -47,8 +47,9 @@ int		chk_glob_brckts(char c1, char *s2)
 				return (1);
 			if (*(search + i) == '-')
 			{
+				ft_printf("Found the dash.15\n");
 				if (c1 >= *(search + i - 1) && c1 <= *(search + i + 1) && *(search + i + 1) != '\0' && *(search + i + 1) != ']' && *(search + i - 1) != '[')
-					return (0);
+					return (1);
 				else
 					i = i + 2;
 			}
@@ -91,11 +92,11 @@ int matchparse (char *s1, char *s2)
 			ft_printf("we made it to the end! and it failed.4\n");
 			return (1);
 		}
-		else if (s2[j] == '[' || s2[j] == '{') 
+		else if (s2[j] == '[' || s2[j] == '{' || s2[j] == ',') 
 		{
-			if (s2[j] == '{')
+			if (s2[j] == '{' || s2[j] == ',')
 			{
-				k = init_parse(s1, s2);
+				k = init_parse(s1, &s2[j]);
 				j = j + k;
 				ft_printf("went through parser for curls5\n");
 			}
@@ -126,7 +127,7 @@ int matchparse (char *s1, char *s2)
 	}
 }
 
-void	print_list2(t_list *list)
+/*void	print_list2(t_list *list)
 {
 	t_list *pointer;
 
@@ -247,4 +248,4 @@ t_list	*get_dir_contents_search(char *dir_path, int ac, char **av)
 		i++;
 	}
 	return (result);
-}
+}*/

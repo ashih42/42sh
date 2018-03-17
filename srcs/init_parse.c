@@ -12,16 +12,14 @@ size_t        init_parse(char *s1, char *s2)
     size_t	k;
 	int		i;
     static int fuck_it = 1;
-	int x;
 
     j = 0;
-    k = 1;
-    x = 0;
+    k = 0;
+	ft_printf("\n\n%c", s2[j]);
     while (s2[j] != '\0')
     {
         if  (s2[j] == '{')
         {
-			x++;
 			while (s2[k] != '\0')
             {
                 k++;
@@ -37,27 +35,27 @@ size_t        init_parse(char *s1, char *s2)
         str = ft_memalloc(k + 1);
 		if (!str)
 			return (0);	
-        while (s2[j] != '}')
+        while (s2[j] != '}' && s2[j] != '\0')
         {
             while (s2[j] <= ' ' && s2[j] >= '~')
 			{
 				ft_printf("The cycle continues.10");
 				j++;
 			}
-            while (s2[j] != ',' && s2[j] != '}' && s2[j] != '\0' && x < 3)
+            while (s2[j] != ',' && s2[j] != '}' && s2[j] != '\0')
             {
 				ft_printf("copycat11");
                 str[i] = s2[j];
-                i++;
-                    j++;
-					x++;
+              	i++;
+                j++;
             }
-            matchparse(s1, str);
-            ft_bzero(str, k);
+            matchparse(s1, (str + 1));
+			ft_bzero(str, k);
             i = 0;
-            j++;
         }
         ft_printf("get ready to burn it all.12");
+		if (s2[j] == '}')
+			j++;
        // }
 	}
     free(str);
