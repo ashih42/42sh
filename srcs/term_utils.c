@@ -127,31 +127,13 @@ size_t chars_until_newline(t_env *e, size_t cur_pos, int direction)
 **	the cursor hits the start or end position of the e->buffer.
 */
 
-// void	ft_go_down(t_env *e)
-// {
-// 	size_t	test;
-
-// 	// go down twice
-// 	ft_putstr("\x1B[E");
-// 	ft_putstr("\x1B[E");
-
-// 	ft_putstr("\x1B[F");	// go up once
-// 	test = chars_until_newline(e, e->cursor - 1, 0) + 1;
-// 	while (test--)
-// 	{
-// 		//going right
-// 		ft_putstr("\x1B[C");
-// 	}
-
-// }
-
 void	move_cursor(t_env *e, int direction, size_t n_times)
 {
 	size_t test;
 
 	while (n_times--)
 	{
-		// Pressing left arrow
+		// Pressing left arrow, works perfectly
 		if (direction == 0 && e->cursor > e->buffer_lock)
 		{
 			if (e->buffer[--e->cursor] == '\n')
@@ -168,24 +150,24 @@ void	move_cursor(t_env *e, int direction, size_t n_times)
 			//going left
 			ft_putstr("\x1B[D");
 		}
-		// Pressing right arrow
+		// Pressing right arrow, off by one
 		else if (direction == 1 && e->cursor < e->buffer_end)
 		{
 			if (e->buffer[e->cursor] == '\n')
 			{
-				//ft_go_down(e);
 				//going down
 				ft_putstr("\x1B[E");
-				test = chars_until_newline(e, e->cursor + 1, 1) + 1;
+				test = chars_until_newline(e, e->cursor + 1, 1) + 2;
 				while (test--)
 				{
 					//going left
 					ft_putstr("\x1B[D");
 				}
 			}
+			else
+				ft_putstr("\x1B[C");
 			e->cursor++;
 			//going right
-			ft_putstr("\x1B[C");
 		}
 	}
 }
