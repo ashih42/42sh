@@ -19,9 +19,11 @@ FILES = built_ins.c \
 		ft_echo.c \
 		ft_env.c \
 		ft_exit.c \
+		ft_export.c \
 		ft_history.c \
 		ft_history_bang_exploder.c \
 		ft_setenv.c \
+		ft_unset.c \
 		ft_unsetenv.c \
 		globber.c \
 		init.c \

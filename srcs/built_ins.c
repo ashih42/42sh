@@ -56,12 +56,14 @@ int				built_ins(t_env *e, int argc, char **argv, int *status)
 		*status = built_in(e, ft_echo, argc, argv);
 	else if (ft_strequ(argv[0], "env"))
 		*status = built_in(e, ft_env, argc, argv);
-	else if (ft_strequ(argv[0], "setenv") ||
-		ft_strequ(argv[0], "export"))
+	else if (ft_strequ(argv[0], "setenv"))
 		*status = built_in(e, ft_setenv, argc, argv);
-	else if (ft_strequ(argv[0], "unsetenv") ||
-		ft_strequ(argv[0], "unset"))
+	else if (ft_strequ(argv[0], "unsetenv"))
 		*status = built_in(e, ft_unsetenv, argc, argv);
+	else if (ft_strequ(argv[0], "export"))
+		*status = built_in(e, ft_export, argc, argv);
+	else if (ft_strequ(argv[0], "unset"))
+		*status = built_in(e, ft_unset, argc, argv);
 	else if (ft_strequ(argv[0], "exit"))
 		*status = built_in(e, ft_exit, argc, argv);
 	else if (ft_strequ(argv[0], "history"))

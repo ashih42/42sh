@@ -1,6 +1,6 @@
 #include "ft_42sh.h"
 
-static int	is_valid(char *name)
+int			is_valid(char *name)
 {
 	int	i;
 

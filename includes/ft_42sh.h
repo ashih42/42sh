@@ -208,6 +208,7 @@ int						ft_env(t_env *e, int argc, char **argv);
 /*
 **	ft_setenv.c
 */
+int						is_valid(char *name);
 int						ft_setenv(t_env *e, int argc, char **argv);
 
 /*
@@ -219,6 +220,16 @@ int						ft_unsetenv(t_env *e, int argc, char **argv);
 **	ft_exit.c
 */
 int						ft_exit(t_env *e, int argc, char **argv);
+
+/*
+**	ft_export.c
+*/
+int						ft_export(t_env *e, int argc, char **argv);
+
+/*
+**	ft_unset.c
+*/
+int						ft_unset(t_env *e, int argc, char **argv);
 
 /*
 **	signal.c
