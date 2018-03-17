@@ -129,8 +129,13 @@ size_t chars_until_newline(t_env *e, size_t cur_pos, int direction)
 
 void	move_cursor(t_env *e, int direction, size_t n_times)
 {
-	size_t test;
+	size_t	n_chars;
+	size_t	n_fl_chars;
+	//size_t	n_ll_chars;
+	int		i;
 
+	n_fl_chars = ft_strchr(e->buffer, '\n') - e->buffer + 1;
+	i = -1;
 	while (n_times--)
 	{
 		// Pressing left arrow, works perfectly
@@ -140,11 +145,16 @@ void	move_cursor(t_env *e, int direction, size_t n_times)
 			{
 				//going UP
 				ft_putstr("\x1B[F");
-				test = chars_until_newline(e, e->cursor - 1, 0) + 1;
-				while (test--)
+				n_chars = chars_until_newline(e, e->cursor - 1, 0) + 1;
+				while (n_chars--)
 				{
 					//going right
 					ft_putstr("\x1B[C");
+				}
+				if (e->cursor <= n_fl_chars)
+				{
+					while (++i < e->promt_len + 3)
+						ft_putstr("\x1B[C");
 				}
 			}
 			//going left
@@ -155,10 +165,15 @@ void	move_cursor(t_env *e, int direction, size_t n_times)
 		{
 			if (e->buffer[e->cursor] == '\n')
 			{
+				if (e->cursor > n_fl_chars + 3)
+				{
+					while (++i < e->promt_len)
+						ft_putstr("\x1B[D");
+				}
 				//going down
 				ft_putstr("\x1B[E");
-				test = chars_until_newline(e, e->cursor + 1, 1) + 2;
-				while (test--)
+				n_chars = chars_until_newline(e, e->cursor + 1, 1) + 2;
+				while (n_chars--)
 				{
 					//going left
 					ft_putstr("\x1B[D");

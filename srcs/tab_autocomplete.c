@@ -129,6 +129,15 @@ void	init_tab_auto(t_env *e)
 
 // ft_printf("\x1b[F");
 
+size_t	get_cword_start(t_env *e, size_t cursor_pos)
+{
+	while (cursor_pos > 0 && ft_is_space(e->buffer[cursor_pos - 1]))
+		cursor_pos--;
+	while (cursor_pos > 0 && !ft_is_space(e->buffer[cursor_pos - 1]))
+		cursor_pos--;
+	return (cursor_pos);
+}
+
 /*
 **	get_curr_word()
 **
@@ -206,8 +215,8 @@ int		tab_autocomplete(t_env *e)
 	}
 	if (e->tab_pos)
 	{
-		//insert_and_update_term(e, e->tab_pos->content, 4);
-		clear_and_update_term(e, e->tab_pos->content);
+		insert_and_update_term(e, e->tab_pos->content, get_cword_start(e, e->cursor));
+		//clear_and_update_term(e, e->tab_pos->content);
 		e->tab_pos = (e->tab_pos->next) ? e->tab_pos->next : curr_auto_lst;
 		e->reset_tab_auto = 0;
 	}

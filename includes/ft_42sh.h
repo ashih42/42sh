@@ -27,6 +27,7 @@ typedef struct			s_env
 	t_dl_list			*history_end;
 	t_dl_list			*history_pos;
 	char				*buffer;
+	int					promt_len;
 	size_t				cursor;
 	size_t				buffer_end;
 	size_t				buffer_lock;

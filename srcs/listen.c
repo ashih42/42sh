@@ -135,7 +135,7 @@ void	sh_listen(t_env *e)
 	e->cursor = 0;
 	e->buffer_lock = 0;
 	e->buffer_end = 0;
-	ft_printf("{robot} %s > ", get_variable(e, "PWD"));
+	e->promt_len = ft_printf("{robot} %s > ", get_variable(e, "PWD"));
 	enable_raw_mode(&orig_termios);
 	while (read(STDIN_FILENO, &c, 1) > 0)
 	{
