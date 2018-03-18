@@ -84,7 +84,11 @@ int			char_specs(t_env *e, char c)
 		return (tab_autocomplete(e));
 	if (c == '\x1B')
 		return (handle_esc_seq(e, c));
-	return (0);
+	if (c != '\x04')
+		return (0);
+	if (!(e->buffer_end))
+		close(STDIN_FILENO);
+	return (1);
 }
 
 int			submit_attempt(t_env *e)

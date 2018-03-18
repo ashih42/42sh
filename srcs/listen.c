@@ -2,7 +2,9 @@
 
 static void	lstn_loop(t_env *e, char *c, size_t i)
 {
-	while (read(STDIN_FILENO, c, 1) > 0)
+	int	br;
+
+	while ((br = read(STDIN_FILENO, c, 1)) > 0)
 	{
 		if (*c != '\t')
 			e->reset_tab_auto = 1;
@@ -23,6 +25,7 @@ static void	lstn_loop(t_env *e, char *c, size_t i)
 		while (++i < e->buffer_end)
 			move_cursor(e, 0, 1);
 	}
+	(br <= 0) ? ft_strdel(&(e->buffer)) : (void)0;
 	ft_putchar('\n');
 }
 
