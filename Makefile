@@ -20,28 +20,30 @@ FILES = built_ins.c \
 		ft_env.c \
 		ft_exit.c \
 		ft_export.c \
+		ft_glob.c \
 		ft_history.c \
 		ft_history_bang_exploder.c \
 		ft_setenv.c \
+		ft_super_factory.c \
 		ft_unset.c \
 		ft_unsetenv.c \
+		glob_utils.c \
 		init.c \
 		listen.c \
 		listen_utils.c \
+		match.c \
+		move_cursor.c \
 		parse.c \
 		path_utils.c \
 		pipes.c \
 		signal.c \
 		split_argv.c \
-		strip_argv.c \
-		tab_autocomplete.c \
-		term_utils.c \
-		move_cursor.c \
-		ft_super_factory.c \
-		match.c \
 		split_dirs.c \
-		ft_glob.c \
-		glob_utils.c
+		strip_argv.c \
+		tab_ac_utils.c \
+		tab_ac_utils2.c \
+		tab_autocomplete.c \
+		term_utils.c
 ## Add main.c ^here^ when done testing
 
 ifeq ($(TESTING_ENV),)

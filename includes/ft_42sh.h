@@ -1,12 +1,14 @@
 #ifndef FT_42SH_H
 # define FT_42SH_H
 
-# include <signal.h>
-# include <sys/ioctl.h>
-# include <termios.h>
-# include <sys/types.h>
-# include <stdbool.h>
+# include <dirent.h>
 # include <errno.h>
+# include <signal.h>
+# include <stdbool.h>
+# include <sys/ioctl.h>
+# include <sys/stat.h>
+# include <sys/types.h>
+# include <termios.h>
 # include "libft.h"
 
 # define HASHMAP_SIZE	256
@@ -256,9 +258,21 @@ int						history_bang_exploder(t_env *e);
 /*
 **	tab_autocomplete.c
 */
-t_list					*get_dir_contents(char *dir_path, int e_mode);
-char					*get_curr_word(t_env *e);
 int						tab_autocomplete(t_env *e);
+
+/*
+** tab_ac_utils.c
+*/
+int						ac_first_word(t_env *e, char *word, char *path);
+int						ac_not_first_word(t_env *e, char *word, char *path);
+
+/*
+** tab_ac_utils2.c
+*/
+t_list					*get_dir_contents(char *dir_path, int e_mode);
+t_list					*get_path_executables(t_env *e);
+char					*truncate_backslashes(char *s);
+void					ac_replace(t_env *e, char *word, char *replace);
 
 /*
 **	split_argv.c
