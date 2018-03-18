@@ -44,12 +44,12 @@ static void	add_terms(char const *s, t_list **list, char *ws)
 	t_list		*glob;
 
 	ft_bzero(&at, sizeof(t_add_terms));
-	at.work_buf = ft_strdup(s);
+	at.work_buf = (char *)s;
 	while (at.work_buf[at.i])
 	{
 		add_terms_helper(ws, &at);
-		if (at.i <= at.head)
-			continue ;
+		if (at.i == at.head)
+			break ;
 		at.word = ft_strnew(at.i - at.head);
 		ft_strncpy(at.word, at.work_buf + at.head, at.i - at.head);
 		if (should_glob(at.word))
@@ -63,7 +63,6 @@ static void	add_terms(char const *s, t_list **list, char *ws)
 		else
 			ft_lst_add_last(list, ft_lst_new_ref(at.word, sizeof(char *)));
 	}
-	free(at.work_buf);
 }
 
 char		**split_argv(char const *s, char *ws)

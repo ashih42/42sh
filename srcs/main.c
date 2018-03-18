@@ -47,7 +47,6 @@ void		replace_monies(t_env *e)
 void		sh_loop(t_env *e)
 {
 	char	***cmds;
-	size_t	i;
 	char	*cpy;
 
 	while (1)
@@ -62,12 +61,11 @@ void		sh_loop(t_env *e)
 		replace_monies(e);
 		cmds = sh_parse(e);
 		if (!cmds)
+		{
+			ft_strdel(&cpy);
 			continue ;
+		}
 		sh_dispatcher(e, cmds);
-		i = -1;
-		while (cmds[++i])
-			ft_char_array_del(cmds[i]);
-		free(cmds);
 		add_cmd_history(e, cpy);
 		ft_strdel(&cpy);
 	}

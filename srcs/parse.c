@@ -93,16 +93,18 @@ char			***sh_parse(t_env *e)
 	cmds = str_explode2(e->buffer);
 	if (cmds)
 	{
-		result = ft_memalloc((ft_char_array_length(cmds) + 1)
-			* sizeof(char ***));
-		i = -1;
-		j = 0;
-		while (cmds[++i])
-			if ((result[j] = split_argv(cmds[i], WHITESPACE)))
-				j++;
+		if ((result = ft_memalloc(
+			(ft_char_array_length(cmds) + 1) * sizeof(char ***))))
+		{
+			i = -1;
+			j = 0;
+			while (cmds[++i])
+				if ((result[j] = split_argv(cmds[i], WHITESPACE)))
+					j++;
+			if (!j)
+				ft_memdel((void **)&result);
+		}
 		ft_char_array_del(cmds);
-		if (!result[0])
-			ft_memdel((void **)&result);
 	}
 	return (result);
 }

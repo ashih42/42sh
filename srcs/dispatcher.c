@@ -78,6 +78,7 @@ static void		dsp_loop(t_env *e, char ***cmds, t_dsp *d)
 void			sh_dispatcher(t_env *e, char ***cmds)
 {
 	t_dsp	d;
+	size_t	i;
 
 	d.status = 0;
 	d.i = -1;
@@ -91,4 +92,8 @@ void			sh_dispatcher(t_env *e, char ***cmds)
 		close(e->redir_out);
 	d.pids = e->children_pids;
 	wait_all_pids(e, &d);
+	i = -1;
+	while (cmds[++i])
+		ft_char_array_del(cmds[i]);
+	free(cmds);
 }
