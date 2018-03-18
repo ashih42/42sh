@@ -48,6 +48,7 @@ void		sh_loop(t_env *e)
 {
 	char	***cmds;
 	size_t	i;
+	char	*cpy;
 
 	while (1)
 	{
@@ -55,20 +56,20 @@ void		sh_loop(t_env *e)
 		sh_listen(e);
 		if (!e->buffer)
 			break ;
-		if (history_bang_exploder(e) != -1)
-		{
-			add_cmd_history(e);
-			replace_monies(e);
-			cmds = sh_parse(e);
-			if (cmds)
-			{
-				sh_dispatcher(e, cmds);
-				i = -1;
-				while (cmds[++i])
-					ft_char_array_del(cmds[i]);
-				free(cmds);
-			}
-		}
+		if (history_bang_exploder(e) == -1)
+			continue ;
+		cpy = ft_strdup(e->buffer);
+		replace_monies(e);
+		cmds = sh_parse(e);
+		if (!cmds)
+			continue ;
+		sh_dispatcher(e, cmds);
+		i = -1;
+		while (cmds[++i])
+			ft_char_array_del(cmds[i]);
+		free(cmds);
+		add_cmd_history(e, cpy);
+		ft_strdel(&cpy);
 	}
 }
 

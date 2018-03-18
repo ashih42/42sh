@@ -62,13 +62,11 @@ void				get_cmd_history(t_env *e, int mode)
 **	Function returns 0 if new node was added successfully.
 */
 
-int					add_cmd_history(t_env *e)
+int					add_cmd_history(t_env *e, char *buffer)
 {
 	t_dl_list	*node;
 
-	if (!*e->buffer)
-		return (1);
-	if ((node = ft_dl_lstnew(e->buffer, ft_strlen(e->buffer) + 1)))
+	if (buffer && (node = ft_dl_lstnew(buffer, ft_strlen(buffer) + 1)))
 	{
 		ft_dl_lst_add_last(&(e->cmd_history), node);
 		e->history_end = node;

@@ -240,7 +240,7 @@ void					ft_ctrl_c(int signo);
 /*
 **	ft_history.c
 */
-int						add_cmd_history(t_env *e);
+int						add_cmd_history(t_env *e, char *buffer);
 int						ft_history(t_env *e, int argc, char **argv);
 void					get_cmd_history(t_env *e, int mode);
 
