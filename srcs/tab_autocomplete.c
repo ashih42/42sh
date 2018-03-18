@@ -194,11 +194,11 @@ void	ac_first_word(t_env *e, char *word)
 	(void)word;
 }
 
-void	build_files_list(t_env *e, char *word)
+void	build_files_list(t_env *e, char *word, char *path)
 {
 	ft_lstdel(&(e->files), (void (*)(void *, size_t))free);
 	
-	e->files = get_dir_contents(".", 0);
+	e->files = get_dir_contents((path) ? path : ".", 0);
 	ft_lst_cond_remove(&(e->files), should_remove, word,
 		(void (*)(void *, size_t))free);
 	ft_list_sort(&(e->files), ft_strcmp);
@@ -207,28 +207,50 @@ void	build_files_list(t_env *e, char *word)
 	e->need_files_list = 0;
 }
 
+void	ac_repos_cursor(t_env *e, size_t old_cursor)
+{
+	size_t	i;
+
+	move_cursor(e, 0, e->cursor);
+	i = 0;
+	while (i < old_cursor)
+	{
+		move_cursor(e, 1, 1);
+		i++;	
+	}
+	while (!ft_is_space(e->buffer[e->cursor]) && e->buffer[e->cursor] != '\0')
+		move_cursor(e, 1, 1);
+}
+
 void	ac_replace(t_env *e, char *word, char *replace)
 {
+	size_t	old_cursor;
+
 	while (ft_strlen(e->buffer) - ft_strlen(word) + ft_strlen(replace)
 			> e->buffer_size)
 		extend_buffer(e);
-	ft_memmove(e->buffer + ft_strlen(replace), e->buffer + ft_strlen(word),
-		ft_strlen(e->buffer + e->cursor));
+	ft_memmove(e->buffer + e->cursor + ft_strlen(replace),
+		e->buffer + e->cursor + ft_strlen(word),
+		ft_strlen(e->buffer + ft_strlen(word)) + 1);
 	ft_strncpy(e->buffer + e->cursor, replace, ft_strlen(replace));
-	// ac_refresh yo
+
 	ft_putstr("\r\x1B[K");
-	e->promt_len = ft_printf("{robot} %s > ", get_variable(e, "PWD"));
+	e->promt_len = ft_printf("%s %s > ", SPESHELL, get_variable(e, "PWD"));
+	old_cursor = e->cursor;
 	ft_printf("%s", e->buffer);
 	e->cursor = ft_strlen(e->buffer);
 	e->buffer_end = ft_strlen(e->buffer);
+	ac_repos_cursor(e, old_cursor);
 }
 
-void	ac_not_first_word(t_env *e, char *word)
+
+
+void	ac_not_first_word(t_env *e, char *word, char *path)
 {
 	char	*replace;
 
 	if (e->need_files_list)
-		build_files_list(e, word);
+		build_files_list(e, word, path);
 	if (ft_lst_size(e->files) == 0)
 		return ;
 	replace = e->files->content;
@@ -236,18 +258,41 @@ void	ac_not_first_word(t_env *e, char *word)
 	if (e->files == 0)
 		e->files = e->files_head;
 	ac_replace(e, word, replace);
-//	ft_printf("replace = %s\n", replace);
+}
+
+void	get_word_path(t_env *e, char **word, char **path)
+{
+	int		i;
+
+	
+	*path = 0;
+	if (!ft_strchr(*word, '/'))
+		return ;
+	*path = *word;
+	i = -1;
+	while (ft_strchr(*path + ++i, '/'))
+		e->cursor++;
+	*word = ft_strdup(*path + i);
+	(*path)[i] = '\0';
 }
 
 int		tab_autocomplete(t_env *e)
 {
-	char *word = get_curr_word(e);
+	char *word;
+	char *path;
+
+	word = get_curr_word(e);
+	get_word_path(e, &word, &path);
+
+//	ft_printf("\npath = |%s|, word = |%s|\n", path, word);
 
 	if (e->cursor == 0)
 		ac_first_word(e, word);
 	else
-		ac_not_first_word(e, word);
+		ac_not_first_word(e, word, path);
+
 	ft_strdel(&word);
+	ft_strdel(&path);
 	return (1);
 }
 

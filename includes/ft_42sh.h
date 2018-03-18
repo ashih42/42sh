@@ -14,6 +14,7 @@
 # define WHITESPACE		" \t\n\v\r\f"
 # define DELIM 			"\"'|<>"
 # define INVALID_COLOR	-1
+# define SPESHELL		":^)"
 
 typedef struct			s_env
 {
