@@ -183,7 +183,7 @@ char	*truncate_backslashes(char *s)
 
 void	build_execs_list(t_env *e, char *word, char *path)
 {
-	ft_lstdel(&(e->files), (void (*)(void *, size_t))free);
+	ft_lstdel(&(e->files_head), (void (*)(void *, size_t))free);
 
 	if (path && (path = truncate_backslashes(path)))
 	{
@@ -208,7 +208,7 @@ void	build_execs_list(t_env *e, char *word, char *path)
 
 void	build_files_list(t_env *e, char *word, char *path)
 {
-	ft_lstdel(&(e->files), (void (*)(void *, size_t))free);
+	ft_lstdel(&(e->files_head), (void (*)(void *, size_t))free);
 
 	(path) ? path = truncate_backslashes(path) : 0;
 	e->files = get_dir_contents((path) ? path : ".", 0);
