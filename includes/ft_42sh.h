@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/18 05:01:35 by ashih             #+#    #+#             */
-/*   Updated: 2018/03/18 05:25:57 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/18 06:05:00 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -48,16 +48,9 @@ typedef struct			s_env
 	size_t				buffer_lock;
 	size_t				buffer_size;
 	t_list				*children_pids;
-	pid_t				child_pid;
-	pid_t				shell_pgid;
-	pid_t				shell_stopped;
-	struct termios		shell_tmodes;
-	bool				shell_terminal;
-	bool				shell_is_interactive;
 	bool				pipe;
 	int					fd;
 	int					redir_out;
-	struct winsize		w;
 	int					need_files_list;
 	t_list				*files;
 	t_list				*files_head;
@@ -238,6 +231,7 @@ int						ft_unsetenv(t_env *e, int argc, char **argv);
 /*
 **	ft_exit.c
 */
+void					ft_democracy(t_env *e);
 int						ft_exit(t_env *e, int argc, char **argv);
 
 /*

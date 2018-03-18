@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/18 01:56:10 by ashih             #+#    #+#             */
-/*   Updated: 2018/03/18 05:21:38 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/18 06:04:28 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,7 @@ int			main(int argc, char **argv, char **envp)
 		sh_init(&e, envp);
 		ft_printf(HEADER);
 		sh_loop(&e);
+		ft_democracy(&e);
 	}
 	return (0);
 }

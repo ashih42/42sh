@@ -6,7 +6,7 @@
 /*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/27 10:07:15 by ashih             #+#    #+#             */
-/*   Updated: 2018/03/18 05:13:26 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/18 06:07:21 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -174,6 +174,8 @@ t_dl_list				*ft_dl_lst_at(t_dl_list *a_dl_lst, unsigned int n);
 void					ft_dl_lst_add_last(t_dl_list **a_dl_lst,
 										t_dl_list *new);
 int						ft_dl_lst_size(t_dl_list *dl_lst);
+void					ft_dl_lstdel(t_dl_list **alst,
+							void (*del)(void *, size_t));
 
 /*
 **	ft_adv_lst_utils.c

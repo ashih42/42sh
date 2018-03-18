@@ -6,7 +6,7 @@
 #    By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/27 10:22:08 by ashih             #+#    #+#              #
-#    Updated: 2018/03/18 03:20:31 by ashih            ###   ########.fr        #
+#    Updated: 2018/03/18 06:07:40 by ashih            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -25,6 +25,7 @@ SRC = del_and_gnl.c\
 	  ft_bzero.c\
 	  ft_char_array_del.c\
 	  ft_char_array_length.c\
+	  ft_dl_lstdel.c\
 	  ft_exp.c\
 	  ft_exp_dbl.c\
 	  ft_hex_to_int_check.c\

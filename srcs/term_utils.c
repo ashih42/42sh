@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/18 03:14:39 by ashih             #+#    #+#             */
-/*   Updated: 2018/03/18 05:20:34 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/18 05:45:36 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,9 +62,10 @@ void	clear_and_update_term(t_env *e, char *new_str)
 {
 	size_t			i;
 	size_t			num_lines;
+	struct winsize	w;
 
-	ioctl(STDOUT_FILENO, TIOCGWINSZ, &e->w);
-	num_lines = ((ft_strlen(e->buffer) + (e->promt_len + 2)) / e->w.ws_col);
+	ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
+	num_lines = ((ft_strlen(e->buffer) + (e->promt_len + 2)) / w.ws_col);
 	while (num_lines--)
 	{
 		ft_putstr("\r\x1B[K");
