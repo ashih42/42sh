@@ -228,41 +228,42 @@ void	ac_replace(t_env *e, char *word, char *replace)
 	ac_repos_cursor(e, old_cursor);
 }
 
-void	ac_first_word(t_env *e, char *word, char *path)
+int		ac_first_word(t_env *e, char *word, char *path)
 {
 	char	*replace;
 
 	if (e->need_files_list)
 		build_execs_list(e, word, path);
 	if (ft_lst_size(e->files) == 0)
-		return ;
+		return (0);
 	replace = e->files->content;
 	e->files = e->files->next;
 	if (e->files == 0)
 		e->files = e->files_head;
 	ac_replace(e, word, replace);
+	return (1);
 }
 
-void	ac_not_first_word(t_env *e, char *word, char *path)
+int		ac_not_first_word(t_env *e, char *word, char *path)
 {
 	char	*replace;
 
 	if (e->need_files_list)
 		build_files_list(e, word, path);
 	if (ft_lst_size(e->files) == 0)
-		return ;
+		return (0);
 	replace = e->files->content;
 	e->files = e->files->next;
 	if (e->files == 0)
 		e->files = e->files_head;
 	ac_replace(e, word, replace);
+	return (1);
 }
 
 void	get_word_path(t_env *e, char **word, char **path)
 {
 	int		i;
 
-	
 	*path = 0;
 	if (!*word || !ft_strchr(*word, '/'))
 		return ;
@@ -291,16 +292,21 @@ int		is_first_word(t_env *e)
 
 int		tab_autocomplete(t_env *e)
 {
-	char *word;
-	char *path;
+	char	*word;
+	char	*path;
+	size_t	temp;
+	int		result;
 
+	temp = e->cursor;
 	word = get_curr_word(e);
 	get_word_path(e, &word, &path);
 	
 	if (is_first_word(e))
-		ac_first_word(e, word, path);
+		result = ac_first_word(e, word, path);
 	else
-		ac_not_first_word(e, word, path);
+		result = ac_not_first_word(e, word, path);
+	if (!result)
+		e->cursor = temp;
 	ft_strdel(&word);
 	ft_strdel(&path);
 	return (1);

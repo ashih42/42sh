@@ -66,7 +66,7 @@ $(OBJS_DIR):
 	$(MKDIR) $@
 
 $(OBJS_DIR)%.o: $(SRCS_DIR)%.c $(OBJS_DIR)
-	gcc $(CFLAGS) -c -I$(INCLUDES) $(LFT_INC) $< -o $@ -g
+	gcc $(CFLAGS) -c -I$(INCLUDES) $(LFT_INC) $< -o $@
 
 $(LFT_LIB):
 	make -C $(LFT)
