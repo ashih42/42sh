@@ -6,7 +6,7 @@
 /*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/27 10:07:15 by ashih             #+#    #+#             */
-/*   Updated: 2018/03/18 03:20:16 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/18 05:13:26 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,7 +196,5 @@ char					*ft_substr(char *s, int start, int len);
 size_t					ft_count_occurrences(char *s, int c);
 ssize_t					ft_fst_occ_idx(char *s, int c);
 ssize_t					ft_lst_occ_idx(char *s, int c);
-
-
 
 #endif

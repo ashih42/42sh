@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_42sh.h                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/03/18 05:01:35 by ashih             #+#    #+#             */
+/*   Updated: 2018/03/18 05:25:57 by ashih            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #ifndef FT_42SH_H
 # define FT_42SH_H
 
@@ -100,16 +112,16 @@ typedef struct			s_dsp
 	t_list				*pids;
 }						t_dsp;
 
-typedef struct 			s_sprf
+typedef struct			s_sprf
 {
-	t_list 				*list;
-	t_list 				*prev;
-	t_list 				*next;
-	t_list 				*head;
+	t_list				*list;
+	t_list				*prev;
+	t_list				*next;
+	t_list				*head;
 	char				*str;
 }						t_sprf;
 
-typedef struct 			s_strf
+typedef struct			s_strf
 {
 	char				*head;
 	char				*mid;
@@ -137,8 +149,8 @@ void					enable_raw_mode(struct termios *orig_termios);
 void					disable_raw_mode(struct termios *orig_termios);
 void					clear_and_update_term(t_env *e, char *new_str);
 void					insert_and_update_term(t_env *e, char *new, size_t pos);
-size_t 					chars_until_newline(t_env *e, size_t cur_pos,
-											int direction);
+size_t					chars_until_newline(t_env *e, size_t cur_pos,
+	int direction);
 
 /*
 **	envp.c

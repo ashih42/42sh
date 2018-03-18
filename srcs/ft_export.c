@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   ft_export.c                                        :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2018/03/18 05:19:12 by ashih             #+#    #+#             */
+/*   Updated: 2018/03/18 05:21:58 by ashih            ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "ft_42sh.h"
 
 static int	export_helper(t_env *e, char *str)
@@ -35,4 +47,3 @@ int			ft_export(t_env *e, int argc, char **argv)
 		ret |= export_helper(e, argv[i]);
 	return (ret);
 }
-

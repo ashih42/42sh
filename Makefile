@@ -1,6 +1,3 @@
-# Uncomment the TESTING_ENV variable to set it to testing environment.
-# TESTING_ENV = 1;
-
 NAME = 42sh
 RM = /bin/rm -f
 MKDIR = /bin/mkdir
@@ -31,6 +28,7 @@ FILES = built_ins.c \
 		init.c \
 		listen.c \
 		listen_utils.c \
+		main.c \
 		match.c \
 		move_cursor.c \
 		parse.c \
@@ -44,17 +42,10 @@ FILES = built_ins.c \
 		tab_ac_utils2.c \
 		tab_autocomplete.c \
 		term_utils.c
-## Add main.c ^here^ when done testing
 
-ifeq ($(TESTING_ENV),)
-    FILES += main.c
-else
-    FILES += test_main.c
-endif
 CFILES = $(patsubst %, $(SRCS_DIR)%, $(FILES))
 OFILES = $(patsubst %.c, $(OBJS_DIR)%.o, $(FILES))
 
-#libft
 LFT = ./libft/
 LFT_LIB = $(addprefix $(LFT), ft.a)
 LFT_INC = -I $(LFT)
