@@ -43,11 +43,8 @@ static void	move_left(t_env *e, size_t n_fl_chars)
 
 static void	move_right(t_env *e, size_t n_fl_chars)
 {
-	//size_t	n_chars;
-	int		i;
 
 	(void)n_fl_chars;
-	i = -1;
 	// ioctl(STDOUT_FILENO, TIOCGWINSZ, &e->w);
 	// if (e->cursor && e->cursor % (e->w.ws_col + 1) == 0)
 	// 	ft_putstr("\r\x1B[E");
@@ -64,6 +61,8 @@ static void	move_right(t_env *e, size_t n_fl_chars)
 
 static void	move_up(t_env *e, size_t n_fl_chars, size_t num_nl)
 {
+	//size_t	n_chars;
+
 	if (e->cursor < n_fl_chars || n_fl_chars == 0)
 	{
 		move_cursor(e, 1, e->buffer_end);
@@ -74,10 +73,17 @@ static void	move_up(t_env *e, size_t n_fl_chars, size_t num_nl)
 		}
 		get_cmd_history(e, 0);
 	}
+	// else
+	// {
+	// 	ft_putstr("\r\x1B[A");
+	// 	e->cursor -= chars_until_newline(e, e->cursor, 0) + 1;
+	// }
 }
 
 static void	move_down(t_env *e, size_t n_lnl_pos, size_t num_nl)
 {
+	//size_t	n_chars;
+
 	if (e->cursor > n_lnl_pos || n_lnl_pos == 0)
 	{
 		move_cursor(e, 1, e->buffer_end);
@@ -88,6 +94,11 @@ static void	move_down(t_env *e, size_t n_lnl_pos, size_t num_nl)
 		}
 		get_cmd_history(e, 1);
 	}
+	// else
+	// {
+	// 	ft_putstr("\r\x1B[B");
+	// 	e->cursor += chars_until_newline(e, e->cursor, 1) + 1;
+	// }
 }
 
 /*
@@ -121,9 +132,9 @@ void	move_cursor(t_env *e, int direction, size_t n_times)
 			move_left(e, n_flcs);
 		else if (direction == 1 && e->cursor < e->buffer_end)
 			move_right(e, n_flcs);
-		else if (direction == 2)
+		else if (direction == 2 && !e->buffer_lock)
 			move_up(e, n_flcs, num_nl);
-		else if (direction == 3)
+		else if (direction == 3 && !e->buffer_lock)
 			move_down(e, n_lnl_pos, num_nl);
 	}
 }
