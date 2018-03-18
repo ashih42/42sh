@@ -96,10 +96,12 @@ char	*get_curr_word(t_env *e)
 	size_t	word_len;
 
 	curr_word = NULL;
-	while (e->buffer[e->cursor] && !ft_is_space(e->buffer[e->cursor]))
+	while (e->buffer[e->cursor] && (!ft_is_space(e->buffer[e->cursor]) ||
+		(e->cursor > 0 && e->buffer[e->cursor - 1] == '\\')))
 		e->cursor++;
 	wend_pos = e->cursor;
-	while (e->cursor > 0 && !ft_is_space(e->buffer[e->cursor - 1]))
+	while (e->cursor > 0 && (!ft_is_space(e->buffer[e->cursor - 1]) ||
+		(e->cursor > 1 && e->buffer[e->cursor - 2] == '\\')))
 		e->cursor--;
 	word_len = wend_pos - e->cursor;
 	if (word_len && (curr_word = ft_strnew(word_len + 1)))	
@@ -160,20 +162,45 @@ int		should_remove(char *filename, char *str)
 	return (!ft_strnequ(filename, str, ft_strlen(str)));
 }
 
+char	*truncate_backslashes(char *s)
+{
+	char	*cpy;
+	size_t	i;
+
+	if ((cpy = ft_strdup(s)))
+	{
+		i = -1;
+		while (cpy[++i])
+			if (cpy[i] == '\\')
+			{
+				ft_memmove(cpy + i, cpy + i + 1, ft_strlen(cpy + i + 1) + 1);
+				if (!cpy[i])
+					break ;
+			}
+	}
+	return (cpy);
+}
+
 void	build_execs_list(t_env *e, char *word, char *path)
 {
 	ft_lstdel(&(e->files), (void (*)(void *, size_t))free);
-	
-	if (path)
+
+	if (path && (path = truncate_backslashes(path)))
 	{
 		e->files = get_dir_contents(path, 1);
 		if (e->files)
 			ft_lstrev(&e->files);
+		ft_strdel(&path);
 	}
 	else
 		e->files = get_path_executables(e);
-	ft_lst_cond_remove(&(e->files), should_remove, word,
-		(void (*)(void *, size_t))free);
+
+	if ((word = truncate_backslashes(word)))
+		ft_lst_cond_remove(&(e->files), should_remove, word,
+			(void (*)(void *, size_t))free);
+	ft_strdel(&word);
+
+	expand_filenames(e->files);
 	e->files_head = e->files;
 	e->need_files_list = 0;
 }
@@ -182,11 +209,18 @@ void	build_execs_list(t_env *e, char *word, char *path)
 void	build_files_list(t_env *e, char *word, char *path)
 {
 	ft_lstdel(&(e->files), (void (*)(void *, size_t))free);
-	
+
+	(path) ? path = truncate_backslashes(path) : 0;
 	e->files = get_dir_contents((path) ? path : ".", 0);
-	ft_lst_cond_remove(&(e->files), should_remove, word,
-		(void (*)(void *, size_t))free);
+	ft_strdel(&path);
+
+	if ((word = truncate_backslashes(word)))
+		ft_lst_cond_remove(&(e->files), should_remove, word,
+			(void (*)(void *, size_t))free);
+	ft_strdel(&word);
+
 	ft_lst_sort(&(e->files), ft_strcmp);
+	expand_filenames(e->files);
 
 	e->files_head = e->files;
 	e->need_files_list = 0;
@@ -203,7 +237,9 @@ void	ac_repos_cursor(t_env *e, size_t old_cursor)
 		move_cursor(e, 1, 1);
 		i++;	
 	}
-	while (!ft_is_space(e->buffer[e->cursor]) && e->buffer[e->cursor] != '\0')
+	while ((!ft_is_space(e->buffer[e->cursor]) ||
+		(e->cursor > 0 && e->buffer[e->cursor - 1] == '\\')) &&
+		e->buffer[e->cursor] != '\0')
 		move_cursor(e, 1, 1);
 }
 
@@ -278,13 +314,17 @@ void	get_word_path(t_env *e, char **word, char **path)
 int		is_first_word(t_env *e)
 {
 	size_t	curs;
+	size_t	chkpnt;
 
 	curs = e->cursor;
-	while (curs > 0 && !ft_is_space(e->buffer[curs - 1]))
+	while (curs > 0 && (!ft_is_space(e->buffer[curs - 1]) ||
+		(curs > 1 && e->buffer[curs - 2] == '\\')))
 		curs--;
-	while (curs > 0 && ft_is_space(e->buffer[curs - 1]))
+	chkpnt = curs;
+	while (curs > 0 && ft_is_space(e->buffer[curs - 1]) &&
+		(curs <= 1 || e->buffer[curs - 2] != '\\'))
 		curs--;
-	if (e->buffer[curs] && !ft_is_space(e->buffer[curs]))
+	if (curs == 0 && (e->cursor == 0 || chkpnt == 0 || ft_is_space(e->buffer[0])))
 		return (1);
 	else
 		return (0);

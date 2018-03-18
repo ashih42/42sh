@@ -70,7 +70,8 @@ static char	*expand_filename(char *s)
 	diff = 0;
 	i = -1;
 	while (s[++i])
-		if ((s[i] == '\'' || s[i] == '\"' || s[i] == '\\'))
+		if ((s[i] == '\'' || s[i] == '\"' || s[i] == '\\' || s[i] == '$' ||
+			s[i] == '*' || s[i] == '[' || s[i] == '?' || s[i] == '{'))
 			diff++;
 	new = NULL;
 	if (diff && (new = ft_strnew(i + diff)))
@@ -79,7 +80,8 @@ static char	*expand_filename(char *s)
 		j = 0;
 		while (s[++i])
 		{
-			if ((s[i] == '\'' || s[i] == '\"' || s[i] == '\\'))
+			if ((s[i] == '\'' || s[i] == '\"' || s[i] == '\\' || s[i] == '$' ||
+				s[i] == '*' || s[i] == '[' || s[i] == '?' || s[i] == '{'))
 				new[j++] = '\\';
 			new[j++] = s[i];
 		}
