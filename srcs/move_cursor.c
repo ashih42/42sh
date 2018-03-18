@@ -23,10 +23,8 @@ static void	move_left(t_env *e, size_t n_fl_chars)
 		while (n_chars--)
 			ft_putstr("\x1B[C");
 		if (e->cursor < n_fl_chars)
-		{
 			while (++i < e->promt_len + 3)
 				ft_putstr("\x1B[C");
-		}
 	}
 	ft_putstr("\x1B[D");
 }
@@ -41,13 +39,8 @@ static void	move_left(t_env *e, size_t n_fl_chars)
 **	'\027[E'	Cursor Next Line
 */
 
-static void	move_right(t_env *e, size_t n_fl_chars)
+static void	move_right(t_env *e)
 {
-
-	(void)n_fl_chars;
-	// ioctl(STDOUT_FILENO, TIOCGWINSZ, &e->w);
-	// if (e->cursor && e->cursor % (e->w.ws_col + 1) == 0)
-	// 	ft_putstr("\r\x1B[E");
 	if (e->buffer[e->cursor] == '\n')
 		ft_putstr("\x1B[E\r");
 	else
@@ -55,50 +48,43 @@ static void	move_right(t_env *e, size_t n_fl_chars)
 	e->cursor++;
 }
 
-/*
-**	
-*/
-
 static void	move_up(t_env *e, size_t n_fl_chars, size_t num_nl)
 {
-	//size_t	n_chars;
+	int	i;
 
 	if (e->cursor < n_fl_chars || n_fl_chars == 0)
 	{
 		move_cursor(e, 1, e->buffer_end);
 		while (num_nl--)
-		{
-			ft_putstr("\r\x1B[K");
-			ft_putstr("\x1B[F");
-		}
+			ft_putstr("\r\x1B[K\x1B[F");
 		get_cmd_history(e, 0);
 	}
-	// else
-	// {
-	// 	ft_putstr("\r\x1B[A");
-	// 	e->cursor -= chars_until_newline(e, e->cursor, 0) + 1;
-	// }
+	else
+	{
+		e->cursor -= chars_until_newline(e, e->cursor, 0) + 1;
+		ft_putstr("\r\x1B[A");
+		e->cursor -= chars_until_newline(e, e->cursor, 0) - 1;
+		i = -1;
+		if (e->cursor < n_fl_chars)
+			while (++i < e->promt_len + 2)
+				ft_putstr("\x1B[C");
+	}
 }
 
 static void	move_down(t_env *e, size_t n_lnl_pos, size_t num_nl)
 {
-	//size_t	n_chars;
-
 	if (e->cursor > n_lnl_pos || n_lnl_pos == 0)
 	{
 		move_cursor(e, 1, e->buffer_end);
 		while (num_nl--)
-		{
-			ft_putstr("\r\x1B[K");
-			ft_putstr("\x1B[F");
-		}
+			ft_putstr("\r\x1B[K\x1B[F");
 		get_cmd_history(e, 1);
 	}
-	// else
-	// {
-	// 	ft_putstr("\r\x1B[B");
-	// 	e->cursor += chars_until_newline(e, e->cursor, 1) + 1;
-	// }
+	else
+	{
+		e->cursor += chars_until_newline(e, e->cursor, 1) + 1;
+		ft_putstr("\x1B[B\r");
+	}
 }
 
 /*
@@ -131,7 +117,7 @@ void	move_cursor(t_env *e, int direction, size_t n_times)
 		if (direction == 0 && e->cursor > e->buffer_lock)
 			move_left(e, n_flcs);
 		else if (direction == 1 && e->cursor < e->buffer_end)
-			move_right(e, n_flcs);
+			move_right(e);
 		else if (direction == 2 && !e->buffer_lock)
 			move_up(e, n_flcs, num_nl);
 		else if (direction == 3 && !e->buffer_lock)
