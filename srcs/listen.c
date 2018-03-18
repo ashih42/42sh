@@ -1,23 +1,23 @@
 #include "ft_42sh.h"
 
-static void	lstn_loop(t_env *e, char *c, size_t i)
+static void	lstn_loop(t_env *e, char c, size_t i)
 {
 	int	br;
 
-	while ((br = read(STDIN_FILENO, c, 1)) > 0)
+	while ((br = read(STDIN_FILENO, &c, 1)) > 0)
 	{
-		if (*c == '\n' && submit_attempt(e))
+		if (c == '\n' && submit_attempt(e))
 			break ;
 		if (e->buffer_end == e->buffer_size && !extend_buffer(e))
 			return ;
-		if (char_specs(e, *c))
+		if (char_specs(e, c))
 			continue ;
 		ft_memmove(e->buffer + e->cursor + 1,
 					e->buffer + e->cursor, e->buffer_end++ - e->cursor);
 		e->buffer[e->buffer_end] = '\0';
 		i = e->cursor++;
-		e->buffer[i] = *c;
-		if (*c == '\n')
+		e->buffer[i] = c;
+		if (c == '\n')
 			continue ;
 		ft_printf("%s", e->buffer + (e->cursor - 1));
 		e->cursor = e->buffer_end;
@@ -41,7 +41,6 @@ static void	lstn_loop(t_env *e, char *c, size_t i)
 void		sh_listen(t_env *e)
 {
 	struct termios	orig_termios;
-	char			c;
 
 	ft_bzero(e->buffer, e->buffer_size + 1);
 	e->cursor = 0;
@@ -49,6 +48,6 @@ void		sh_listen(t_env *e)
 	e->buffer_end = 0;
 	e->promt_len = ft_printf("%s %s > ", SPESHELL, get_variable(e, "PWD"));
 	enable_raw_mode(&orig_termios);
-	lstn_loop(e, &c, 0);
+	lstn_loop(e, 0, 0);
 	disable_raw_mode(&orig_termios);
 }
