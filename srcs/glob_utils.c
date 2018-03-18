@@ -1,6 +1,6 @@
 #include "ft_42sh.h"
 
-static int		dequeue(t_list **stack, char c)
+static int	dequeue(t_list **stack, char c)
 {
 	char		*top;
 

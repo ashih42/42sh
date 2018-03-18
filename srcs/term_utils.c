@@ -70,36 +70,6 @@ void	clear_and_update_term(t_env *e, char *new_str)
 	ft_printf("%s", e->buffer);
 }
 
-/*
-** Super broken function yo...
-*/
-/*
-void	insert_and_update_term(t_env *e, char *new, size_t pos)
-{
-	size_t	new_s;
-	size_t	old_s;
-	size_t	i;
-	char	*old;
-
-	while (e->cursor++ < e->buffer_end)
-		ft_printf("\x1B[C");
-	i = 0;
-	while (i++ < e->buffer_end)
-		ft_printf("\b \b");
-	old = get_curr_word(e, pos);
-	old_s = ft_strlen(old);
-	free(old);
-	new_s = ft_strlen(new);
-	while (ft_strlen(e->buffer) + new_s > e->buffer_size)
-		extend_buffer(e);
-	ft_memmove(e->buffer + pos + new_s,
-		e->buffer + pos + old_s, e->buffer_end - (pos + old_s));
-	ft_memmove(e->buffer + pos, new, new_s);
-	e->buffer_end = ft_strlen(e->buffer);
-	e->cursor = pos + new_s;
-	ft_printf("\n%s\n", e->buffer);
-}
-*/
 size_t	chars_until_newline(t_env *e, size_t cur_pos, int direction)
 {
 	size_t	start;

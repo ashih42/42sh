@@ -6,7 +6,7 @@
 /*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2017/11/27 10:07:15 by ashih             #+#    #+#             */
-/*   Updated: 2018/03/17 03:31:01 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/18 03:20:16 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,6 +139,7 @@ void					ft_lst_cond_remove(t_list **list,
 	int (*cond)(char *, char *), char *key, void (*del)(void *, size_t));
 unsigned int			ft_rand(void);
 void					ft_srand(unsigned long seed);
+void					ft_lst_sort(t_list **begin_list, int (*cmp)());
 
 /*
 ** get_next_line.c

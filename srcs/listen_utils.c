@@ -66,8 +66,7 @@ int			char_specs(t_env *e, char c)
 {
 	size_t	i;
 
-	if (c != '\t')
-		e->need_files_list = 1;
+	(c != '\t') ? e->need_files_list = 1 : 0;
 	if (c == 127 || c == '\b')
 	{
 		if (e->cursor > e->buffer_lock)
@@ -88,8 +87,7 @@ int			char_specs(t_env *e, char c)
 		return (handle_esc_seq(e, c));
 	if (ft_isprint(c) || (c == '\n'))
 		return (0);
-	if (c == '\x04' && !(e->buffer_end))
-		close(STDIN_FILENO);
+	(c == '\x04' && !(e->buffer_end)) ? close(STDIN_FILENO) : 0;
 	return (1);
 }
 

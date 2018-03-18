@@ -6,7 +6,7 @@
 #    By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2017/11/27 10:22:08 by ashih             #+#    #+#              #
-#    Updated: 2018/03/17 03:31:37 by ashih            ###   ########.fr        #
+#    Updated: 2018/03/18 03:20:31 by ashih            ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -42,6 +42,7 @@ SRC = del_and_gnl.c\
 	  ft_lst_new_ref.c\
 	  ft_lst_remove_first.c\
 	  ft_lst_size.c\
+	  ft_lst_sort.c\
 	  ft_lstadd.c\
 	  ft_lstdel.c\
 	  ft_lstdelone.c\

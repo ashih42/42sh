@@ -117,7 +117,7 @@ int		tab_autocomplete(t_env *e)
 	autocomplete
 }
 */
-
+/*
 void	insert(t_list **head, t_list *new_node, int (*cmp)())
 {
 	t_list	*current;
@@ -152,7 +152,7 @@ void	ft_list_sort(t_list **begin_list, int (*cmp)())
 	}
 	*begin_list = sorted;
 }
-
+*/
 
 
 int		should_remove(char *filename, char *str)
@@ -186,7 +186,7 @@ void	build_files_list(t_env *e, char *word, char *path)
 	e->files = get_dir_contents((path) ? path : ".", 0);
 	ft_lst_cond_remove(&(e->files), should_remove, word,
 		(void (*)(void *, size_t))free);
-	ft_list_sort(&(e->files), ft_strcmp);
+	ft_lst_sort(&(e->files), ft_strcmp);
 
 	e->files_head = e->files;
 	e->need_files_list = 0;
