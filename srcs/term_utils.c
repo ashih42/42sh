@@ -66,7 +66,7 @@ void	clear_and_update_term(t_env *e, char *new_str)
 	ft_memmove(e->buffer, new_str, i);
 	e->cursor = i;
 	e->buffer_end = i;
-	e->promt_len = ft_printf("{robot} %s > ", get_variable(e, "PWD"));
+	e->promt_len = ft_printf(":^) %s > ", get_variable(e, "PWD"));
 	ft_printf("%s", e->buffer);
 }
 
