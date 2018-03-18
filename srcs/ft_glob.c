@@ -71,7 +71,7 @@ static void	prepend_dirs(char *prepend, t_list *files)
 	}
 }
 
-static void	update_files(t_list **files)
+static void	update_files(t_list **files, t_list *matchlist)
 {
 	t_list	*temp;
 	t_list	*result;
@@ -83,7 +83,14 @@ static void	update_files(t_list **files)
 	{
 		if ((tmp = get_dir_contents((char *)temp->content, 0)))
 		{
-			prepend_dirs((char *)temp->content, tmp);
+			if (ft_lst_search(matchlist, ".", 2, ft_strcmp))
+				ft_lstadd(&tmp, ft_lstnew(".", 2));
+			if (ft_lst_search(matchlist, "..", 3, ft_strcmp))
+				ft_lstadd(&tmp, ft_lstnew("..", 3));
+			if (ft_strcmp((char *)temp->content, "/") == 0)
+				prepend_dirs("", tmp);
+			else if (ft_strcmp((char *)temp->content, ".") != 0)
+				prepend_dirs((char *)temp->content, tmp);
 			ft_lst_add_last(&result, tmp);
 		}
 		temp = temp->next;
@@ -102,17 +109,14 @@ t_list		*ft_glob(char *s2)
 	if (!should_glob(s2) || valid_brackets(s2) < 0 || !(dirs = split_dirs(s2)))
 		return (NULL);
 	if (*s2 != '/')
-		files = get_dir_contents(".", 0);
+		files = ft_lstnew(".", 2);
 	else
-	{
-		files = get_dir_contents("/", 0);
-		prepend_dirs("", files);
-	}
+		files = ft_lstnew("/", 2);
 	i = -1;
 	while (files && dirs[++i])
 	{
-		(i > 0) ? update_files(&files) : (void)0;
 		matchlist = ft_super_factory(dirs[i]);
+		update_files(&files, matchlist);
 		if (files)
 			match_files(&files, matchlist, (dirs[i + 1]) ? 1 : 0);
 		ft_lstdel(&matchlist, (void (*)(void *, size_t))free);

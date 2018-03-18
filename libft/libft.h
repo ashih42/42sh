@@ -181,6 +181,8 @@ int						ft_dl_lst_size(t_dl_list *dl_lst);
 void					ft_lstrev(t_list **begin_list);
 t_list					*ft_sorted_lst_merge(t_list *lst1, t_list *lst2,
 											int (*cmp)());
+t_list					*ft_lst_search(t_list *lst, void *content, size_t size,
+											int (*cmp)());
 int						ft_is_space(int c);
 char					**list_to_array(t_list *list);
 void					dup3(int fd1, int fd2);

@@ -79,3 +79,14 @@ t_list	*ft_sorted_lst_merge(t_list *lst1, t_list *lst2, int (*cmp)())
 	*new_end = (lst1) ? lst1 : lst2;
 	return (new_start);
 }
+
+t_list	*ft_lst_search(t_list *lst, void *content, size_t size, int (*cmp)())
+{
+	while (lst)
+	{
+		if (cmp(lst->content, content, size) == 0)
+			return (lst);
+		lst = lst->next;
+	}
+	return (NULL);
+}
