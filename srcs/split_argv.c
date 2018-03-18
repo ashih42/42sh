@@ -54,7 +54,7 @@ static void	add_terms(char const *s, t_list **list, char *ws)
 		ft_strncpy(at.word, at.work_buf + at.head, at.i - at.head);
 		if (should_glob(at.word))
 		{
-			if ((glob = ft_glob(at.word)))
+			if ((glob = ft_glob(truncate_wildcards(at.word))))
 				ft_lst_add_last(list, glob);
 			else
 				ft_printf("42sh: no matches found: %s\n", at.word);

@@ -1,5 +1,25 @@
 #include "ft_42sh.h"
 
+char			*truncate_wildcards(char *query)
+{
+	size_t	i;
+
+	i = 0;
+	while (query[i])
+	{
+		if (query[i] == '*' && (i == 0 || query[i - 1] != '\\'))
+		{
+			if (i == 0 || query[i - 1] != '*')
+				i++;
+			else
+				ft_memmove(query + i, query + i + 1, ft_strlen(query + i));
+		}
+		else
+			i++;
+	}
+	return (query);
+}
+
 static size_t	chk_glob_brckts(char c1, char *s2)
 {
 	size_t	i;

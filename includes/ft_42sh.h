@@ -274,6 +274,7 @@ t_list					*ft_super_factory(char *s);
 /*
 **	match.c
 */
+char					*truncate_wildcards(char *query);
 int						match(char *s1, char *s2);
 
 /*
