@@ -292,7 +292,7 @@ void	get_word_path(t_env *e, char **word, char **path)
 
 	
 	*path = 0;
-	if (!ft_strchr(*word, '/'))
+	if (!*word || !ft_strchr(*word, '/'))
 		return ;
 	*path = *word;
 	i = -1;
@@ -311,7 +311,7 @@ int		is_first_word(t_env *e)
 		curs--;
 	while (curs > 0 && ft_is_space(e->buffer[curs - 1]))
 		curs--;
-	if (!ft_is_space(e->buffer[curs]))
+	if (e->buffer[curs] && !ft_is_space(e->buffer[curs]))
 		return (1);
 	else
 		return (0);
@@ -325,14 +325,11 @@ int		tab_autocomplete(t_env *e)
 
 	word = get_curr_word(e);
 	get_word_path(e, &word, &path);
-
-//	ft_printf("\npath = |%s|, word = |%s|\n", path, word);
-
+	
 	if (is_first_word(e))
 		ac_first_word(e, word, path);
 	else
 		ac_not_first_word(e, word, path);
-
 	ft_strdel(&word);
 	ft_strdel(&path);
 	return (1);
