@@ -19,7 +19,8 @@ void	ft_ctrl_c(int signo)
 	else
 	{
 		move_cursor(g_e, 1, g_e->buffer_end - g_e->cursor);
-		g_e->promt_len = ft_printf("\n:^) %s > ", get_variable(g_e, "PWD")) - 1;
+		g_e->promt_len = ft_printf("\n%s %s > ", SPESHELL,
+			get_variable(g_e, "PWD")) - 1;
 		ft_bzero(g_e->buffer, g_e->buffer_size + 1);
 		g_e->cursor = 0;
 		g_e->buffer_end = 0;

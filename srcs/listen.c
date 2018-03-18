@@ -46,7 +46,7 @@ void		sh_listen(t_env *e)
 	e->cursor = 0;
 	e->buffer_lock = 0;
 	e->buffer_end = 0;
-	e->promt_len = ft_printf(":^) %s > ", get_variable(e, "PWD"));
+	e->promt_len = ft_printf("%s %s > ", SPESHELL, get_variable(e, "PWD"));
 	enable_raw_mode(&orig_termios);
 	lstn_loop(e, &c, 0);
 	disable_raw_mode(&orig_termios);
