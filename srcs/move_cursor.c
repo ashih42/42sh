@@ -23,7 +23,7 @@ static void	move_left(t_env *e, size_t n_fl_chars)
 		while (n_chars--)
 			ft_putstr("\x1B[C");
 		if (e->cursor < n_fl_chars)
-			while (++i < e->promt_len + 3)
+			while (++i < e->promt_len + 4)
 				ft_putstr("\x1B[C");
 	}
 	ft_putstr("\x1B[D");
@@ -61,12 +61,14 @@ static void	move_up(t_env *e, size_t n_fl_chars, size_t num_nl)
 	}
 	else
 	{
-		e->cursor -= chars_until_newline(e, e->cursor, 0) + 1;
+		e->cursor -= chars_until_newline(e, e->cursor - 1, 0) + 2;
 		ft_putstr("\r\x1B[A");
 		e->cursor -= chars_until_newline(e, e->cursor, 0) - 1;
+		if (e->cursor == 1 && e->buffer[0] != '\n')
+			e->cursor = 0;
 		i = -1;
 		if (e->cursor < n_fl_chars)
-			while (++i < e->promt_len + 2)
+			while (++i < e->promt_len + 3)
 				ft_putstr("\x1B[C");
 	}
 }
