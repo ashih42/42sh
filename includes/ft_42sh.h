@@ -274,9 +274,14 @@ t_list					*ft_super_factory(char *s);
 /*
 **	match.c
 */
+int						match(char *s1, char *s2);
+
+/*
+**	glob_utils.c
+*/
 int						valid_brackets(char *s);
 int						should_glob(char *s2);
-int						match(char *s1, char *s2);
+t_list					*expand_filenames(t_list *files);
 
 /*
 **	split_dirs.c

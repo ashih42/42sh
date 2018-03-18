@@ -118,5 +118,5 @@ t_list		*ft_glob(char *s2)
 		ft_lstdel(&matchlist, (void (*)(void *, size_t))free);
 	}
 	ft_char_array_del(dirs);
-	return (files);
+	return (expand_filenames(files));
 }

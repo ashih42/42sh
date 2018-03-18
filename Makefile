@@ -40,7 +40,8 @@ FILES = built_ins.c \
 		ft_super_factory.c \
 		match.c \
 		split_dirs.c \
-		ft_glob.c
+		ft_glob.c \
+		glob_utils.c
 ## Add main.c ^here^ when done testing
 
 ifeq ($(TESTING_ENV),)
