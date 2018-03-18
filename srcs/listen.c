@@ -14,6 +14,7 @@ static void	lstn_loop(t_env *e, char *c, size_t i)
 			continue ;
 		ft_memmove(e->buffer + e->cursor + 1,
 					e->buffer + e->cursor, e->buffer_end++ - e->cursor);
+		e->buffer[e->buffer_end] = '\0';
 		i = e->cursor++;
 		e->buffer[i] = *c;
 		if (*c == '\n')
