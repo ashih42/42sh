@@ -116,6 +116,7 @@ int			submit_attempt(t_env *e)
 		if (quote == '\"')
 			ft_printf("\ndquote> ");
 		e->buffer_lock = e->buffer_end + 1;
+		e->cursor = e->buffer_end;
 		return (0);
 	}
 	return (1);
