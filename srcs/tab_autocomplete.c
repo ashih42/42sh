@@ -77,19 +77,6 @@ t_list	*get_path_executables(t_env *e)
 	return (path_execs);
 }
 
-
-
-// ft_printf("\x1b[F");
-
-size_t	get_cword_start(t_env *e, size_t cursor_pos)
-{
-	while (cursor_pos > 0 && ft_is_space(e->buffer[cursor_pos - 1]))
-		cursor_pos--;
-	while (cursor_pos > 0 && !ft_is_space(e->buffer[cursor_pos - 1]))
-		cursor_pos--;
-	return (cursor_pos);
-}
-
 /*
 **	get_curr_word()
 **
@@ -111,8 +98,6 @@ char	*get_curr_word(t_env *e)
 	curr_word = NULL;
 	while (e->buffer[e->cursor] && !ft_is_space(e->buffer[e->cursor]))
 		e->cursor++;
-	while (e->cursor > 0 && ft_is_space(e->buffer[e->cursor - 1]))
-		e->cursor--;
 	wend_pos = e->cursor;
 	while (e->cursor > 0 && !ft_is_space(e->buffer[e->cursor - 1]))
 		e->cursor--;
@@ -122,17 +107,6 @@ char	*get_curr_word(t_env *e)
 	return (curr_word);
 }
 
-
-
-/*
-**	TODO:
-**
-**	1. autocomplete a program with a specified path, e.g. ./a TAB TAB TAB
-**
-**  2. autocomplete on args, grab everything in current directory and
-**  add suffix character for folder, symlink, executable, etc.
-**
-*/
 
 /*
 int		tab_autocomplete(t_env *e)
@@ -198,8 +172,6 @@ void	build_execs_list(t_env *e, char *word, char *path)
 	}
 	else
 		e->files = get_path_executables(e);
-
-//	e->files = get_dir_contents((path) ? path : ".", 0);
 	ft_lst_cond_remove(&(e->files), should_remove, word,
 		(void (*)(void *, size_t))free);
 	e->files_head = e->files;
@@ -317,7 +289,6 @@ int		is_first_word(t_env *e)
 		return (0);
 }
 
-
 int		tab_autocomplete(t_env *e)
 {
 	char *word;
@@ -334,49 +305,3 @@ int		tab_autocomplete(t_env *e)
 	ft_strdel(&path);
 	return (1);
 }
-
-
-/*
-int		tab_autocomplete(t_env *e)
-{
-	static t_list	*curr_auto_lst = NULL;
-	static size_t	auto_lst_size;
-	char			*cword;
-
-	if (!(e->tab_pos))
-		init_tab_auto(e);
-	if (e->reset_tab_auto && curr_auto_lst)
-	{
-		ft_lstdel(&curr_auto_lst, 0);
-		curr_auto_lst = NULL;
-	}
-	if (!curr_auto_lst)
-	{
-		cword = get_curr_word(e, e->cursor);
-		if (cword)
-		{
-			if (ft_strchr(cword, '/'))
-			{
-				if (e->tab_dir)
-					ft_lstdel(&e->tab_dir, (void (*)(void *, size_t))free);
-				e->tab_dir = get_dir_contents(cword, 0);
-				e->tab_mode = 1;
-				//ft_printf("\n|%s|\n", dir_to_lookup);
-			}
-			auto_lst_size = 0;
-			curr_auto_lst = build_auto_lst(e, e->tab_mode, cword, &auto_lst_size);
-			//print_list20(curr_auto_lst);
-			e->tab_pos = curr_auto_lst;
-			free(cword);
-		}
-	}
-	if (e->tab_pos)
-	{
-//		insert_and_update_term(e, e->tab_pos->content, get_cword_start(e, e->cursor));
-		clear_and_update_term(e, e->tab_pos->content);
-		e->tab_pos = (e->tab_pos->next) ? e->tab_pos->next : curr_auto_lst;
-		e->reset_tab_auto = 0;
-	}
-	return (1);
-}
-*/
