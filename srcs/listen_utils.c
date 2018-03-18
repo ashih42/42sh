@@ -84,7 +84,7 @@ int			char_specs(t_env *e, char c)
 		return (tab_autocomplete(e));
 	if (c == '\x1B')
 		return (handle_esc_seq(e, c));
-	if (ft_isprint(c))
+	if (ft_isprint(c) || (c == '\n'))
 		return (0);
 	if (c == '\x04' && !(e->buffer_end))
 		close(STDIN_FILENO);
