@@ -186,13 +186,26 @@ int		should_remove(char *filename, char *str)
 	return (!ft_strnequ(filename, str, ft_strlen(str)));
 }
 
-
-void	ac_first_word(t_env *e, char *word)
+void	build_execs_list(t_env *e, char *word, char *path)
 {
-	ft_printf("ac_first_word()\n");
-	(void)e;
-	(void)word;
+	ft_lstdel(&(e->files), (void (*)(void *, size_t))free);
+	
+	if (path)
+	{
+		e->files = get_dir_contents(path, 1);
+		if (e->files)
+			ft_lstrev(&e->files);
+	}
+	else
+		e->files = get_path_executables(e);
+
+//	e->files = get_dir_contents((path) ? path : ".", 0);
+	ft_lst_cond_remove(&(e->files), should_remove, word,
+		(void (*)(void *, size_t))free);
+	e->files_head = e->files;
+	e->need_files_list = 0;
 }
+
 
 void	build_files_list(t_env *e, char *word, char *path)
 {
@@ -243,7 +256,20 @@ void	ac_replace(t_env *e, char *word, char *replace)
 	ac_repos_cursor(e, old_cursor);
 }
 
+void	ac_first_word(t_env *e, char *word, char *path)
+{
+	char	*replace;
 
+	if (e->need_files_list)
+		build_execs_list(e, word, path);
+	if (ft_lst_size(e->files) == 0)
+		return ;
+	replace = e->files->content;
+	e->files = e->files->next;
+	if (e->files == 0)
+		e->files = e->files_head;
+	ac_replace(e, word, replace);
+}
 
 void	ac_not_first_word(t_env *e, char *word, char *path)
 {
@@ -276,6 +302,22 @@ void	get_word_path(t_env *e, char **word, char **path)
 	(*path)[i] = '\0';
 }
 
+int		is_first_word(t_env *e)
+{
+	size_t	curs;
+
+	curs = e->cursor;
+	while (curs > 0 && !ft_is_space(e->buffer[curs - 1]))
+		curs--;
+	while (curs > 0 && ft_is_space(e->buffer[curs - 1]))
+		curs--;
+	if (!ft_is_space(e->buffer[curs]))
+		return (1);
+	else
+		return (0);
+}
+
+
 int		tab_autocomplete(t_env *e)
 {
 	char *word;
@@ -286,8 +328,8 @@ int		tab_autocomplete(t_env *e)
 
 //	ft_printf("\npath = |%s|, word = |%s|\n", path, word);
 
-	if (e->cursor == 0)
-		ac_first_word(e, word);
+	if (is_first_word(e))
+		ac_first_word(e, word, path);
 	else
 		ac_not_first_word(e, word, path);
 
