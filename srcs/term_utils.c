@@ -105,7 +105,15 @@ size_t	chars_until_newline(t_env *e, size_t cur_pos, int direction)
 	size_t	start;
 
 	start = cur_pos;
-	while (cur_pos > 0 && cur_pos < e->buffer_end && e->buffer[cur_pos] != '\n')
-		cur_pos = (direction) ? cur_pos + 1 : cur_pos - 1;
+	if (direction)
+	{
+		while (cur_pos < e->buffer_end && e->buffer[cur_pos] != '\n')
+			cur_pos++;
+	}
+	else
+	{
+		while (cur_pos > 0 && e->buffer[cur_pos] != '\n')
+			cur_pos--;
+	}
 	return ((start > cur_pos) ? start - cur_pos : cur_pos - start);
 }
