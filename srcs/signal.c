@@ -18,6 +18,7 @@ void	ft_ctrl_c(int signo)
 	}
 	else
 	{
+		move_cursor(g_e, 1, g_e->buffer_end - g_e->cursor);
 		g_e->promt_len = ft_printf("\n{robot} %s > ", get_variable(g_e, "PWD"));
 		ft_bzero(g_e->buffer, g_e->buffer_size + 1);
 		g_e->cursor = 0;
