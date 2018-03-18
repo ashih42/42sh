@@ -16,6 +16,11 @@
 # define INVALID_COLOR	-1
 # define SPESHELL		":^)"
 
+# define HEADER			"$> Speshell\n" HEADER1
+# define HEADER1		"(c) 2018 Speshell Dev. Team\n" HEADER2
+# define HEADER2		"Created by: @apuel, @ashih," HEADER3
+# define HEADER3		" @husui, @msharpe, @nmei\n"
+
 typedef struct			s_env
 {
 	t_list				*envp;

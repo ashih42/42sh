@@ -88,6 +88,7 @@ int			main(int argc, char **argv, char **envp)
 	{
 		e.buffer_size = BUFFER_SIZE;
 		sh_init(&e, envp);
+		ft_printf(HEADER);
 		sh_loop(&e);
 	}
 	return (0);
