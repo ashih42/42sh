@@ -73,7 +73,7 @@ void	clear_and_update_term(t_env *e, char *new_str)
 /*
 ** Super broken function yo...
 */
-
+/*
 void	insert_and_update_term(t_env *e, char *new, size_t pos)
 {
 	size_t	new_s;
@@ -99,7 +99,7 @@ void	insert_and_update_term(t_env *e, char *new, size_t pos)
 	e->cursor = pos + new_s;
 	ft_printf("\n%s\n", e->buffer);
 }
-
+*/
 size_t	chars_until_newline(t_env *e, size_t cur_pos, int direction)
 {
 	size_t	start;

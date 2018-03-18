@@ -6,8 +6,6 @@ static void	lstn_loop(t_env *e, char *c, size_t i)
 
 	while ((br = read(STDIN_FILENO, c, 1)) > 0)
 	{
-		if (*c != '\t')
-			e->reset_tab_auto = 1;
 		if (*c == '\n' && submit_attempt(e))
 			break ;
 		if (e->buffer_end == e->buffer_size && !extend_buffer(e))

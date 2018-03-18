@@ -77,55 +77,7 @@ t_list	*get_path_executables(t_env *e)
 	return (path_execs);
 }
 
-/*
-**	build_auto_lst()
-**
-**	Builds a new linked list that references the nodes in either e->tab_execs
-**	(mode = 0) or e->tab_dir (mode = 1) that can autocomplete the content of
-**	e->buffer.
-*/
 
-t_list	*build_auto_lst(t_env *e, int mode, char *cword, size_t *auto_lst_size)
-{
-	t_list	*new_auto_lst;
-	t_list	*curr;
-
-	new_auto_lst = NULL;
-	if (!(*e->buffer))
-		return (NULL);
-	curr = (mode) ? e->tab_dir : e->tab_execs;
-	while (curr)
-	{
-		if (mode || !ft_strncmp(cword, curr->content, ft_strlen(cword)))
-		{
-			ft_lstadd(&new_auto_lst,
-				ft_lst_new_ref(curr->content, curr->content_size));
-			*auto_lst_size = *auto_lst_size + 1;
-		}
-		curr = curr->next;
-	}
-	if (new_auto_lst)
-		ft_lstrev(&new_auto_lst);
-	return (new_auto_lst);
-}
-
-void print_list20(t_list *list)
-{
-	ft_printf("print_list: ");
-	while (list)
-	{
-		ft_printf("%s -> ", list->content);
-		list = list->next;
-	}
-	ft_printf("\n");
-}
-
-void	init_tab_auto(t_env *e)
-{
-	if (e->tab_execs)
-		ft_lstdel(&e->tab_execs, (void (*)(void *, size_t))free);
-	e->tab_execs = get_path_executables(e);
-}
 
 // ft_printf("\x1b[F");
 
@@ -150,25 +102,27 @@ size_t	get_cword_start(t_env *e, size_t cursor_pos)
 **	Spaces are defined as: ' ', '\t', '\n', '\r', '\f', or '\v'
 */
 
-char	*get_curr_word(t_env *e, size_t cursor_pos)
+char	*get_curr_word(t_env *e)
 {
 	char	*curr_word;
 	size_t	wend_pos;
 	size_t	word_len;
 
 	curr_word = NULL;
-	while (e->buffer[cursor_pos] && !ft_is_space(e->buffer[cursor_pos]))
-		cursor_pos++;
-	while (cursor_pos > 0 && ft_is_space(e->buffer[cursor_pos - 1]))
-		cursor_pos--;
-	wend_pos = cursor_pos;
-	while (cursor_pos > 0 && !ft_is_space(e->buffer[cursor_pos - 1]))
-		cursor_pos--;
-	word_len = wend_pos - cursor_pos;
-	if (word_len && (curr_word = (char *)malloc((word_len + 1) * sizeof(char))))
-		ft_strncpy(curr_word, e->buffer + cursor_pos, word_len);
+	while (e->buffer[e->cursor] && !ft_is_space(e->buffer[e->cursor]))
+		e->cursor++;
+	while (e->cursor > 0 && ft_is_space(e->buffer[e->cursor - 1]))
+		e->cursor--;
+	wend_pos = e->cursor;
+	while (e->cursor > 0 && !ft_is_space(e->buffer[e->cursor - 1]))
+		e->cursor--;
+	word_len = wend_pos - e->cursor;
+	if (word_len && (curr_word = ft_strnew(word_len + 1)))	
+		ft_strncpy(curr_word, e->buffer + e->cursor, word_len);
 	return (curr_word);
 }
+
+
 
 /*
 **	TODO:
@@ -180,6 +134,125 @@ char	*get_curr_word(t_env *e, size_t cursor_pos)
 **
 */
 
+/*
+int		tab_autocomplete(t_env *e)
+{
+	if (cursor is in middle of word)
+		move cursor to last pos of world 
+	
+	autocomplete
+}
+*/
+
+void	insert(t_list **head, t_list *new_node, int (*cmp)())
+{
+	t_list	*current;
+
+	if (*head == NULL || cmp((*head)->content, new_node->content) >= 0)
+	{
+		new_node->next = *head;
+		*head = new_node;
+		return ;
+	}
+	current = *head;
+	while (current->next != NULL &&
+			cmp(current->next->content, new_node->content) < 0)
+		current = current->next;
+	new_node->next = current->next;
+	current->next = new_node;
+}
+
+void	ft_list_sort(t_list **begin_list, int (*cmp)())
+{
+	t_list	*sorted;
+	t_list	*current;
+	t_list	*next;
+
+	sorted = NULL;
+	current = *begin_list;
+	while (current != NULL)
+	{
+		next = current->next;
+		insert(&sorted, current, cmp);
+		current = next;
+	}
+	*begin_list = sorted;
+}
+
+
+
+int		should_remove(char *filename, char *str)
+{
+	return (!ft_strnequ(filename, str, ft_strlen(str)));
+}
+
+
+void	ac_first_word(t_env *e, char *word)
+{
+	ft_printf("ac_first_word()\n");
+	(void)e;
+	(void)word;
+}
+
+void	build_files_list(t_env *e, char *word)
+{
+	ft_lstdel(&(e->files), (void (*)(void *, size_t))free);
+	
+	e->files = get_dir_contents(".", 0);
+	ft_lst_cond_remove(&(e->files), should_remove, word,
+		(void (*)(void *, size_t))free);
+	ft_list_sort(&(e->files), ft_strcmp);
+
+	e->files_head = e->files;
+	e->need_files_list = 0;
+}
+
+void	ac_replace(t_env *e, char *word, char *replace)
+{
+	while (ft_strlen(e->buffer) - ft_strlen(word) + ft_strlen(replace)
+			> e->buffer_size)
+		extend_buffer(e);
+	ft_memmove(e->buffer + ft_strlen(replace), e->buffer + ft_strlen(word),
+		ft_strlen(e->buffer + e->cursor));
+	ft_strncpy(e->buffer + e->cursor, replace, ft_strlen(replace));
+	// ac_refresh yo
+	ft_putstr("\r\x1B[K");
+	e->promt_len = ft_printf("{robot} %s > ", get_variable(e, "PWD"));
+	ft_printf("%s", e->buffer);
+	e->cursor = ft_strlen(e->buffer);
+	e->buffer_end = ft_strlen(e->buffer);
+}
+
+void	ac_not_first_word(t_env *e, char *word)
+{
+	char	*replace;
+
+	if (e->need_files_list)
+		build_files_list(e, word);
+	if (ft_lst_size(e->files) == 0)
+		return ;
+	replace = e->files->content;
+	e->files = e->files->next;
+	if (e->files == 0)
+		e->files = e->files_head;
+	ac_replace(e, word, replace);
+//	ft_printf("replace = %s\n", replace);
+}
+
+int		tab_autocomplete(t_env *e)
+{
+	char *word = get_curr_word(e);
+
+	if (e->cursor == 0)
+		ac_first_word(e, word);
+	else
+		ac_not_first_word(e, word);
+	ft_strdel(&word);
+	return (1);
+}
+
+
+/*
 int		tab_autocomplete(t_env *e)
 {
 	static t_list	*curr_auto_lst = NULL;
@@ -222,3 +295,4 @@ int		tab_autocomplete(t_env *e)
 	}
 	return (1);
 }
+*/

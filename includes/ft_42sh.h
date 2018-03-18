@@ -18,11 +18,6 @@
 typedef struct			s_env
 {
 	t_list				*envp;
-	t_list				*tab_execs;
-	t_list				*tab_dir;
-	t_list				*tab_pos;
-	int					tab_mode;
-	int					reset_tab_auto;
 	t_dl_list			*cmd_history;
 	t_dl_list			*history_end;
 	t_dl_list			*history_pos;
@@ -43,6 +38,9 @@ typedef struct			s_env
 	int					fd;
 	int					redir_out;
 	struct winsize		w;
+	int					need_files_list;
+	t_list				*files;
+	t_list				*files_head;
 }						t_env;
 
 typedef struct			s_add_terms
@@ -253,7 +251,7 @@ int						history_bang_exploder(t_env *e);
 **	tab_autocomplete.c
 */
 t_list					*get_dir_contents(char *dir_path, int e_mode);
-char					*get_curr_word(t_env *e, size_t cursor_pos);
+char					*get_curr_word(t_env *e);
 int						tab_autocomplete(t_env *e);
 
 /*

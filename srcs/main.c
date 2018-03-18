@@ -83,6 +83,7 @@ int			main(int argc, char **argv, char **envp)
 	signal(SIGINT, ft_ctrl_c);
 	signal(SIGTSTP, SIG_IGN);
 	ft_bzero(&e, sizeof(t_env));
+	e.need_files_list = 1;
 	if ((e.buffer = malloc(BUFFER_SIZE + 1)))
 	{
 		e.buffer_size = BUFFER_SIZE;

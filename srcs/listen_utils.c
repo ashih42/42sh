@@ -66,6 +66,8 @@ int			char_specs(t_env *e, char c)
 {
 	size_t	i;
 
+	if (c != '\t')
+		e->need_files_list = 1;
 	if (c == 127 || c == '\b')
 	{
 		if (e->cursor > e->buffer_lock)
