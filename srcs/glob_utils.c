@@ -6,7 +6,7 @@
 /*   By: apuel <apuel@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/18 04:32:19 by ashih             #+#    #+#             */
-/*   Updated: 2018/03/18 16:54:18 by apuel            ###   ########.fr       */
+/*   Updated: 2018/03/18 16:59:07 by apuel            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -86,19 +86,17 @@ static char	*expand_filename(char *s)
 			s[i] == '*' || s[i] == '[' || s[i] == '?' || s[i] == '{' ||
 			ft_is_space(s[i]))
 			diff++;
-	new = NULL;
-	if (diff && (new = ft_strnew(i + diff)))
+	if (!diff || !(new = ft_strnew(i + diff)))
+		return (NULL);
+	i = -1;
+	j = 0;
+	while (s[++i])
 	{
-		i = -1;
-		j = 0;
-		while (s[++i])
-		{
-			if (s[i] == '\'' || s[i] == '\"' || s[i] == '\\' || s[i] == '$' ||
-				s[i] == '*' || s[i] == '[' || s[i] == '?' || s[i] == '{' ||
-				ft_is_space(s[i]))
-				new[j++] = '\\';
-			new[j++] = s[i];
-		}
+		if (s[i] == '\'' || s[i] == '\"' || s[i] == '\\' || s[i] == '$' ||
+			s[i] == '*' || s[i] == '[' || s[i] == '?' || s[i] == '{' ||
+			ft_is_space(s[i]))
+			new[j++] = '\\';
+		new[j++] = s[i];
 	}
 	return (new);
 }
