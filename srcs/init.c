@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/14 16:06:44 by ashih             #+#    #+#             */
-/*   Updated: 2018/03/18 05:21:43 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/18 21:50:53 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -39,9 +39,11 @@ void				sh_init(t_env *e, char **envp)
 			}
 			envp++;
 		}
-	tmp_val = getcwd(NULL, 0);
-	set_variable(e, "PWD", tmp_val);
-	if (!get_variable(e, "OLDPWD"))
-		set_variable(e, "OLDPWD", tmp_val);
-	free(tmp_val);
+	if ((tmp_val = getcwd(NULL, 0)))
+	{
+		set_variable(e, "PWD", tmp_val);
+		if (!get_variable(e, "OLDPWD"))
+			set_variable(e, "OLDPWD", tmp_val);
+		free(tmp_val);
+	}
 }

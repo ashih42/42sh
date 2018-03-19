@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/14 16:06:44 by ashih             #+#    #+#             */
-/*   Updated: 2018/03/18 05:22:18 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/18 21:43:06 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,9 +21,11 @@ static int	change_directory(t_env *e, char *directory)
 	else
 	{
 		set_variable(e, "OLDPWD", get_variable(e, "PWD"));
-		pwd = getcwd(NULL, 0);
-		set_variable(e, "PWD", pwd);
-		free(pwd);
+		if ((pwd = getcwd(NULL, 0)))
+		{
+			set_variable(e, "PWD", pwd);
+			ft_strdel(&pwd);
+		}
 		return (0);
 	}
 	return (1);
@@ -46,7 +48,7 @@ int			ft_cd(t_env *e, int argc, char **argv)
 			(path = ft_strjoin(homedir, &argv[1][1])))
 		{
 			result = change_directory(e, path);
-			free(path);
+			ft_strdel(&path);
 			return (result);
 		}
 		return (change_directory(e, argv[1]));
