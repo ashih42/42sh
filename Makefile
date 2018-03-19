@@ -8,7 +8,6 @@ INCLUDES = ./includes/
 OBJS_DIR = ./objects/
 
 FILES = built_ins.c \
-		debug.c \
 		dispatcher.c \
 		envp.c \
 		execute.c \

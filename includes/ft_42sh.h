@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_42sh.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
+/*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/18 05:01:35 by ashih             #+#    #+#             */
-/*   Updated: 2018/03/18 19:14:09 by nmei             ###   ########.fr       */
+/*   Updated: 2018/03/18 22:38:17 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -317,13 +317,5 @@ char					**split_dirs(char const *s);
 **	ft_glob.c
 */
 t_list					*ft_glob(char *s2);
-
-/*
-**	debug.c
-*/
-void					print_list(t_list *list);
-void					print_expr_list(t_list *expr_list);
-void					print_char2d(char **array);
-void					print_char4d(char ****array);
 
 #endif
