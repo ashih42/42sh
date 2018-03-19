@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   term_utils.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/18 03:14:39 by ashih             #+#    #+#             */
-/*   Updated: 2018/03/18 05:45:36 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/18 19:14:44 by nmei             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,24 @@ void	disable_raw_mode(struct termios *orig_termios)
 	tcsetattr(STDIN_FILENO, TCSAFLUSH, orig_termios);
 }
 
+void	clear_all_and_update_term(t_env *e, size_t num_nl)
+{
+	char	*new_buffer;
+	size_t	corr_curse_pos;
+
+	corr_curse_pos = e->cursor - 1;
+	move_cursor(e, 1, e->buffer_end);
+	while (num_nl--)
+		ft_putstr("\r\x1B[K\x1B[F");
+	if ((new_buffer = ft_strdup(e->buffer)))
+	{
+		clear_and_update_term(e, new_buffer);
+		ft_strdel(&new_buffer);
+		if (e->cursor > corr_curse_pos)
+			move_cursor(e, 0, (e->cursor - corr_curse_pos));
+	}
+}
+
 /*
 **	clear_and_update_term()
 **
@@ -64,6 +82,8 @@ void	clear_and_update_term(t_env *e, char *new_str)
 	size_t			num_lines;
 	struct winsize	w;
 
+	if (!new_str)
+		return ;
 	ioctl(STDOUT_FILENO, TIOCGWINSZ, &w);
 	num_lines = ((ft_strlen(e->buffer) + (e->promt_len + 2)) / w.ws_col);
 	while (num_lines--)

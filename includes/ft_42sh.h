@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_42sh.h                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/18 05:01:35 by ashih             #+#    #+#             */
-/*   Updated: 2018/03/18 06:05:00 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/18 19:14:09 by nmei             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -141,9 +141,9 @@ int						is_dir(char *path);
 void					enable_raw_mode(struct termios *orig_termios);
 void					disable_raw_mode(struct termios *orig_termios);
 void					clear_and_update_term(t_env *e, char *new_str);
-void					insert_and_update_term(t_env *e, char *new, size_t pos);
+void					clear_all_and_update_term(t_env *e, size_t num_nl);
 size_t					chars_until_newline(t_env *e, size_t cur_pos,
-	int direction);
+											int direction);
 
 /*
 **	envp.c

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   listen_utils.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/18 03:16:12 by ashih             #+#    #+#             */
-/*   Updated: 2018/03/18 05:21:39 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/18 19:13:11 by nmei             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,6 +67,30 @@ int			handle_esc_seq(t_env *e, char c)
 	return (1);
 }
 
+int			handle_backspace(t_env *e)
+{
+	size_t	i;
+	size_t	num_nl;
+
+	if (e->cursor > e->buffer_lock)
+	{
+		num_nl = ft_count_occurrences(e->buffer, '\n');
+		ft_memmove(e->buffer + e->cursor - 1,
+					e->buffer + e->cursor, e->buffer_end - e->cursor);
+		i = --e->buffer_end;
+		e->buffer[i] = '\0';
+		if (!(e->buffer_lock))
+			clear_all_and_update_term(e, num_nl);
+		else
+		{
+			ft_printf("\b%s \b", e->buffer + --e->cursor);
+			while (i-- > e->cursor)
+				ft_putchar('\b');
+		}
+	}
+	return (1);
+}
+
 /*
 **	Handles special characters like TAB, LEFT, RIGHT, and DEL
 **
@@ -76,23 +100,9 @@ int			handle_esc_seq(t_env *e, char c)
 
 int			char_specs(t_env *e, char c)
 {
-	size_t	i;
-
 	(c != '\t') ? e->need_files_list = 1 : 0;
 	if (c == 127 || c == '\b')
-	{
-		if (e->cursor > e->buffer_lock)
-		{
-			ft_memmove(e->buffer + e->cursor - 1,
-						e->buffer + e->cursor, e->buffer_end - e->cursor);
-			i = --e->buffer_end;
-			e->buffer[i] = '\0';
-			ft_printf("\b%s \b", e->buffer + --e->cursor);
-			while (i-- > e->cursor)
-				ft_putchar('\b');
-		}
-		return (1);
-	}
+		return (handle_backspace(e));
 	if (c == '\t')
 		return (tab_autocomplete(e));
 	if (c == '\x1B')

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   move_cursor.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
+/*   By: nmei <nmei@student.42.fr>                  +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/18 03:12:58 by ashih             #+#    #+#             */
-/*   Updated: 2018/03/18 05:23:00 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/18 19:02:04 by nmei             ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -132,9 +132,9 @@ void			move_cursor(t_env *e, int direction, size_t n_times)
 			move_left(e, n_flcs);
 		else if (direction == 1 && e->cursor < e->buffer_end)
 			move_right(e);
-		else if (direction == 2 && !e->buffer_lock)
+		else if (direction == 2 && !(e->buffer_lock))
 			move_up(e, n_flcs, num_nl);
-		else if (direction == 3 && !e->buffer_lock)
+		else if (direction == 3 && !(e->buffer_lock))
 			move_down(e, n_lnl_pos, num_nl);
 	}
 }
