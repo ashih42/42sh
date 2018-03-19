@@ -6,7 +6,7 @@
 /*   By: ashih <ashih@student.42.fr>                +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/03/16 00:48:01 by ashih             #+#    #+#             */
-/*   Updated: 2018/03/18 05:22:22 by ashih            ###   ########.fr       */
+/*   Updated: 2018/03/18 21:03:02 by ashih            ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,24 +30,24 @@ void			del_variable(t_env *e, char *key)
 {
 	t_list		*node;
 	t_list		*prev;
-	char		**entry;
 
-	entry = e->envp->content;
-	if (ft_strequ(entry[0], key))
+	if (!e->envp)
+		return ;
+	if (ft_strequ(((char **)e->envp->content)[0], key))
 	{
+		node = e->envp;
 		e->envp = e->envp->next;
-		ft_char_array_del(entry);
+		ft_char_array_del((char **)node->content);
 		return (ft_memdel((void **)&node));
 	}
 	prev = e->envp;
 	node = e->envp->next;
 	while (node)
 	{
-		entry = node->content;
-		if (ft_strequ(entry[0], key))
+		if (ft_strequ(((char **)node->content)[0], key))
 		{
 			prev->next = node->next;
-			ft_char_array_del(entry);
+			ft_char_array_del((char **)node->content);
 			return (ft_memdel((void **)&node));
 		}
 		prev = node;
