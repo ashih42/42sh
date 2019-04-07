@@ -1,2 +1,2 @@
 # 42sh
-A very powerful operating system shell. (42 silicon valley)
+A very powerful operating system [shell](https://en.wikipedia.org/wiki/Shell_(computing)) in C. (42 silicon valley)
